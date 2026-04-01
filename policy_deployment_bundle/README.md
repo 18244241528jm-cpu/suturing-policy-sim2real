@@ -1,25 +1,25 @@
 # Policy Deployment Bundle
 
-è¿™ä¸ªæ–‡ä»¶å¤¹ç”¨äºŽé›†ä¸­æ”¾ç½®ç¬¬ä¸€æ¬¡ `policy -> ROS/CRTK -> PSM` çœŸæœºæœ€å°é—­çŽ¯ç›¸å…³æ–‡ä»¶ï¼Œæ–¹ä¾¿ä¸‹æ¬¡ä¸Šæœºç›´æŽ¥ä»Žæ ¹ç›®å½•æ‰“å¼€ã€‚
+这个文件夹用于集中放置第一次 `policy -> ROS/CRTK -> PSM` 真机最小闭环相关文件，方便下次上机直接从根目录打开。
 
-## æ–‡ä»¶è¯´æ˜Ž
+## 文件说明
 
-- `dVRK_PolicyçœŸæœºæµ‹è¯•Checklist_ä¸­è‹±å¯¹ç…§.md`
-  - ç¬¬ä¸€æ¬¡çœŸæœºæœ€å°é—­çŽ¯ checklist
+- `dVRK_Policy真机测试Checklist_中英对照.md`
+  - 第一次真机最小闭环 checklist
 - `README_dvrk_adapter.md`
-  - `dvrk_policy_adapter.py` çš„ä½¿ç”¨è¯´æ˜Žå’Œé£Žé™©æé†’
-- `README_è¿è¡Œè¯´æ˜Ž.md`
-  - ä»¿çœŸä¾§ `Image IL` / `Task_evaluation_R3M.py` è¿è¡Œè¯´æ˜Ž
+  - `dvrk_policy_adapter.py` 的使用说明和风险提醒
+- `README_运行说明.md`
+  - 仿真侧 `Image IL` / `Task_evaluation_R3M.py` 运行说明
 - `dvrk_policy_adapter.py`
-  - é¡¹ç›®å†… `policy -> ROS/CRTK` é€‚é…å®žçŽ°
+  - 项目内 `policy -> ROS/CRTK` 适配实现
 
-## åŽŸå§‹ä½ç½®
+## 原始位置
 
-- `project34/dvrkè®²ä¹‰/dVRK_PolicyçœŸæœºæµ‹è¯•Checklist_ä¸­è‹±å¯¹ç…§.md`
+- `project34/dvrk讲义/dVRK_Policy真机测试Checklist_中英对照.md`
 - `project34/SurgicAI-SurgicAI-DR-RAL/Image_IL/README_dvrk_adapter.md`
-- `project34/SurgicAI-SurgicAI-DR-RAL/Image_IL/README_è¿è¡Œè¯´æ˜Ž.md`
+- `project34/SurgicAI-SurgicAI-DR-RAL/Image_IL/README_运行说明.md`
 - `project34/SurgicAI-SurgicAI-DR-RAL/Image_IL/dvrk_policy_adapter.py`
 
-## ä½¿ç”¨å»ºè®®
+## 使用建议
 
-å…ˆè¯» `dVRK_PolicyçœŸæœºæµ‹è¯•Checklist_ä¸­è‹±å¯¹ç…§.md`ï¼Œå†å¯¹ç…§ `README_dvrk_adapter.md` å’Œ `dvrk_policy_adapter.py`ã€‚æ¶‰åŠæŽ¥å£è¯­ä¹‰ã€åæ ‡ç³»ã€è§†é¢‘ ROS ç®¡çº¿æ—¶ï¼Œä»¥å®˜æ–¹ dVRK æ–‡æ¡£ä¸ºå‡†ã€‚
+先读 `dVRK_Policy真机测试Checklist_中英对照.md`，再对照 `README_dvrk_adapter.md` 和 `dvrk_policy_adapter.py`。涉及接口语义、坐标系、视频 ROS 管线时，以官方 dVRK 文档为准。

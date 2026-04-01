@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-dVRK Policy Adapter â€” å°† Image IL æ¨¡åž‹è¾“å‡ºæ¡¥æŽ¥åˆ° dVRK CRTK æŽ¥å£
+dVRK Policy Adapter — 将 Image IL 模型输出桥接到 dVRK CRTK 接口
 
-ç”¨æ³•ï¼š
+用法：
   source /opt/ros/humble/setup.bash
   python3 dvrk_policy_adapter.py --arm PSM1 --camera_topic /your/camera/topic
 
-å‰ç½®ï¼šdVRK å·² Power Onã€Homeï¼›ç›¸æœº topic å·²å‘å¸ƒã€‚
+前置：dVRK 已 Power On、Home；相机 topic 已发布。
 """
 
 import sys
@@ -23,38 +23,38 @@ from geometry_msgs.msg import TransformStamped
 from sensor_msgs.msg import Image as RosImage, JointState
 from std_msgs.msg import Empty
 
-# è·¯å¾„è®¾ç½®
+# 路径设置
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(_script_dir, '..', 'RL'))
-# æœ¬åœ° r3m åŒ…ï¼ˆä¸Ž Task_evaluation_R3M ç›¸åŒï¼‰
+# 本地 r3m 包（与 Task_evaluation_R3M 相同）
 _r3m_dir = os.path.join(_script_dir, 'r3m')
 if os.path.isdir(_r3m_dir):
     sys.path.insert(0, _r3m_dir)
-# ralï¼ˆAMBF ros_abstraction_layerï¼‰ç”¨äºŽ AMBF ç›¸æœºè®¢é˜…ï¼ŒQoS ä¸Ž Task_evaluation_R3M ä¸€è‡´
+# ral（AMBF ros_abstraction_layer）用于 AMBF 相机订阅，QoS 与 Task_evaluation_R3M 一致
 _ambf_client_py = os.path.normpath(os.path.join(_script_dir, '..', '..', 'ambf-ambf-3.0', 'ros_modules', 'ambf_client', 'python'))
 if os.path.isdir(_ambf_client_py):
     sys.path.insert(0, _ambf_client_py)
 from r3m import load_r3m
 
-# ä¸Ž Task_evaluation_R3M ç›¸åŒçš„ step_sizeï¼ˆApproach ä»»åŠ¡ï¼‰
+# 与 Task_evaluation_R3M 相同的 step_size（Approach 任务）
 TRANS_STEP = 1.0e-3
 ANGLE_STEP = np.deg2rad(3)
 JAW_STEP = 0.3
 STEP_SIZE = np.array([TRANS_STEP, TRANS_STEP, TRANS_STEP, ANGLE_STEP, ANGLE_STEP, ANGLE_STEP, JAW_STEP], dtype=np.float32)
 
-# dVRK jawï¼š0=é—­åˆï¼Œå¼§åº¦ï¼›Policyï¼š0=å¼€ï¼Œ1=é—­ã€‚çº¿æ€§æ˜ å°„ã€‚
-JAW_MAX_RAD = 0.8  # å®žæµ‹æˆ–æŸ¥å™¨æ¢°æ–‡æ¡£ï¼ŒLarge Needle Driver çº¦ 0.8
+# dVRK jaw：0=闭合，弧度；Policy：0=开，1=闭。线性映射。
+JAW_MAX_RAD = 0.8  # 实测或查器械文档，Large Needle Driver 约 0.8
 
 
 def quat_to_rpy(qx, qy, qz, qw):
-    """å››å…ƒæ•°è½¬ RPY (rad)"""
+    """四元数转 RPY (rad)"""
     from scipy.spatial.transform import Rotation as R
     r = R.from_quat([qx, qy, qz, qw])
     return r.as_euler('xyz')  # roll, pitch, yaw
 
 
 def rpy_to_quat(roll, pitch, yaw):
-    """RPY (rad) è½¬å››å…ƒæ•° [x,y,z,w]"""
+    """RPY (rad) 转四元数 [x,y,z,w]"""
     from scipy.spatial.transform import Rotation as R
     r = R.from_euler('xyz', [roll, pitch, yaw])
     return r.as_quat()  # [x,y,z,w]
@@ -67,20 +67,20 @@ class DVRKPolicyAdapter(Node):
         self.camera_topic = camera_topic
         self.control_hz = control_hz
         self.dry_run = dry_run
-        self.dry_run_steps = dry_run_steps  # >0 æ—¶è·‘å®ŒæŒ‡å®šæ­¥æ•°åŽé€€å‡º
-        self.use_ral_camera = use_ral_camera  # True æ—¶ç”¨ ral è®¢é˜…ç›¸æœºï¼ˆä¸Ž Task_evaluation_R3M ç›¸åŒï¼Œå…¼å®¹ AMBFï¼‰
+        self.dry_run_steps = dry_run_steps  # >0 时跑完指定步数后退出
+        self.use_ral_camera = use_ral_camera  # True 时用 ral 订阅相机（与 Task_evaluation_R3M 相同，兼容 AMBF）
         self.bridge = CvBridge()
 
-        # çŠ¶æ€ç¼“å­˜
+        # 状态缓存
         self._measured_cp = None
         self._jaw_measured = None
         self._measured_cp_frame_id = None
         self._image = None
         self._image_received = False
-        # dry_run æ—¶ç”¨åˆæˆ proprio
+        # dry_run 时用合成 proprio
         self._mock_proprio = np.array([0.0, 0.0, 0.10, 0.0, 0.0, 0.0, 0.5], dtype=np.float32) if mock_proprio is None else np.array(mock_proprio, dtype=np.float32)
 
-        # æ¨¡åž‹
+        # 模型
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model, self.r3m_model = self._load_model(model_path)
         self.transform = transforms.Compose([
@@ -91,14 +91,14 @@ class DVRKPolicyAdapter(Node):
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
 
-        # QoSï¼šdVRK ç”¨ BEST_EFFORT
+        # QoS：dVRK 用 BEST_EFFORT
         qos = QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT, history=HistoryPolicy.KEEP_LAST, depth=1)
 
         if not dry_run:
             self.create_subscription(TransformStamped, f"/{arm}/measured_cp", self._measured_cp_cb, qos)
             self.create_subscription(JointState, f"/{arm}/jaw/measured_js", self._jaw_cb, qos)
 
-        # ç›¸æœºè®¢é˜…ï¼šuse_ral_camera æ—¶ç”¨ ralï¼ˆä¸Ž Task_evaluation_R3M ç›¸åŒï¼Œå…¼å®¹ AMBFï¼‰ï¼›å¦åˆ™ç”¨ rclpy
+        # 相机订阅：use_ral_camera 时用 ral（与 Task_evaluation_R3M 相同，兼容 AMBF）；否则用 rclpy
         self._ral_instance = None
         self._ral_thread = None
         if use_ral_camera:
@@ -107,25 +107,25 @@ class DVRKPolicyAdapter(Node):
                 import threading
                 self._ral_instance = ral("dvrk_adapter_camera")
                 import time
-                time.sleep(0.5)  # ral åˆå§‹åŒ–
+                time.sleep(0.5)  # ral 初始化
                 self._ral_instance.subscriber(camera_topic, RosImage, self._image_cb)
                 self._ral_thread = threading.Thread(target=self._ral_instance.spin, daemon=True)
                 self._ral_thread.start()
-                self.get_logger().info(f"ç›¸æœºè®¢é˜…ä½¿ç”¨ ral: {camera_topic}")
+                self.get_logger().info(f"相机订阅使用 ral: {camera_topic}")
             except ImportError as e:
-                self.get_logger().error(f"æ— æ³•åŠ è½½ ralï¼Œå›žé€€åˆ° rclpy: {e}")
+                self.get_logger().error(f"无法加载 ral，回退到 rclpy: {e}")
                 use_ral_camera = False
         if not use_ral_camera:
             qos_cam = QoSProfile(reliability=ReliabilityPolicy.RELIABLE, durability=DurabilityPolicy.VOLATILE, history=HistoryPolicy.KEEP_LAST, depth=10)
             self.create_subscription(RosImage, camera_topic, self._image_cb, qos_cam)
 
-        # å‘å¸ƒï¼ˆdry_run æ—¶ä¹Ÿåˆ›å»ºï¼Œä½†å¯ä¸ publishï¼‰
+        # 发布（dry_run 时也创建，但可不 publish）
         self._servo_cp_pub = self.create_publisher(TransformStamped, f"/{arm}/servo_cp", 1)
         self._jaw_pub = self.create_publisher(JointState, f"/{arm}/jaw/servo_jp", 1)
         self._hold_pub = self.create_publisher(Empty, f"/{arm}/hold", 1)
 
         self._step_count = 0
-        self._control_timer = None  # ç”¨äºŽ dry_run è¾¾åˆ°æ­¥æ•°æ—¶å–æ¶ˆ
+        self._control_timer = None  # 用于 dry_run 达到步数时取消
         mode = "DRY_RUN (no dVRK)" if dry_run else "LIVE"
         self.get_logger().info(f"Adapter: arm={arm}, camera={camera_topic}, control_hz={control_hz}, mode={mode}")
 
@@ -173,22 +173,22 @@ class DVRKPolicyAdapter(Node):
             self._jaw_measured = float(msg.position[0])
 
     def _image_cb(self, msg, *args, **kwargs):
-        """ral å¯èƒ½ä¼ å…¥é¢å¤–å‚æ•° camera_id ç­‰"""
+        """ral 可能传入额外参数 camera_id 等"""
         try:
             self._image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
             if not self._image_received:
                 self._image_received = True
-                self.get_logger().info(f"å·²æ”¶åˆ°ç›¸æœºå›¾åƒ: {self.camera_topic}")
+                self.get_logger().info(f"已收到相机图像: {self.camera_topic}")
         except Exception as e:
             self.get_logger().warn(f"Image conversion failed: {e}")
 
     def _get_proprio(self):
-        """ä»Ž dVRK çŠ¶æ€æž„é€  policy è¾“å…¥ [x,y,z,rx,ry,rz,jaw]"""
+        """从 dVRK 状态构造 policy 输入 [x,y,z,rx,ry,rz,jaw]"""
         if self.dry_run:
             return self._mock_proprio.copy()
         if self._measured_cp is None or self._jaw_measured is None:
             return None
-        jaw_01 = 1.0 - (self._jaw_measured / JAW_MAX_RAD)  # dVRK rad(0=é—­) -> policy 0-1(1=é—­)
+        jaw_01 = 1.0 - (self._jaw_measured / JAW_MAX_RAD)  # dVRK rad(0=闭) -> policy 0-1(1=闭)
         jaw_01 = np.clip(jaw_01, 0.0, 1.0)
         return np.append(self._measured_cp, jaw_01).astype(np.float32)
 
@@ -200,7 +200,7 @@ class DVRKPolicyAdapter(Node):
         return action.cpu().numpy().squeeze()
 
     def _publish_servo(self, goal_vector):
-        """goal_vector: [x,y,z,roll,pitch,yaw,jaw] â€” ç±³ã€å¼§åº¦ã€0-1"""
+        """goal_vector: [x,y,z,roll,pitch,yaw,jaw] — 米、弧度、0-1"""
         # servo_cp
         msg = TransformStamped()
         msg.header.stamp = self.get_clock().now().to_msg()
@@ -223,17 +223,17 @@ class DVRKPolicyAdapter(Node):
         self._jaw_pub.publish(jaw_msg)
 
     def _get_image(self):
-        """èŽ·å–å½“å‰å›¾åƒï¼›dry_run ä¸”æ— ç›¸æœºæ—¶ç”¨åˆæˆå›¾"""
+        """获取当前图像；dry_run 且无相机时用合成图"""
         if self._image_received and self._image is not None:
             return self._image
         if self.dry_run:
-            # é¦–æ¬¡ç”¨é»‘å›¾æ—¶æ‰“å°ä¸€æ¬¡ï¼Œä¾¿äºŽæŽ’æŸ¥
+            # 首次用黑图时打印一次，便于排查
             if self._step_count == 0:
                 self.get_logger().warn(
-                    f"[dry_run] æœªæ”¶åˆ°ç›¸æœº {self.camera_topic}ï¼Œä½¿ç”¨é»‘å›¾ã€‚"
-                    " è¯·ç¡®è®¤ï¼š1) AMBF å·²å¸¦ GUI å¯åŠ¨  2) ros2 topic list | grep Image èƒ½çœ‹åˆ°è¯¥ topic"
+                    f"[dry_run] 未收到相机 {self.camera_topic}，使用黑图。"
+                    " 请确认：1) AMBF 已带 GUI 启动  2) ros2 topic list | grep Image 能看到该 topic"
                 )
-            return np.zeros((480, 640, 3), dtype=np.uint8)  # åˆæˆé»‘å›¾ï¼Œæ¨¡åž‹å¯è·‘
+            return np.zeros((480, 640, 3), dtype=np.uint8)  # 合成黑图，模型可跑
         return None
 
     def _control_timer_cb(self):
@@ -250,16 +250,16 @@ class DVRKPolicyAdapter(Node):
             if self._step_count % 50 == 1:
                 self.get_logger().info(f"[dry_run] step={self._step_count} proprio={proprio[:3]} action={action[:3]} goal={goal[:3]}")
             if self.dry_run_steps > 0 and self._step_count >= self.dry_run_steps:
-                self.get_logger().info(f"[dry_run] å®Œæˆ {self._step_count} æ­¥ï¼Œé€€å‡º")
+                self.get_logger().info(f"[dry_run] 完成 {self._step_count} 步，退出")
                 if self._control_timer is not None:
                     self._control_timer.cancel()
-                # ç”¨èŠ‚ç‚¹å†… timer è§¦å‘ shutdownï¼ˆåŒçº¿ç¨‹ï¼‰ï¼Œé¿å… threading.Timer çš„ RuntimeError
+                # 用节点内 timer 触发 shutdown（同线程），避免 threading.Timer 的 RuntimeError
                 self.create_timer(0.05, self._dry_run_exit_cb)
-                return  # ä¸ publish
+                return  # 不 publish
         self._publish_servo(goal)
 
     def _dry_run_exit_cb(self):
-        """dry_run è¾¾åˆ°æ­¥æ•°åŽç”± timer è°ƒç”¨ï¼Œåœ¨ä¸» executor ä¸­ shutdown"""
+        """dry_run 达到步数后由 timer 调用，在主 executor 中 shutdown"""
         if getattr(self, '_exit_requested', False):
             return
         self._exit_requested = True
@@ -275,15 +275,15 @@ class DVRKPolicyAdapter(Node):
         executor = SingleThreadedExecutor()
         executor.add_node(self)
 
-        # å¯åŠ¨æ—¶ç­‰å¾…ç›¸æœºé¦–å¸§ï¼ˆæœ€å¤š 5 ç§’ï¼‰ï¼Œéœ€ spin æ‰èƒ½å¤„ç†å›žè°ƒ
-        self.get_logger().info("ç­‰å¾…ç›¸æœºé¦–å¸§...")
+        # 启动时等待相机首帧（最多 5 秒），需 spin 才能处理回调
+        self.get_logger().info("等待相机首帧...")
         for _ in range(100):
             executor.spin_once(timeout_sec=0.05)
             if self._image_received:
-                self.get_logger().info("ç›¸æœºå°±ç»ª")
+                self.get_logger().info("相机就绪")
                 break
         else:
-            self.get_logger().warn("5 ç§’å†…æœªæ”¶åˆ°ç›¸æœºï¼Œç»§ç»­è¿è¡Œï¼ˆå¯èƒ½ç”¨é»‘å›¾ï¼‰")
+            self.get_logger().warn("5 秒内未收到相机，继续运行（可能用黑图）")
 
         self._control_timer = self.create_timer(1.0 / self.control_hz, self._control_timer_cb)
         executor.spin()
@@ -297,10 +297,10 @@ def main():
     parser.add_argument("--camera_topic", default="/dvrk/ECM/camera/image", help="Camera image topic")
     parser.add_argument("--model_path", default=None, help="Path to model_final.pth")
     parser.add_argument("--control_hz", type=int, default=50, help="Control loop frequency")
-    parser.add_argument("--dry_run", action="store_true", help="No dVRK: use synthetic proprio + camera topic; å¯é…åˆ AMBF ç›¸æœºéªŒè¯")
-    parser.add_argument("--dry_run_steps", type=int, default=0, help="dry_run æ—¶è·‘å®Œ N æ­¥åŽé€€å‡ºï¼Œ0=ä¸é™åˆ¶")
-    parser.add_argument("--use_ral_camera", action="store_true", help="ç”¨ ral è®¢é˜…ç›¸æœºï¼ˆä¸Ž Task_evaluation_R3M ç›¸åŒï¼ŒAMBF ImageData æŽ¨èï¼‰")
-    parser.add_argument("--mock_proprio", type=str, default=None, help="dry_run æ—¶åˆæˆ proprioï¼Œæ ¼å¼: x,y,z,rx,ry,rz,jaw")
+    parser.add_argument("--dry_run", action="store_true", help="No dVRK: use synthetic proprio + camera topic; 可配合 AMBF 相机验证")
+    parser.add_argument("--dry_run_steps", type=int, default=0, help="dry_run 时跑完 N 步后退出，0=不限制")
+    parser.add_argument("--use_ral_camera", action="store_true", help="用 ral 订阅相机（与 Task_evaluation_R3M 相同，AMBF ImageData 推荐）")
+    parser.add_argument("--mock_proprio", type=str, default=None, help="dry_run 时合成 proprio，格式: x,y,z,rx,ry,rz,jaw")
     args = parser.parse_args()
 
     mock_proprio = None
@@ -311,7 +311,7 @@ def main():
     try:
         node.run()
     except (KeyboardInterrupt, Exception):
-        pass  # dry_run é€€å‡ºæ—¶ Timer ä¼š shutdownï¼Œå¯èƒ½è§¦å‘å¼‚å¸¸
+        pass  # dry_run 退出时 Timer 会 shutdown，可能触发异常
     finally:
         try:
             node.destroy_node()
@@ -320,7 +320,7 @@ def main():
         try:
             rclpy.shutdown()
         except RuntimeError:
-            pass  # å¯èƒ½å·²è¢« Timer è°ƒç”¨è¿‡
+            pass  # 可能已被 Timer 调用过
 
 
 if __name__ == "__main__":
