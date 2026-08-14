@@ -1,0 +1,19 @@
+name: public-contract
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  code-only:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - run: python -m pip install numpy scipy
+      - run: python scripts/preflight.py --mode code-only
+      - run: python -m unittest discover -s tests -v
+      - run: python -m compileall -q src scripts tests
+

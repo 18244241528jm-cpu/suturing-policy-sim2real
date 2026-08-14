@@ -1,0 +1,107 @@
+enclosure size: { length: 10.0, width: 10.0, height: 3.0 }
+lights: [light2]
+cameras: [cameraL, cameraL2, cameraR, cameraR2]
+environment: "/home/jiaming/surgical_robotics_challenge/ADF/world/checkered_floor.yaml"
+namespace: /ambf/env/
+max iterations: 200
+gravity: { x: 0.0, y: 0.0, z: -9.8 }
+shaders:
+  path: /home/jiaming/surgical_robotics_challenge/ambf_shaders/
+  vertex: "shader.vs"
+  fragment: "shader.fs"
+
+light2:
+  namespace: lights/
+  name: light2
+  location: { x: 0.0, y: 0.0, z: 0.0 }
+  direction: { x: 0.0, y: 0.0, z: -1.0 }
+  attenuation: {constant: 0.8, linear: 0.8, quadratic: 0.0}
+  spot exponent: 0.9
+  shadow quality: 0
+  cutoff angle: 1.6
+  parent: BODY CameraFrame
+
+cam common configs:
+  clipping plane: &cam_common_clipping_plane
+    near: 0.001
+    far: 10.0
+  # Identical to Xiangrui/A3: 2*atan(480/(2*358.807027298745)).
+  field of view: &cam_common_fov 1.179071143
+  publish image resolution: &cam_common_pub_img_res { width: 640, height: 480 }
+  publish depth resolution: &cam_common_pub_depth_res { width: 640, height: 480 }
+
+cameraL:
+  namespace: cameras/
+  name: cameraL
+  location: { x: -0.002, y: 0.0, z: -0.05 }
+  look at: { x: 0.0, y: 0.0, z: -1.0 }
+  up: { x: 0.0, y: 1.0, z: 0.0 }
+  clipping plane: *cam_common_clipping_plane
+  field view angle: *cam_common_fov
+  monitor: 1
+  parent: BODY CameraFrame
+  publish image: True
+  publish image interval: 1
+  publish image resolution: *cam_common_pub_img_res
+  publish depth: True
+  publish depth interval: 1
+  publish depth resolution: *cam_common_pub_depth_res
+  multipass: True
+
+cameraL2:
+  namespace: cameras/
+  name: cameraL2
+  location: { x: 0.0, y: 0.0, z: 0.0 }
+  look at: { x: -1.0, y: 0.0, z: 0.0 }
+  up: { x: 0.0, y: 0.0, z: 1.0 }
+  clipping plane: *cam_common_clipping_plane
+  field view angle: *cam_common_fov
+  monitor: 1
+  parent: cameraL
+  preprocessing shaders:
+    path: /home/jiaming/surgical_robotics_challenge/ambf_shaders/preprocessing
+    vertex: shader.vs
+    fragment: shader.fs
+  publish image: True
+  visible: False
+  publish image interval: 1
+  publish image resolution: *cam_common_pub_img_res
+  publish depth: False
+
+cameraR:
+  namespace: cameras/
+  name: cameraR
+  location: { x: 0.002, y: 0.0, z: -0.05 }
+  look at: { x: 0.0, y: 0.0, z: -1.0 }
+  up: { x: 0.0, y: 1.0, z: 0.0 }
+  clipping plane: *cam_common_clipping_plane
+  field view angle: *cam_common_fov
+  monitor: 1
+  parent: BODY CameraFrame
+  publish image: True
+  publish image interval: 1
+  publish image resolution: *cam_common_pub_img_res
+  publish depth: True
+  publish depth interval: 1
+  publish depth resolution: *cam_common_pub_depth_res
+  multipass: True
+
+cameraR2:
+  namespace: cameras/
+  name: cameraR2
+  location: { x: 0.0, y: 0.0, z: 0.0 }
+  look at: { x: -1.0, y: 0.0, z: 0.0 }
+  up: { x: 0.0, y: 0.0, z: 1.0 }
+  clipping plane: *cam_common_clipping_plane
+  field view angle: *cam_common_fov
+  monitor: 1
+  parent: cameraR
+  preprocessing shaders:
+    path: /home/jiaming/surgical_robotics_challenge/ambf_shaders/preprocessing
+    vertex: shader.vs
+    fragment: shader.fs
+  publish image: True
+  visible: False
+  publish image interval: 1
+  publish image resolution: *cam_common_pub_img_res
+  publish depth: False

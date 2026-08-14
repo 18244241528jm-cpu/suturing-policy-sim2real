@@ -1,0 +1,34 @@
+schema_version: d3a_handeye_v1
+
+# [假设] Replace every TO_CONFIRM value on site after running discover_topics.sh.
+topics:
+  left_image: /TO_CONFIRM/left/image_raw
+  right_image: /TO_CONFIRM/right/image_raw
+  left_camera_info: /TO_CONFIRM/left/camera_info
+  robot_measured_cp: /PSM2/measured_cp
+  robot_pose_msg_type: geometry_msgs/msg/TransformStamped
+
+marker:
+  dictionary: DICT_4X4_50
+  id: 0
+  size_m: 0.020
+
+checkerboard:
+  enabled: false
+  rows: 0
+  columns: 0
+  square_size_m: 0.0
+
+robot_config_path: TO_CONFIRM_ON_SITE
+camera_config_path: TO_CONFIRM_ON_SITE
+installation_photo_path: TO_CAPTURE_ON_SITE
+
+validation:
+  max_sync_delta_ms: 25.0
+  min_solve_samples: 24
+  min_heldout_samples: 6
+  duplicate_translation_mm: 0.25
+  duplicate_rotation_deg: 0.25
+  min_translation_span_mm: 10.0
+  min_rotation_span_deg: 25.0
+

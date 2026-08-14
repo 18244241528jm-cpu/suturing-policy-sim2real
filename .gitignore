@@ -1,14 +1,21 @@
-# Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+.pytest_cache/
 .venv/
 venv/
-
-# IDE
-.vscode/
-.idea/
-
-# OS
+configs/pipeline.env
+results/
+runs/
+*.bag
+*.db3
+*.mcap
+*.pth
+*.pt
+*.onnx
+*.engine
+*.zip
+*.tar
+*.tar.gz
+*.log
 .DS_Store
 Thumbs.db

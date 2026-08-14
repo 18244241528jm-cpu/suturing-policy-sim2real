@@ -1,0 +1,11 @@
+world config: "/mnt/c/Users/30518/OneDrive - Johns Hopkins/Desktop/cis2/project34/depth_audit_stage_a/world_depth_audit_stereo.yaml"
+color config: "/home/jiaming/surgical_robotics_challenge/ADF/color/colors.yaml"
+input devices config: "/home/jiaming/surgical_robotics_challenge/ADF/input_devices/input_devices.yaml"
+
+multibody configs:
+  - "/home/jiaming/surgical_robotics_challenge/ADF/Phantoms/3D_MED/phantom.yaml"
+  - "/home/jiaming/surgical_robotics_challenge/ADF/Phantoms/3D_MED/ghosts.yaml"
+  - "/home/jiaming/surgical_robotics_challenge/ADF/PSMs/LND_420006/psm1.yaml"
+  - "/home/jiaming/surgical_robotics_challenge/ADF/PSMs/LND_420006/ghosts_actuators_psm1.yaml"
+  - "/home/jiaming/surgical_robotics_challenge/ADF/PSMs/LND_420006/psm2.yaml"
+  - "/home/jiaming/surgical_robotics_challenge/ADF/PSMs/LND_420006/ghosts_actuators_psm2.yaml"
