@@ -1,0 +1,309 @@
+{
+  "schema": "SurgicAI.P5c.gate_DA.v1",
+  "complete": true,
+  "frames": 40,
+  "checkpoint_sha256": "fc46bead4a5ea0e4122566bb88b93932aa82f110ee98281b5fcb09f499c9ec88",
+  "encoder": "vitl",
+  "input_size": 518,
+  "precision": "fp32",
+  "runtime_s": {
+    "count": 40,
+    "p50": 0.188298906,
+    "p95": 0.26455220700000265,
+    "max": 0.9662715769999863
+  },
+  "full_mae_mm": {
+    "count": 40,
+    "p50": 1.1240363237448037,
+    "p95": 1.2391652213409543,
+    "max": 1.2553430860862136
+  },
+  "needle_mae_mm": {
+    "count": 40,
+    "p50": 0.6795896915718913,
+    "p95": 1.059538166737184,
+    "max": 1.2586137745529413
+  },
+  "rows": [
+    {
+      "frame_id": "frame_000000",
+      "runtime_s": 0.9662715769999863,
+      "full_mae_mm": 1.0650400072336197,
+      "needle_mae_mm": 0.7270706701092422,
+      "needle_pixels": 586
+    },
+    {
+      "frame_id": "frame_000001",
+      "runtime_s": 0.16617940700001554,
+      "full_mae_mm": 1.1467444710433483,
+      "needle_mae_mm": 0.6702834507450461,
+      "needle_pixels": 532
+    },
+    {
+      "frame_id": "frame_000002",
+      "runtime_s": 0.16703760699999748,
+      "full_mae_mm": 1.1454031337052584,
+      "needle_mae_mm": 0.49780006520450115,
+      "needle_pixels": 591
+    },
+    {
+      "frame_id": "frame_000003",
+      "runtime_s": 0.24618876399995315,
+      "full_mae_mm": 1.1369697749614716,
+      "needle_mae_mm": 1.0581238893792033,
+      "needle_pixels": 574
+    },
+    {
+      "frame_id": "frame_000004",
+      "runtime_s": 0.27815284400003293,
+      "full_mae_mm": 1.086962758563459,
+      "needle_mae_mm": 0.6676549091935158,
+      "needle_pixels": 617
+    },
+    {
+      "frame_id": "frame_000005",
+      "runtime_s": 0.21788232500000504,
+      "full_mae_mm": 1.1535229859873652,
+      "needle_mae_mm": 1.0406418005004525,
+      "needle_pixels": 578
+    },
+    {
+      "frame_id": "frame_000006",
+      "runtime_s": 0.17548901100002468,
+      "full_mae_mm": 1.138513907790184,
+      "needle_mae_mm": 0.558012630790472,
+      "needle_pixels": 611
+    },
+    {
+      "frame_id": "frame_000007",
+      "runtime_s": 0.21187422400004152,
+      "full_mae_mm": 1.1068081948906183,
+      "needle_mae_mm": 0.4789003578480333,
+      "needle_pixels": 558
+    },
+    {
+      "frame_id": "frame_000008",
+      "runtime_s": 0.22480292500000587,
+      "full_mae_mm": 1.1411769082769752,
+      "needle_mae_mm": 1.2586137745529413,
+      "needle_pixels": 575
+    },
+    {
+      "frame_id": "frame_000009",
+      "runtime_s": 0.2638363840000011,
+      "full_mae_mm": 1.252434798516333,
+      "needle_mae_mm": 0.5070343613624573,
+      "needle_pixels": 598
+    },
+    {
+      "frame_id": "frame_000010",
+      "runtime_s": 0.1812415510000278,
+      "full_mae_mm": 1.1603494640439749,
+      "needle_mae_mm": 0.49907603533938527,
+      "needle_pixels": 581
+    },
+    {
+      "frame_id": "frame_000011",
+      "runtime_s": 0.19535626099997216,
+      "full_mae_mm": 1.0751346126198769,
+      "needle_mae_mm": 0.5125922034494579,
+      "needle_pixels": 622
+    },
+    {
+      "frame_id": "frame_000012",
+      "runtime_s": 0.2142099280000025,
+      "full_mae_mm": 1.2333003105595708,
+      "needle_mae_mm": 0.9654213208705187,
+      "needle_pixels": 624
+    },
+    {
+      "frame_id": "frame_000013",
+      "runtime_s": 0.2567245540000158,
+      "full_mae_mm": 1.140236621722579,
+      "needle_mae_mm": 0.7687256438657641,
+      "needle_pixels": 541
+    },
+    {
+      "frame_id": "frame_000014",
+      "runtime_s": 0.21981146199999557,
+      "full_mae_mm": 1.1082954006269574,
+      "needle_mae_mm": 0.8942268905229867,
+      "needle_pixels": 590
+    },
+    {
+      "frame_id": "frame_000015",
+      "runtime_s": 0.19572952300001134,
+      "full_mae_mm": 1.2298055225983262,
+      "needle_mae_mm": 0.6183400982990861,
+      "needle_pixels": 618
+    },
+    {
+      "frame_id": "frame_000016",
+      "runtime_s": 0.20586609899999075,
+      "full_mae_mm": 1.092218328267336,
+      "needle_mae_mm": 1.0864094365388155,
+      "needle_pixels": 579
+    },
+    {
+      "frame_id": "frame_000017",
+      "runtime_s": 0.23994457500003818,
+      "full_mae_mm": 1.108825672417879,
+      "needle_mae_mm": 0.5604031612165272,
+      "needle_pixels": 625
+    },
+    {
+      "frame_id": "frame_000018",
+      "runtime_s": 0.23168149200000698,
+      "full_mae_mm": 1.1053902562707663,
+      "needle_mae_mm": 0.6425388273783028,
+      "needle_pixels": 606
+    },
+    {
+      "frame_id": "frame_000019",
+      "runtime_s": 0.2067737950000037,
+      "full_mae_mm": 1.1419947259128094,
+      "needle_mae_mm": 0.9837525431066751,
+      "needle_pixels": 569
+    },
+    {
+      "frame_id": "frame_000020",
+      "runtime_s": 0.2024110799999903,
+      "full_mae_mm": 1.221375772729516,
+      "needle_mae_mm": 0.8939921972341835,
+      "needle_pixels": 591
+    },
+    {
+      "frame_id": "frame_000021",
+      "runtime_s": 0.22215177100002848,
+      "full_mae_mm": 1.2553430860862136,
+      "needle_mae_mm": 0.5541989230550826,
+      "needle_pixels": 580
+    },
+    {
+      "frame_id": "frame_000022",
+      "runtime_s": 0.22509383699997443,
+      "full_mae_mm": 1.0632401099428535,
+      "needle_mae_mm": 0.5363880773074925,
+      "needle_pixels": 567
+    },
+    {
+      "frame_id": "frame_000023",
+      "runtime_s": 0.19880471400000488,
+      "full_mae_mm": 1.0590258752927184,
+      "needle_mae_mm": 0.7248270558193326,
+      "needle_pixels": 564
+    },
+    {
+      "frame_id": "frame_000024",
+      "runtime_s": 0.16964535300002126,
+      "full_mae_mm": 1.225094310939312,
+      "needle_mae_mm": 0.9251632145605981,
+      "needle_pixels": 576
+    },
+    {
+      "frame_id": "frame_000025",
+      "runtime_s": 0.15595029700000396,
+      "full_mae_mm": 1.08904589433223,
+      "needle_mae_mm": 0.641977705527097,
+      "needle_pixels": 585
+    },
+    {
+      "frame_id": "frame_000026",
+      "runtime_s": 0.16272607399997696,
+      "full_mae_mm": 1.1784961679950356,
+      "needle_mae_mm": 0.7541973609477282,
+      "needle_pixels": 558
+    },
+    {
+      "frame_id": "frame_000027",
+      "runtime_s": 0.15806967299999997,
+      "full_mae_mm": 1.114913378842175,
+      "needle_mae_mm": 0.5721028428524733,
+      "needle_pixels": 600
+    },
+    {
+      "frame_id": "frame_000028",
+      "runtime_s": 0.1539762990000213,
+      "full_mae_mm": 1.0882123606279492,
+      "needle_mae_mm": 0.6359912804327905,
+      "needle_pixels": 601
+    },
+    {
+      "frame_id": "frame_000029",
+      "runtime_s": 0.1553701860000274,
+      "full_mae_mm": 1.0803228942677379,
+      "needle_mae_mm": 0.7021091296337545,
+      "needle_pixels": 589
+    },
+    {
+      "frame_id": "frame_000030",
+      "runtime_s": 0.15875319799999943,
+      "full_mae_mm": 1.104473602026701,
+      "needle_mae_mm": 0.4191675689071417,
+      "needle_pixels": 599
+    },
+    {
+      "frame_id": "frame_000031",
+      "runtime_s": 0.1528822690000311,
+      "full_mae_mm": 1.083844224922359,
+      "needle_mae_mm": 0.7894354057498276,
+      "needle_pixels": 590
+    },
+    {
+      "frame_id": "frame_000032",
+      "runtime_s": 0.154486683000016,
+      "full_mae_mm": 1.1572971707209945,
+      "needle_mae_mm": 0.432528875535354,
+      "needle_pixels": 595
+    },
+    {
+      "frame_id": "frame_000033",
+      "runtime_s": 0.15333485300004668,
+      "full_mae_mm": 1.2384668225422502,
+      "needle_mae_mm": 0.9381102281622589,
+      "needle_pixels": 592
+    },
+    {
+      "frame_id": "frame_000034",
+      "runtime_s": 0.1511390950000191,
+      "full_mae_mm": 1.2134250719100237,
+      "needle_mae_mm": 0.6776300142519176,
+      "needle_pixels": 587
+    },
+    {
+      "frame_id": "frame_000035",
+      "runtime_s": 0.1470083030000069,
+      "full_mae_mm": 1.0869997786357999,
+      "needle_mae_mm": 0.681549368891865,
+      "needle_pixels": 607
+    },
+    {
+      "frame_id": "frame_000036",
+      "runtime_s": 0.16067823100001988,
+      "full_mae_mm": 1.121742301620543,
+      "needle_mae_mm": 1.0234088404104114,
+      "needle_pixels": 570
+    },
+    {
+      "frame_id": "frame_000037",
+      "runtime_s": 0.150979360000008,
+      "full_mae_mm": 1.1120069539174438,
+      "needle_mae_mm": 0.5553057999350131,
+      "needle_pixels": 611
+    },
+    {
+      "frame_id": "frame_000038",
+      "runtime_s": 0.1531604580000021,
+      "full_mae_mm": 1.1085671139881015,
+      "needle_mae_mm": 0.8296652231365442,
+      "needle_pixels": 589
+    },
+    {
+      "frame_id": "frame_000039",
+      "runtime_s": 0.15521585400000504,
+      "full_mae_mm": 1.1263303458690643,
+      "needle_mae_mm": 0.6860946887172759,
+      "needle_pixels": 573
+    }
+  ]
+}

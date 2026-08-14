@@ -15,17 +15,29 @@ Large or third-party assets are deliberately excluded from Git.
 The DA checkpoint is about 3.8 GB and is not stored in Git. Obtain it from the
 project owner or lab storage, then verify the full SHA256 before use.
 
-## Optional RL asset
+## Released RL assets
+
+| File | SHA256 |
+|---|---|
+| `models/rl/m3_measured_r3_100k.zip` | `0407987e296d78b8b63ccf49c16e35395b00cf8d4ebc4cfe857b57f3381f2a2f` |
+| `models/rl/r6_unified_single_goal_yaw15_seed1_final.zip` | `6286a88c21f04abfbc4b0747a87a67bc2c5dcba17f710692c6b5138f7776e525` |
 
 The default demo path uses the staged D2 controller. RL is an experimental
-alternative. The evaluated M3 checkpoints and expert trajectories are not in
-this lightweight repository. Do not silently substitute another checkpoint;
-record its SHA, training contract, number of transitions and evaluation mode.
+alternative. Do not silently substitute another checkpoint; record its SHA,
+training contract, number of transitions and evaluation mode.
 
 The historical SIM-S4 evaluator still initializes the policy stack even when
 the D2 action is selected, so exact SIM-S4 reproduction requires the M3-100k
 checkpoint path in `SIM_S4_MODEL`. The controller algorithm itself does not use
 the network output.
+
+## Released frozen SIM-S3 bank
+
+`data/reference/sim_s3_20260811/` contains the reset snapshots, DA metadata,
+gated FP result and deployment-proxy candidate arrays needed to rebuild the
+SIM-S4 goal banks. It enables controller replay without rerunning DA/FP. It
+does not contain RGB/depth images and therefore cannot be used to claim that
+the perception computation was reproduced.
 
 ## Simulator assets
 
@@ -35,7 +47,7 @@ This repository does not relicense those assets.
 
 ## Data needed for exact statistical reproduction
 
-The small reports in `docs/evidence/` preserve conclusions, but exact Wilson
-intervals and paired re-analysis require the original per-episode JSONL/CSV and
-frame banks. Request the corresponding dated result bundle from the project
-owner and verify its `MANIFEST.sha256`.
+The small reports and frozen bank preserve the main Reach input contract. Exact
+Wilson intervals, visual re-analysis and DA image-level metrics still require
+the original per-episode JSONL/CSV and RGB/depth frame bundles. Request the
+corresponding dated result bundle and verify its `MANIFEST.sha256`.

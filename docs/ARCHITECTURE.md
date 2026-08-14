@@ -83,3 +83,19 @@ pose-close success and the configured needle reset range. Demonstration,
 training termination and evaluation must use the same goal semantics. Historical
 25-candidate termination results are not directly comparable.
 
+## 7. Executable replacement matrix
+
+The public entrypoint makes privilege replacement explicit:
+
+| CLI | Upstream state | Interpretation |
+|---|---|---|
+| `--depth gt` | AMBF depth | privileged FP upper bound |
+| `--depth da` | learned metric depth | deployment-proxy perception |
+| `--goal gt` | AMBF needle pose | bypasses FP |
+| `--goal fp` | gated FP needle pose | deployment-proxy frozen goal |
+| `--controller d2` | staged SE(3) servo | main Reach controller |
+| `--controller rl` | checkpoint action | learned-policy comparison |
+
+`--goal both` runs the paired GT/FP cells from one reset bank. A frozen
+reference bank replays control without recomputing perception; a `--stage full`
+run captures RGB/depth and recomputes DA/FP before control.

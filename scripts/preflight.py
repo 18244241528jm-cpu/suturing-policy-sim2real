@@ -47,8 +47,9 @@ def main() -> None:
         missing = [name for name in variables if not os.environ.get(name)]
         if missing:
             raise SystemExit("MISSING environment variables: " + ", ".join(missing))
-        if os.environ["ROS_DOMAIN_ID"] in {"0", ""}:
-            raise SystemExit("ROS_DOMAIN_ID must be an explicit isolated non-zero domain")
+        domain = os.environ["ROS_DOMAIN_ID"]
+        if not domain.isdigit() or not 1 <= int(domain) <= 232:
+            raise SystemExit("ROS_DOMAIN_ID must be an isolated Fast DDS domain in 1..232")
         for name in ("AMBF_ROOT", "SRC_ROOT", "FOUNDATIONPOSE_ROOT", "DA_ROOT"):
             require(Path(os.environ[name]).expanduser(), name)
         checkpoint = Path(os.environ["DA_CHECKPOINT"]).expanduser()
@@ -63,4 +64,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

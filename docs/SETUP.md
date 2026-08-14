@@ -1,5 +1,9 @@
 # Setup and reproduction
 
+For a command-by-command Chinese guide, use
+[`docs/zh/从零复现仿真.md`](zh/从零复现仿真.md). This page is the compact
+English checklist.
+
 ## 1. Reference environment
 
 - Ubuntu 22.04 or WSL2 Ubuntu 22.04
@@ -19,6 +23,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements/analysis.txt
+# Install a CUDA-compatible PyTorch build first, then:
+python -m pip install -r requirements/simulation.txt
 ```
 
 ROS Python packages, PyKDL and AMBF clients must come from the corresponding
@@ -69,14 +75,20 @@ python src/handeye/synthetic_self_test.py --output-root /tmp/surgicai_handeye_se
 
 ## 6. Asset verification
 
-Place external model files as described in `docs/MODEL_ASSETS.md`, then run:
+The Reach replay uses the released compact SIM-S3 bank and RL checkpoint:
 
 ```bash
-python scripts/preflight.py --mode simulation
+python scripts/doctor.py --profile reach --config configs/pipeline.env
 ```
 
-The script checks required paths, checkpoint hashes and that the ROS domain is
-explicitly set. A failed preflight is a stop condition.
+Full DA/FP recomputation additionally requires the external assets in
+`docs/MODEL_ASSETS.md`:
+
+```bash
+python scripts/doctor.py --profile full --config configs/pipeline.env
+```
+
+Any doctor failure is a stop condition.
 
 ## 7. Main simulation sequence
 
@@ -94,14 +106,20 @@ external AMBF/SRC layouts described by environment variables. Start with one
 episode and inspect every output before launching a formal matrix.
 
 ```bash
-export ROS_DOMAIN_ID=330
-export SIM_S4_RESULT_ROOT=$HOME/surgicai_runs/sim_s4_smoke
-bash src/runners/run_sim_s4_deployment_proxy_reach.sh all
+source /opt/ros/humble/setup.bash
+source "$HOME/ambf_ros_ws/install/setup.bash"
+
+# Released frozen perception bank -> paired Reach A/B.
+python scripts/run_simulation.py --stage s4 --profile smoke --goal both --controller d2
+
+# Render -> DA -> FP gate -> paired Reach A/B.
+python scripts/run_simulation.py --stage full --profile smoke --depth da --goal both --controller d2
 ```
 
-Expected artifacts include `episodes.jsonl`, `result.json`, `status.txt`, logs
-and a `MANIFEST.sha256`. A ROS teardown exit code alone is not the acceptance
-criterion; the runner checks completed episode artifacts.
+Use `--depth gt|da`, `--goal gt|fp|both`, and `--controller d2|rl` for controlled
+replacements. Expected artifacts include `pipeline_status.json`,
+`episodes.jsonl`, `result.json`, `status.txt`, logs and `MANIFEST.sha256`. A ROS
+teardown exit code alone is not the acceptance criterion.
 
 ## 8. Real-robot hand-eye: read-only first
 

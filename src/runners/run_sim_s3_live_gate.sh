@@ -1,42 +1,63 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-RESULT_ROOT="${SIM_S3_RESULT_ROOT:-/home/jiaming/sim_s3_runs/20260811/formal}"
-PROJECT_MNT="${SIM_S3_PROJECT_MNT:-/mnt/c/Users/30518/OneDrive - Johns Hopkins/Desktop/cis2/project34}"
-REPO="${SIM_S3_REPO:-/home/jiaming/SurgicAI-edheadd-clean}"
-AUD="$PROJECT_MNT/depth_audit_stage_a"
-AMBF_ROOT="${SIM_S3_AMBF_ROOT:-$PROJECT_MNT/environments/ambf-ambf-3.0}"
-AMBF_EXECUTABLE="${SIM_S3_AMBF_EXECUTABLE:-/home/jiaming/sim_s3_runtime/ambf_sim_s3_domain229}"
-STEREO_LAUNCH="${SIM_S3_STEREO_LAUNCH:-$AUD/depth_audit_stereo.launch.yaml}"
-ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-229}"
+PROJECT_MNT="${SIM_S3_PROJECT_MNT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
+RESULT_ROOT="${SIM_S3_RESULT_ROOT:-$HOME/surgicai_runs/sim_s3}"
+REPO="${SIM_S3_REPO:-$PROJECT_MNT/src/SurgicAI}"
+AUD="${SIM_S3_PERCEPTION_ROOT:-$PROJECT_MNT/src/perception}"
+AMBF_ROOT="${SIM_S3_AMBF_ROOT:-${AMBF_ROOT:-}}"
+ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-220}"
+AMBF_EXECUTABLE="${SIM_S3_AMBF_EXECUTABLE:-$HOME/.cache/surgicai/ambf_sim_s3_domain${ROS_DOMAIN_ID}}"
+STEREO_LAUNCH="${SIM_S3_STEREO_LAUNCH:-}"
 FP_IMAGE="${SIM_S3_FP_IMAGE:-foundationpose:blackwell}"
-FP_ROOT="${SIM_S3_FP_ROOT:-/home/jiaming/FoundationPose}"
-FP_MESH="${SIM_S3_FP_MESH:-/home/jiaming/surgical_robotics_challenge/ADF/Phantoms/3D_MED/high_res/Needle_stage_d_v0.OBJ}"
-DA_REPO="${SIM_S3_DA_REPO:-/home/jiaming/p5a_da_trainer/Depth-Anything-V2-xiangrui}"
-DA_CHECKPOINT="${SIM_S3_DA_CHECKPOINT:-/home/jiaming/p5a_da_training/20260729/p5a_diverse_clean_vitl_fp32/best.pth}"
-EXPECTED_DA_SHA="fc46bead4a5ea0e4122566bb88b93932aa82f110ee98281b5fcb09f499c9ec88"
+FP_ROOT="${SIM_S3_FP_ROOT:-${FOUNDATIONPOSE_ROOT:-}}"
+FP_MESH="${SIM_S3_FP_MESH:-${SRC_ROOT:-}/ADF/Phantoms/3D_MED/high_res/Needle_stage_d_v0.OBJ}"
+DA_REPO="${SIM_S3_DA_REPO:-${DA_ROOT:-}}"
+DA_CHECKPOINT="${SIM_S3_DA_CHECKPOINT:-${DA_CHECKPOINT:-}}"
+EXPECTED_DA_SHA="${SIM_S3_EXPECTED_DA_SHA:-fc46bead4a5ea0e4122566bb88b93932aa82f110ee98281b5fcb09f499c9ec88}"
+EPISODES="${SIM_S3_EPISODES:-40}"
+EVAL_SEED="${SIM_S3_EVAL_SEED:-1}"
+YAW_DEG="${SIM_S3_YAW_DEG:-15}"
+X_MM="${SIM_S3_X_MM:-3}"
+Y_MM="${SIM_S3_Y_MM:-3}"
+DEPTH_SOURCE="${SIM_S3_DEPTH_SOURCE:-da}"
+RUNTIME="${SIM_S3_RUNTIME:-$HOME/.cache/surgicai/sim_s3_runtime}"
+ROS_SETUP="${SIM_S3_ROS_SETUP:-/opt/ros/humble/setup.bash}"
+AMBF_ROS_SETUP="${SIM_S3_AMBF_ROS_SETUP:-$HOME/ambf_ros_ws/install/setup.bash}"
 
-[[ "$ROS_DOMAIN_ID" == "229" ]] || { echo "SIM-S3 frozen domain is 229" >&2; exit 2; }
+[[ "$ROS_DOMAIN_ID" =~ ^[0-9]+$ && "$ROS_DOMAIN_ID" -ge 1 && "$ROS_DOMAIN_ID" -le 232 ]] || { echo "Use an isolated ROS_DOMAIN_ID in 1..232" >&2; exit 2; }
+[[ "$EPISODES" =~ ^[1-9][0-9]*$ ]] || { echo "SIM_S3_EPISODES must be a positive integer" >&2; exit 2; }
+[[ "$DEPTH_SOURCE" == da || "$DEPTH_SOURCE" == gt ]] || { echo "SIM_S3_DEPTH_SOURCE must be da or gt" >&2; exit 2; }
+[[ -n "$AMBF_ROOT" && -d "$AMBF_ROOT" ]] || { echo "Set SIM_S3_AMBF_ROOT or AMBF_ROOT" >&2; exit 2; }
+[[ -s "$STEREO_LAUNCH" ]] || { echo "Set SIM_S3_STEREO_LAUNCH to the rendered launch YAML" >&2; exit 2; }
+[[ -d "$FP_ROOT" ]] || { echo "Set SIM_S3_FP_ROOT or FOUNDATIONPOSE_ROOT" >&2; exit 2; }
+[[ -s "$FP_MESH" ]] || { echo "Set SIM_S3_FP_MESH or SRC_ROOT" >&2; exit 2; }
+if [[ "$DEPTH_SOURCE" == da ]]; then
+  [[ -d "$DA_REPO" ]] || { echo "Set SIM_S3_DA_REPO or DA_ROOT" >&2; exit 2; }
+  [[ -s "$DA_CHECKPOINT" ]] || { echo "Set SIM_S3_DA_CHECKPOINT or DA_CHECKPOINT" >&2; exit 2; }
+fi
 [[ ! -e "$RESULT_ROOT" ]] || { echo "Refusing overwrite: $RESULT_ROOT" >&2; exit 3; }
-mkdir -p "$RESULT_ROOT" /home/jiaming/sim_s3_runtime
-source /opt/ros/humble/setup.bash
-source /home/jiaming/ambf_ros_ws/install/setup.bash
+mkdir -p "$RESULT_ROOT" "$RUNTIME"
+source "$ROS_SETUP"
+source "$AMBF_ROS_SETUP"
 export ROS_DOMAIN_ID DISPLAY="${DISPLAY:-:0}" MESA_LOADER_DRIVER_OVERRIDE="${MESA_LOADER_DRIVER_OVERRIDE:-d3d12}"
 export PYTHONPATH="$REPO:$REPO/RL:$AUD:${PYTHONPATH:-}"
-export AMBF_PLUGINS_PATH="$AMBF_ROOT/core/build/ambf_plugins:/home/jiaming/ambf_ros_ws/install/ros_comm_plugin/lib"
+export AMBF_PLUGINS_PATH="$AMBF_ROOT/core/build/ambf_plugins:$(dirname "$AMBF_ROS_SETUP")/ros_comm_plugin/lib"
 export LD_LIBRARY_PATH="$AMBF_ROOT/core/build/lib:${LD_LIBRARY_PATH:-}"
 
 topics="$(timeout 8 ros2 topic list 2>&1 | grep -Ev '^/(parameter_events|rosout)$' || true)"
-[[ -z "$topics" ]] || { printf '%s\n' "$topics" >"$RESULT_ROOT/domain_preflight_topics.txt"; echo "Domain 229 is not clean" >&2; exit 4; }
-printf 'ROS_DOMAIN_ID=229\nstatus=clean\n' >"$RESULT_ROOT/domain_preflight_topics.txt"
-actual_sha="$(sha256sum "$DA_CHECKPOINT" | awk '{print $1}')"
-[[ "$actual_sha" == "$EXPECTED_DA_SHA" ]] || { echo "DA SHA mismatch: $actual_sha" >&2; exit 5; }
+[[ -z "$topics" ]] || { printf '%s\n' "$topics" >"$RESULT_ROOT/domain_preflight_topics.txt"; echo "ROS domain $ROS_DOMAIN_ID is not clean" >&2; exit 4; }
+printf 'ROS_DOMAIN_ID=%s\nstatus=clean\n' "$ROS_DOMAIN_ID" >"$RESULT_ROOT/domain_preflight_topics.txt"
+if [[ "$DEPTH_SOURCE" == da ]]; then
+  actual_sha="$(sha256sum "$DA_CHECKPOINT" | awk '{print $1}')"
+  [[ "$actual_sha" == "$EXPECTED_DA_SHA" ]] || { echo "DA SHA mismatch: $actual_sha" >&2; exit 5; }
+fi
 
-python3 - "$RESULT_ROOT/perturbation_plan_frozen.json" <<'PY'
+python3 - "$RESULT_ROOT/perturbation_plan_frozen.json" "$EPISODES" <<'PY'
 import json, numpy as np, sys
 from pathlib import Path
 rng=np.random.default_rng(20260811); ops=['erosion','dilation','none']; rows=[]
-for i in range(40):
+for i in range(int(sys.argv[2])):
  rows.append({'frame_id':f'frame_{i:06d}','dx_px':int(rng.integers(-3,4)),
               'dy_px':int(rng.integers(-3,4)),'morphology':ops[int(rng.integers(0,3))],
               'kernel_radius_px':int(rng.integers(0,4))})
@@ -74,21 +95,33 @@ sleep 3
 
 python3 -u "$AUD/capture_p9a_camera_daemon.py" \
   --request-dir "$RESULT_ROOT/requests" --out "$RESULT_ROOT/rendered_reset_frames" \
-  --expected-frames 40 >"$RESULT_ROOT/camera_capture.log" 2>&1 &
+  --expected-frames "$EPISODES" >"$RESULT_ROOT/camera_capture.log" 2>&1 &
 CAMERA_PID=$!
-python3 -u "$AUD/capture_p9a_reset_bank.py" --episodes 40 --eval-seed 1 \
-  --yaw-deg 15 --x-mm 3 --y-mm 3 --ros-domain-id 229 \
+python3 -u "$AUD/capture_p9a_reset_bank.py" --episodes "$EPISODES" --eval-seed "$EVAL_SEED" \
+  --yaw-deg "$YAW_DEG" --x-mm "$X_MM" --y-mm "$Y_MM" --ros-domain-id "$ROS_DOMAIN_ID" \
   --request-dir "$RESULT_ROOT/requests" --output "$RESULT_ROOT/reset_bank.json" \
   >"$RESULT_ROOT/reset_bank.log" 2>&1
 wait "$CAMERA_PID"; CAMERA_PID=""; cleanup; AMBF_PID=""
 
-python3 -u "$AUD/infer_p5c_gate_da.py" --repo-root "$DA_REPO" \
-  --checkpoint "$DA_CHECKPOINT" --capture-dir "$RESULT_ROOT/rendered_reset_frames/L" \
-  --prediction-dir "$RESULT_ROOT/new_da_depth" --out "$RESULT_ROOT/da_result.json" \
-  --device cuda >"$RESULT_ROOT/da.log" 2>&1
+if [[ "$DEPTH_SOURCE" == da ]]; then
+  python3 -u "$AUD/infer_p5c_gate_da.py" --repo-root "$DA_REPO" \
+    --checkpoint "$DA_CHECKPOINT" --capture-dir "$RESULT_ROOT/rendered_reset_frames/L" \
+    --prediction-dir "$RESULT_ROOT/new_da_depth" --out "$RESULT_ROOT/da_result.json" \
+    --device cuda >"$RESULT_ROOT/da.log" 2>&1
+else
+  python3 -u "$AUD/use_gt_depth.py" --capture-dir "$RESULT_ROOT/rendered_reset_frames/L" \
+    --prediction-dir "$RESULT_ROOT/new_da_depth" --out "$RESULT_ROOT/da_result.json" \
+    >"$RESULT_ROOT/da.log" 2>&1
+fi
 
-docker run --rm --ipc host --device=/dev/dxg -v /usr/lib/wsl:/usr/lib/wsl \
-  -e LD_LIBRARY_PATH=/usr/lib/wsl/lib -v "$FP_ROOT:/workspace" -v "$AUD:/audit:ro" \
+if [[ -n "${SIM_S3_FP_DOCKER_ARGS:-}" ]]; then
+  read -r -a FP_GPU_ARGS <<<"$SIM_S3_FP_DOCKER_ARGS"
+elif [[ -e /dev/dxg ]]; then
+  FP_GPU_ARGS=(--device=/dev/dxg -v /usr/lib/wsl:/usr/lib/wsl -e LD_LIBRARY_PATH=/usr/lib/wsl/lib)
+else
+  FP_GPU_ARGS=(--gpus all)
+fi
+docker run --rm --ipc host "${FP_GPU_ARGS[@]}" -v "$FP_ROOT:/workspace" -v "$AUD:/audit:ro" \
   -v "$RESULT_ROOT:/results" -v "$FP_MESH:/mesh/needle.obj:ro" -w /audit "$FP_IMAGE" \
   /opt/venv/bin/python /audit/run_fp_sim_s3_live_gate.py \
   --foundationpose-root /workspace --dataset /results/rendered_reset_frames \

@@ -12,8 +12,8 @@ from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "depth_audit_stage_a"))
+PUBLIC_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PUBLIC_ROOT / "src/perception"))
 from p9a_goal_geometry import needle_pose_to_goal  # noqa: E402
 
 

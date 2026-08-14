@@ -1,174 +1,106 @@
 # Suturing Policy Sim2Real
 
-Reproducible research code for the pipeline
+**中文新人入口：** [从零复现仿真](docs/zh/从零复现仿真.md) ·
+[参数与排错](docs/zh/参数与排错.md) ·
+[真机与仿真的区别](docs/zh/真机与仿真的区别.md)
+
+This repository releases the project code and contracts for:
 
 ```text
 ECM RGB -> metric depth -> needle mask -> FoundationPose -> physical gate
-        -> frozen grasp goal -> PSM kinematics + hand-eye -> staged SE(3) servo
-        -> Reach -> (future) physical close/lift
+        -> frozen grasp goal -> PSM kinematics + hand-eye -> D2/RL controller
+        -> Reach -> (unvalidated) physical close/lift
 ```
 
-This repository is a compact, public-facing snapshot of Project 34. It keeps
-the code that defines the interfaces and validated experiments, while large
-checkpoints, simulator binaries, raw datasets and third-party repositories stay
-outside Git.
+## What is actually validated
 
-## Read this first: what is and is not working
+- [Measured] A frozen-goal deployment-proxy **Reach** result passed 29/30 paired
+  AMBF episodes. This used the D2 staged controller, not RL actions.
+- [Measured] The SIM-S3 first-frame physical gate accepted 40/40 and reduced
+  proxy-mask raw flips from 1/40 to 0/40 after gating.
+- [Disproved] Pure FoundationPose PSM tracking is not control-ready.
+- [Not tested] Real dVRK hand-eye accuracy, automatic real-camera needle masks,
+  physical jaw close/lift and needle retention.
 
-The validated simulation result is a **Reach sub-pipeline**, not autonomous
-physical suturing:
-
-- needle initialization: RGB -> new Depth Anything checkpoint -> FoundationPose
-  -> support-plane/rest-orientation gate -> frozen goal;
-- PSM state: kinematics plus a hand-eye transform, not pure visual PSM tracking;
-- controller: staged D2 SE(3) servo;
-- deployment-proxy Reach: 29/30 paired episodes;
-- physical jaw close, lift and needle retention: not yet validated on the real robot.
-
-Known negative results are part of the release:
-
-- pure FoundationPose tracking of the PSM is not control-ready;
-- 4 mm AMBF stereo degraded the validated DA depth when fused;
-- an MHT/EKF selector did not materially beat the simple fixed fusion baseline;
-- moving the camera near and normal to the phantom enlarged the needle but moved
-  the DA model out of distribution, worsening needle depth p95 to 33.489 mm.
-
-See [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md) before interpreting
-any success rate.
+Evidence is preserved in `docs/evidence/`. Read
+[known limitations](docs/KNOWN_LIMITATIONS.md) before quoting a success rate.
 
 ## Repository layout
 
 ```text
-src/
-  SurgicAI/RL/        Environment, reset, goal, TD3-HER-BC and evaluation contracts
-  perception/         DA/FP bridges, geometry and first-frame safety gate
-  control/            Staged SE(3) controller and isolated evaluator
-  handeye/            Read-only real-robot collection, solve and overlay tools
-  runners/            Reproducible simulation orchestration scripts
-docs/
-  ARCHITECTURE.md      Data flow, coordinate contracts and privilege boundaries
-  SETUP.md             Installation and smoke-test instructions
-  MODEL_ASSETS.md      External repositories, checkpoints and SHA256 values
-  KNOWN_LIMITATIONS.md What has been measured, inferred and disproved
-  evidence/            Small dated reports; no raw datasets or checkpoints
-configs/
-  pipeline.env.example Portable path and ROS-domain configuration
-scripts/
-  preflight.py         Checks code, external assets and unsafe missing inputs
-tests/
-  test_public_contract.py  Hardware-free contract checks
+src/SurgicAI/RL/       environment, TD3-HER-BC and evaluation contracts
+src/perception/        stereo capture, DA adapter, FP gate and geometry
+src/control/           D2 controller and SIM-S4 evaluator
+src/handeye/           read-only collection, solve and overlay tools
+src/runners/           portable SIM-S3/SIM-S4 research runners
+models/rl/             released M3 and R6 project checkpoints
+data/reference/        compact frozen SIM-S3 bank for Reach replay
+configs/               host paths and frozen smoke/formal profiles
+scripts/doctor.py      stage-coded setup audit; starts no simulator or robot
+scripts/run_simulation.py  one entrypoint for code/S3/S4/full runs
+scripts/inspect_results.py artifact completeness check
 ```
 
-The original relative layout is intentionally retained under `src/`. Several
-research scripts import the SurgicAI environment dynamically; a cosmetic
-package rewrite would make the public code shorter but no longer reproduce the
-tested runtime.
+Third-party AMBF, Surgical Robotics Challenge, FoundationPose and Depth
+Anything repositories remain external. The 3.8 GB DA checkpoint and the
+FoundationPose image are also external; see [model assets](docs/MODEL_ASSETS.md).
 
-Existing lab onboarding material remains available:
+## Ten-minute code-only check
 
-- [完整Pipeline_从0到MTM控制仿真PSM.md](完整Pipeline_从0到MTM控制仿真PSM.md):
-  environment setup, teleoperation, rosbag and basic PSM control;
-- [policy_deployment_bundle/](policy_deployment_bundle/): historical dVRK
-  adapter and deployment checklist;
-- [checkpoint presentation/](checkpoint%20presentation/): earlier project
-  presentation material.
-
-## External dependencies
-
-This repository does **not** vendor these projects:
-
-- [AMBF](https://github.com/WPI-AIM/ambf)
-- [Surgical Robotics Challenge](https://github.com/surgical-robotics-ai/surgical_robotics_challenge)
-- [FoundationPose](https://github.com/NVlabs/FoundationPose)
-- [Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V2)
-- ROS 2 Humble and a compatible dVRK workspace
-
-It also does not contain the 3.8 GB DA checkpoint, FoundationPose Docker image,
-raw rosbag files or expert trajectories. Exact hashes and placement rules are
-in [docs/MODEL_ASSETS.md](docs/MODEL_ASSETS.md).
-
-## Quick start: hardware-free checks
-
-Ubuntu 22.04 or WSL2 with Python 3.10 is the reference host.
+Reference host: Ubuntu 22.04 or WSL2 Ubuntu 22.04, Python 3.10.
 
 ```bash
 git clone https://github.com/18244241528jm-cpu/suturing-policy-sim2real.git
 cd suturing-policy-sim2real
-
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements/analysis.txt
 
-python scripts/preflight.py --mode code-only
+python scripts/doctor.py --profile code
 python -m unittest discover -s tests -v
-python src/handeye/synthetic_self_test.py --output-root /tmp/surgicai_handeye_selftest
+python src/handeye/synthetic_self_test.py --output-root "$HOME/surgicai_runs/handeye_selftest"
 ```
 
-Expected endings:
+Expected endings are `DOCTOR_PASS`, `OK`, and `"passed": true`. The hand-eye
+test is synthetic; it proves software conventions, not real robot accuracy.
 
-```text
-PUBLIC_PIPELINE_PREFLIGHT_OK mode=code-only
-OK
-"passed": true
-```
+## Simulation entrypoint
 
-The hand-eye self-test uses synthetic data. It verifies conventions and the
-solver implementation; it is not a claim about real dVRK accuracy.
-
-## Full simulation smoke test
-
-Follow [docs/SETUP.md](docs/SETUP.md) to install the external repositories and
-place the model assets. Copy the example configuration and edit only paths:
+After following [the full setup guide](docs/zh/从零复现仿真.md):
 
 ```bash
 cp configs/pipeline.env.example configs/pipeline.env
-set -a
-source configs/pipeline.env
-set +a
+# Edit host paths, then source ROS in this shell.
+source /opt/ros/humble/setup.bash
+source "$HOME/ambf_ros_ws/install/setup.bash"
 
-python scripts/preflight.py --mode simulation
-bash src/runners/run_sim_s4_deployment_proxy_reach.sh all
+# Fast Reach replay from the released frozen SIM-S3 bank.
+python scripts/run_simulation.py --stage s4 --profile smoke --goal both --controller d2
+
+# Full render -> DA -> FP gate -> Reach computation.
+python scripts/run_simulation.py --stage full --profile smoke --goal both --controller d2
 ```
 
-The runner refuses to overwrite an existing result directory and requires a
-clean, dedicated `ROS_DOMAIN_ID`. Do not share a domain with another AMBF run.
+Controlled replacements are explicit:
 
-## Real robot safety boundary
+- `--depth gt|da`: privileged AMBF GT depth or learned metric depth;
+- `--goal gt|fp|both`: bypass FP, use FP goal, or paired A/B;
+- `--controller d2|rl`: staged servo or learned policy;
+- `--profile smoke|formal`: 2-episode wiring check or frozen 40/30 contract.
 
-Nothing in this repository authorizes autonomous motion on a real dVRK.
+Every stage writes `pipeline_status.json`. A failure is reported as a stable
+code such as `D9-E60-S3` or `D9-E90-S4`; use the
+[parameter and troubleshooting guide](docs/zh/参数与排错.md).
 
-The hand-eye collector is read-only: an approved operator moves the robot and
-presses Enter to save synchronized observations. Before any automatic command:
+## Safety boundary
 
-1. verify camera topics, camera intrinsics, frame IDs and units;
-2. solve hand-eye and pass held-out overlays;
-3. project measured PSM kinematics into the image and inspect the overlay;
-4. validate needle DA/FP offline on real images;
-5. authorize translation, orientation and approach separately at low speed.
-
-The existing `policy_deployment_bundle/` is retained as historical dVRK adapter
-material. It is not a complete needle-goal safety runner.
-
-## Reproducing a result versus extending the project
-
-- To reproduce the main Reach result, use SIM-S3 then SIM-S4 with the frozen
-  assets listed in `docs/MODEL_ASSETS.md`.
-- To evaluate another DA checkpoint, keep the same held-out frames and run the
-  DA/FP acceptance code; never compare on its training frames.
-- To change camera geometry, collect a new held-out set and revalidate metric
-  depth before running FP or control.
-- To add a probabilistic fusion model, first show that the FP candidate oracle
-  contains a correct candidate. A selector cannot recover a pose absent from
-  its candidate set.
-
-## Citation and provenance
-
-This is research software under active development. Every measured statement
-in the docs points to a dated report in `docs/evidence/`. Upstream code remains
-under its original license; see [LICENSE](LICENSE) and the upstream projects.
+Nothing here authorizes autonomous real-dVRK motion. Real operation adds camera
+calibration, hand-eye, frame/unit validation, segmentation, latency, collision
+limits, operator enable/stop and staged low-speed authorization. See
+[simulation versus real robot](docs/zh/真机与仿真的区别.md).
 
 ## License
 
-MIT for the SurgicAI-derived code in this snapshot. Third-party repositories,
-meshes, models and checkpoints are not relicensed by this repository.
+MIT for project-generated source code in this snapshot. Upstream projects,
+meshes, model architectures and external checkpoints retain their own licenses.

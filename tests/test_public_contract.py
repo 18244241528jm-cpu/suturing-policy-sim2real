@@ -36,7 +36,15 @@ class PublicContractTest(unittest.TestCase):
         for relative in (
             "docs/ARCHITECTURE.md",
             "docs/SETUP.md",
+            "docs/zh/从零复现仿真.md",
+            "docs/zh/真机与仿真的区别.md",
+            "scripts/doctor.py",
+            "scripts/run_simulation.py",
             "src/perception/run_fp_sim_s3_live_gate.py",
+            "src/perception/capture_p9a_reset_bank.py",
+            "src/perception/infer_p5c_gate_da.py",
+            "models/rl/m3_measured_r3_100k.zip",
+            "data/reference/sim_s3_20260811/reset_bank.json",
             "src/handeye/config/example_session.yaml",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
@@ -44,4 +52,3 @@ class PublicContractTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
