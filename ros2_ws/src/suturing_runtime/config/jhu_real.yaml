@@ -1,0 +1,44 @@
+dvrk_topic_adapter:
+  ros__parameters:
+    raw_left_image: /jhu_daVinci/left/image_rect
+    raw_right_image: /jhu_daVinci/right/image_rect
+    raw_left_info: /jhu_daVinci/left/camera_info
+    raw_right_info: /jhu_daVinci/right/camera_info
+    raw_psm_pose: /PSM1/measured_cp
+    raw_psm_pose_type: geometry_msgs/msg/PoseStamped
+    raw_psm_twist: /PSM1/measured_cv
+    raw_psm_jaw: /PSM1/jaw/measured_js
+    fallback_psm_frame: PSM1_psm_base_link
+pipeline_supervisor:
+  ros__parameters:
+    max_sensor_age_s: 0.75
+    require_depth: true
+    require_mask: true
+    require_needle_pose: true
+    require_goal: true
+approach_goal_builder:
+  ros__parameters:
+    target_frame: PSM1_psm_base_link
+    grasp_angle_deg: 12.5
+    lift_height_m: 0.007
+    max_pose_age_s: 1.0
+    freeze_first_goal: true
+guarded_pose_executor:
+  ros__parameters:
+    enable_output: false
+    operator_acknowledgement: NOT_ACKNOWLEDGED
+    raw_servo_topic: /PSM1/servo_cp
+    raw_servo_type: geometry_msgs/msg/PoseStamped
+    command_frame: PSM1_psm_base_link
+    control_hz: 20.0
+    max_input_age_s: 0.5
+    max_initial_translation_m: 0.010
+    max_initial_rotation_deg: 30.0
+    max_linear_speed_m_s: 0.002
+    max_angular_speed_deg_s: 5.0
+    translation_tolerance_m: 0.001
+    rotation_tolerance_deg: 2.0
+    execution_timeout_s: 20.0
+    # [假设] Site-specific PSM1-base workspace. Confirm before enabling output.
+    workspace_min_m: [-0.20, -0.20, -0.05]
+    workspace_max_m: [0.20, 0.20, 0.25]

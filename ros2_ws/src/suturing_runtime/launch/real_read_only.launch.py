@@ -1,0 +1,16 @@
+import os
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+def generate_launch_description():
+    config=LaunchConfiguration("config")
+    return LaunchDescription([
+        DeclareLaunchArgument("config",default_value=os.path.join(
+            get_package_share_directory("suturing_runtime"),"config","jhu_real.yaml")),
+        Node(package="suturing_runtime",executable="dvrk_topic_adapter",name="dvrk_topic_adapter",parameters=[config],output="screen"),
+        Node(package="suturing_runtime",executable="approach_goal_builder",name="approach_goal_builder",parameters=[config],output="screen"),
+        Node(package="suturing_runtime",executable="pipeline_supervisor",name="pipeline_supervisor",parameters=[config],output="screen"),
+        Node(package="suturing_runtime",executable="guarded_pose_executor",name="guarded_pose_executor",parameters=[config,{"enable_output":False}],output="screen"),
+    ])

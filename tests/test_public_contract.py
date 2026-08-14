@@ -46,6 +46,13 @@ class PublicContractTest(unittest.TestCase):
             "models/rl/m3_measured_r3_100k.zip",
             "data/reference/sim_s3_20260811/reset_bank.json",
             "src/handeye/config/example_session.yaml",
+            "ros2_ws/src/suturing_runtime/package.xml",
+            "ros2_ws/src/suturing_runtime/config/jhu_real.yaml",
+            "ros2_ws/src/suturing_runtime/launch/real_read_only.launch.py",
+            "ros2_ws/src/suturing_runtime/launch/real_guarded.launch.py",
+            "ros2_ws/src/suturing_runtime/suturing_runtime/dvrk_topic_adapter.py",
+            "ros2_ws/src/suturing_runtime/suturing_runtime/approach_goal_builder.py",
+            "ros2_ws/src/suturing_runtime/suturing_runtime/guarded_pose_executor.py",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 

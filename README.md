@@ -93,6 +93,16 @@ Every stage writes `pipeline_status.json`. A failure is reported as a stable
 code such as `D9-E60-S3` or `D9-E90-S4`; use the
 [parameter and troubleshooting guide](docs/zh/参数与排错.md).
 
+## ROS 2 real-robot runtime
+
+The topic-first, startup-safe dVRK runtime is in
+[`ros2_ws/src/suturing_runtime`](ros2_ws/src/suturing_runtime/README.md). It
+ships with the JHU topic names supplied on 2026-08-13, a read-only type/message
+preflight, a stable `/suturing/*` contract, TF-based Approach-goal generation,
+freshness diagnostics, and a bounded single-Reach gateway. Robot output is
+disabled by default and requires explicit acknowledgement, arm and execute
+calls; it never commands jaw close or claims physical grasp.
+
 ## Safety boundary
 
 Nothing here authorizes autonomous real-dVRK motion. Real operation adds camera
