@@ -34,9 +34,10 @@ class PublicContractTest(unittest.TestCase):
 
     def test_required_public_files_exist(self):
         for relative in (
-            "docs/ARCHITECTURE.md",
-            "docs/SETUP.md",
-            "docs/zh/从零复现仿真.md",
+            "README.md",
+            "docs/MODEL_ASSETS.md",
+            "docs/KNOWN_LIMITATIONS.md",
+            "docs/zh/参数与排错.md",
             "docs/zh/真机与仿真的区别.md",
             "scripts/doctor.py",
             "scripts/run_simulation.py",
@@ -55,6 +56,23 @@ class PublicContractTest(unittest.TestCase):
             "ros2_ws/src/suturing_runtime/suturing_runtime/guarded_pose_executor.py",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
+
+    def test_readme_is_the_single_front_door(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for required in (
+            "AMBF_ROOT=",
+            "SRC_ROOT=",
+            "DA_ROOT=",
+            "FOUNDATIONPOSE_ROOT=",
+            "scripts/prepare_ambf_launch.py",
+            "scripts/run_simulation.py --stage code",
+            "--stage s4",
+            "--stage full",
+            "scripts/inspect_results.py",
+            "D9-E60-S3",
+            "D9-E90-S4",
+        ):
+            self.assertIn(required, readme)
 
 
 if __name__ == "__main__":
