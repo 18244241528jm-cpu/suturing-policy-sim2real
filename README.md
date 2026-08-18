@@ -315,7 +315,10 @@ python scripts/inspect_results.py \
 /suturing/psm1/measured_cp
 ```
 
-并输出诊断、TF goal 和受保护的单次 Reach。它默认只读，且当前不在包内自动运行 DA/mask/FP；上游感知必须先把经门控的针位姿发布到 `/suturing/needle/pose_gated`。这是刻意的失败隔离，不是“完整真机自动 pipeline 已完成”。
+并输出诊断、TF goal 和受保护的单次 Reach。它默认只读。R2 已包含经过 P5a 验收的
+DA backend，但默认关闭，必须提供冻结 checkpoint 与 Depth-Anything-V2 路径；mask 和
+FoundationPose backend 仍是外部输入。只有 R6 平放门与人工确认之后的针位姿才会发布到
+`/suturing/needle/pose_gated`。这是刻意的失败隔离，不是“完整真机自动 pipeline 已完成”。
 
 编译和只读冒烟：
 
@@ -331,7 +334,7 @@ source install/setup.bash
 ros2 launch suturing_runtime real_read_only.launch.py
 ```
 
-先完成 topic 类型、相机内参、hand-eye、frame/单位、mask、freshness、低速和人工停止验证，才可进入 guarded motion。真机与仿真输入逐项差异见 [`docs/zh/真机与仿真的区别.md`](docs/zh/真机与仿真的区别.md)。
+先完成 topic 类型、相机内参、hand-eye、frame/单位、mask、freshness、低速和人工停止验证，才可进入 guarded motion。真机与仿真输入逐项差异见 [`docs/zh/真机与仿真的区别.md`](docs/zh/真机与仿真的区别.md)；逐文件、逐 callback 的白话代码讲义见 [`docs/zh/真机主代码逐段讲义.md`](docs/zh/真机主代码逐段讲义.md)。
 
 ## 8. 本地验证范围
 

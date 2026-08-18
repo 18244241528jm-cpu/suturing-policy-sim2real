@@ -28,6 +28,78 @@ class TopicContract:
     execution_preview: str = "/suturing/execution/preview"
 
 
+@dataclass(frozen=True)
+class FrameContract:
+    """ROS-independent description used to join one initialization frame."""
+
+    stamp_ns: int
+    frame_id: str
+    width: int
+    height: int
+    encoding: str
+
+
+def frame_contract_issues(
+    reference: FrameContract,
+    candidate: FrameContract,
+    allowed_encodings: tuple[str, ...],
+) -> list[str]:
+    """Return every reason that candidate cannot belong to reference RGB."""
+
+    issues: list[str] = []
+    if candidate.stamp_ns != reference.stamp_ns:
+        issues.append(f"stamp:{candidate.stamp_ns}!={reference.stamp_ns}")
+    if candidate.frame_id != reference.frame_id:
+        issues.append(f"frame:{candidate.frame_id!r}!={reference.frame_id!r}")
+    if candidate.width != reference.width or candidate.height != reference.height:
+        issues.append(
+            f"shape:{candidate.width}x{candidate.height}!="
+            f"{reference.width}x{reference.height}"
+        )
+    if candidate.encoding not in allowed_encodings:
+        issues.append(
+            f"encoding:{candidate.encoding!r} not in {list(allowed_encodings)!r}"
+        )
+    return issues
+
+
+def select_flat_candidate(
+    poses: np.ndarray,
+    scores: np.ndarray,
+    plane_normal: np.ndarray,
+    mesh_rest_normal: np.ndarray,
+    maximum_angle_deg: float,
+) -> tuple[int | None, np.ndarray]:
+    """Select the highest-scored signed-normal-consistent candidate.
+
+    No absolute dot product is used: an upside-down mesh normal is not silently
+    accepted as equivalent to the configured resting side.
+    """
+
+    matrices = np.asarray(poses, dtype=np.float64)
+    values = np.asarray(scores, dtype=np.float64).reshape(-1)
+    if matrices.ndim != 3 or matrices.shape[1:] != (4, 4):
+        raise ValueError("poses must have shape [N,4,4]")
+    if len(matrices) != len(values) or len(values) == 0:
+        raise ValueError("poses/scores must be non-empty and have equal length")
+    if not np.isfinite(matrices).all() or not np.isfinite(values).all():
+        raise ValueError("poses/scores must be finite")
+    plane = np.asarray(plane_normal, dtype=np.float64).reshape(3)
+    rest = np.asarray(mesh_rest_normal, dtype=np.float64).reshape(3)
+    plane_norm, rest_norm = float(np.linalg.norm(plane)), float(np.linalg.norm(rest))
+    if plane_norm < 1.0e-9 or rest_norm < 1.0e-9:
+        raise ValueError("plane and rest normals must be non-zero")
+    plane, rest = plane / plane_norm, rest / rest_norm
+    candidate_normals = np.einsum("nij,j->ni", matrices[:, :3, :3], rest)
+    dots = np.clip(candidate_normals @ plane, -1.0, 1.0)
+    angles = np.degrees(np.arccos(dots))
+    valid = np.flatnonzero(angles <= float(maximum_angle_deg))
+    if len(valid) == 0:
+        return None, angles
+    selected = int(valid[np.argmax(values[valid])])
+    return selected, angles
+
+
 def normalize_quaternion_xyzw(q: np.ndarray) -> np.ndarray:
     q = np.asarray(q, dtype=np.float64).reshape(4)
     norm = float(np.linalg.norm(q))

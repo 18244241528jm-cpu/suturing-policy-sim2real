@@ -98,4 +98,7 @@ class DVRKTopicAdapter(Node):
 def main() -> None:
     rclpy.init(); node = DVRKTopicAdapter()
     try: rclpy.spin(node)
-    finally: node.destroy_node(); rclpy.shutdown()
+    except KeyboardInterrupt: pass
+    finally:
+        node.destroy_node()
+        if rclpy.ok(): rclpy.shutdown()

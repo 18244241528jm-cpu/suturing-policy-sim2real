@@ -16,13 +16,51 @@ pipeline_supervisor:
     require_mask: true
     require_needle_pose: true
     require_goal: true
+initialization_snapshot:
+  ros__parameters:
+    max_pair_skew_s: 0.030
+    max_image_age_s: 0.75
+    buffer_size: 30
+metric_da_depth:
+  ros__parameters:
+    # Set true only after the two absolute paths and SHA have been verified.
+    enabled: false
+    checkpoint_path: ""
+    depth_anything_repo: ""
+    device: cuda
+    expected_checkpoint_sha256: fc46bead4a5ea0e4122566bb88b93932aa82f110ee98281b5fcb09f499c9ec88
+perception_input_adapter:
+  ros__parameters:
+    # External DA and mask providers must copy the captured RGB source header.
+    external_depth_topic: /suturing/external/depth
+    external_mask_topic: /suturing/external/needle_mask
+fp_candidate_adapter:
+  ros__parameters:
+    # External FoundationPose bridge publishes suturing.fp_candidates.v1 JSON here.
+    external_candidate_topic: /suturing/external/needle_candidates
+needle_flat_gate:
+  ros__parameters:
+    # Fail closed until the real phantom plane normal and needle mesh rest side are measured.
+    plane_configured: false
+    plane_frame: ""
+    plane_normal_camera: [0.0, 0.0, 1.0]
+    needle_rest_normal_mesh: [0.0, 0.0, 1.0]
+    max_flat_angle_deg: 15.0
+    manual_confirmation_required: true
+psm_camera_bridge:
+  ros__parameters:
+    # Fill with the actual left rectified optical frame after on-site topic/TF audit.
+    camera_frame: ""
 approach_goal_builder:
   ros__parameters:
     target_frame: PSM1_psm_base_link
     grasp_angle_deg: 12.5
     lift_height_m: 0.007
-    max_pose_age_s: 1.0
+    # One-shot DA/FP may take several seconds; this still rejects an old session latch.
+    max_pose_age_s: 30.0
     freeze_first_goal: true
+    # Fill together with psm_camera_bridge.camera_frame after the real frame ID is observed.
+    required_needle_frame: ""
 guarded_pose_executor:
   ros__parameters:
     enable_output: false
