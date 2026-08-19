@@ -316,8 +316,9 @@ python scripts/inspect_results.py \
 ```
 
 并输出诊断、TF goal 和受保护的单次 Reach。它默认只读。R2 已包含经过 P5a 验收的
-DA backend，但默认关闭，必须提供冻结 checkpoint 与 Depth-Anything-V2 路径；mask 和
-FoundationPose backend 仍是外部输入。只有 R6 平放门与人工确认之后的针位姿才会发布到
+DA backend，但默认关闭，必须提供冻结 checkpoint 与 Depth-Anything-V2 路径；人工
+polygon/PNG 首帧 mask publisher 已包含，自动分割和 FoundationPose backend 仍是外部
+输入。只有 R6 平放门与人工确认之后的针位姿才会发布到
 `/suturing/needle/pose_gated`。这是刻意的失败隔离，不是“完整真机自动 pipeline 已完成”。
 
 编译和只读冒烟：

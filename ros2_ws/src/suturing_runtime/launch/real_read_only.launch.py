@@ -12,6 +12,7 @@ def generate_launch_description():
         Node(package="suturing_runtime",executable="dvrk_topic_adapter",name="dvrk_topic_adapter",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="initialization_snapshot",name="initialization_snapshot",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="metric_da_depth",name="metric_da_depth",parameters=[config],output="screen"),
+        Node(package="suturing_runtime",executable="operator_mask_publisher",name="operator_mask_publisher",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="perception_input_adapter",name="perception_input_adapter",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="fp_bundle_join",name="fp_bundle_join",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="fp_candidate_adapter",name="fp_candidate_adapter",parameters=[config],output="screen"),

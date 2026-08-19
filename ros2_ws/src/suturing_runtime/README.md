@@ -8,6 +8,7 @@
 - 把已知 JHU dVRK topics 转成稳定的 `/suturing/*` 接口；
 - 启动前只读检查 topic 名、消息类型、消息到达和 `frame_id`；
 - 操作者触发一组双目初始化快照，并拒绝跨帧 RGB/depth/mask；
+- 自动导出锁存 RGB，并支持本机多边形或外部 PNG 的人工首帧 mask；
 - 验收外部 DA、mask 和 FoundationPose 全候选输出；
 - 用 phantom 平面方向筛选平放针候选，并要求人工确认；
 - 同时生成 camera-frame 与 PSM-base 的冻结 Approach goal；
@@ -15,7 +16,8 @@
 - 以 preview-only 或显式四重解锁的低速模式执行一次 PSM Reach。
 
 R2 已包含经过 P5a 验收的 DA 推理节点，但默认关闭，必须配置 3.8 GiB checkpoint 和
-Depth-Anything-V2 源码路径。自动 mask 与 FoundationPose GPU backend 仍是外部程序。
+Depth-Anything-V2 源码路径。人工首帧 mask 已有工具；自动 mask 与 FoundationPose GPU
+backend 仍是外部程序。
 它们共同使用以下边界：
 
 ```text
@@ -40,6 +42,54 @@ metric_da_depth:
 
 三者必须复制锁存 RGB 的原始 stamp/frame/shape。runtime 自己产生
 `/suturing/needle/pose_gated`；不能把 raw FP top-1 直接 remap 到该 topic。
+
+## 人工首帧 mask（第一次真机推荐）
+
+capture 后，mask 节点自动创建：
+
+```text
+~/surgicai_operator_masks/stamp_<source_stamp>/source_rgb.png
+~/surgicai_operator_masks/stamp_<source_stamp>/source.json
+```
+
+本机操作可在 YAML 设 `gui_enabled: true`：左键沿针轮廓加点、右键撤销，按 `p` 发布。
+若使用外部工具/GPT，只发送 `source_rgb.png`，把结果按原分辨率保存为同一 session 下的
+`needle_mask.png`；白色只能是针，黑色是背景。然后执行：
+
+```bash
+ros2 service call /suturing/operator_mask/publish_file std_srvs/srv/Trigger '{}'
+ros2 topic echo /suturing/operator_mask/status --qos-durability transient_local --once
+```
+
+必须打开同目录的 `mask_overlay.png` 人工确认。脚本能验证分辨率、面积、二值化和 source
+header，不能证明人工/GPT 选中的像素语义正确。
+
+## 一键只读诊断包
+
+在 read-only runtime 已启动后执行：
+
+```bash
+cd "$HOME/suturing-policy-sim2real"
+bash scripts/run_real_diagnostics.sh \
+  "$HOME/surgicai_diagnostics/$(date +%Y%m%d_%H%M%S)" 20
+```
+
+它安全触发一次 snapshot，收集 topic graph、消息数/类型/frame/stamp、K/D/R/P、RGB、
+DA depth NPY/预览、mask、PSM pose/twist/jaw、TF、FP/runtime/execution status 和 GPU 信息，
+并行抓取 PSM1/ECM 的 `operating_state/error/warning/goal_reached` 单条 raw 消息，
+并发布 **0 条机器人运动命令**。发回分析时优先发送：
+
+```text
+SHARE_THIS_FIRST.md
+SUMMARY.json
+```
+
+摘要按 R0–R9 标出第一个未解决阶段，后续阶段标成 `BLOCKED_BY_EARLIER_STAGE`，避免把
+上游缺 mask 错诊为 FoundationPose 故障。
+
+诊断器能保存这些安全状态，不等于 executor 已把它们接成运动互锁。当前 executor 尚未
+订阅 dVRK `operating_state/error/warning/goal_reached`；完成该合同并在真机监督验证前，
+不要启用真实输出。
 
 ## 1. 构建
 

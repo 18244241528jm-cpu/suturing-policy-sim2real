@@ -5,7 +5,7 @@ package_name = "suturing_runtime"
 
 setup(
     name=package_name,
-    version="0.3.0",
+    version="0.4.0",
     packages=find_packages(exclude=("test",)),
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
@@ -33,5 +33,7 @@ setup(
         "needle_flat_gate = suturing_runtime.needle_flat_gate:main",
         "psm_camera_bridge = suturing_runtime.psm_camera_bridge:main",
         "metric_da_depth = suturing_runtime.metric_da_depth:main",
+        "operator_mask_publisher = suturing_runtime.operator_mask_publisher:main",
+        "diagnostic_bundle = suturing_runtime.diagnostic_bundle:main",
     ]},
 )
