@@ -29,6 +29,14 @@ metric_da_depth:
     depth_anything_repo: ""
     device: cuda
     expected_checkpoint_sha256: fc46bead4a5ea0e4122566bb88b93932aa82f110ee98281b5fcb09f499c9ec88
+operator_mask_publisher:
+  ros__parameters:
+    output_root: ~/surgicai_operator_masks
+    mask_filename: needle_mask.png
+    auto_export: true
+    gui_enabled: false
+    minimum_mask_fraction: 0.00001
+    maximum_mask_fraction: 0.20
 perception_input_adapter:
   ros__parameters:
     # External DA and mask providers must copy the captured RGB source header.
