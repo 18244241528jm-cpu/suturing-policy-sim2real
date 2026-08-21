@@ -16,6 +16,9 @@ pipeline_supervisor:
     require_mask: true
     require_needle_pose: true
     require_goal: true
+    # The selected PSM control-point pose is produced by psm_pose_selector.
+    # With its default disabled mode the supervisor must remain WAITING_INPUTS.
+    psm_pose: /suturing/psm1/pose_selected_camera
 initialization_snapshot:
   ros__parameters:
     max_pair_skew_s: 0.030
@@ -46,19 +49,51 @@ fp_candidate_adapter:
   ros__parameters:
     # External FoundationPose bridge publishes suturing.fp_candidates.v1 JSON here.
     external_candidate_topic: /suturing/external/needle_candidates
-needle_flat_gate:
+needle_pose_selector:
   ros__parameters:
-    # Fail closed until the real phantom plane normal and needle mesh rest side are measured.
-    plane_configured: false
-    plane_frame: ""
-    plane_normal_camera: [0.0, 0.0, 1.0]
+    # Ablation switch: fp_only | flat | support | flat_planar | support_planar.
+    # fp_only is the only mode that needs neither an ArUco/phantom support
+    # message nor a mask+plane+CAD planar observation.
+    selection_mode: fp_only
+    support_surface_topic: /suturing/external/support_surface
+    planar_observation_topic: /suturing/external/needle_planar_observation
     needle_rest_normal_mesh: [0.0, 0.0, 1.0]
+    needle_heading_axis_mesh: [1.0, 0.0, 0.0]
     max_flat_angle_deg: 15.0
+    # Leave false until the real Needle OBJ origin-to-support offset is audited.
+    needle_origin_support_offset_configured: false
+    needle_origin_support_offset_m: 0.0
+    max_height_error_m: 0.003
+    max_planar_skew_s: 0.030
+    planar_chi2_threshold: 11.3449
     manual_confirmation_required: true
 psm_camera_bridge:
   ros__parameters:
     # Fill with the actual left rectified optical frame after on-site topic/TF audit.
     camera_frame: ""
+    output_topic: /suturing/psm1/measured_pose_camera
+psm_pose_selector:
+  ros__parameters:
+    # disabled | vision_only | fk_only | fused.  Default disabled is deliberate:
+    # the project does not yet have real hand-eye or mesh<->control-point data.
+    selection_mode: disabled
+    vision_candidates_topic: /suturing/external/psm_candidates
+    fk_camera_pose_topic: /suturing/psm1/measured_pose_camera
+    selected_pose_topic: /suturing/psm1/pose_selected_camera
+    vision_mesh_pose_topic: /suturing/psm1/vision_mesh_pose_camera
+    vision_mesh_frame: ""
+    mesh_to_control_point_configured: false
+    mesh_from_control_point_translation_m: [0.0, 0.0, 0.0]
+    # Zero quaternion is an intentionally invalid placeholder, never identity.
+    mesh_from_control_point_quaternion_xyzw: [0.0, 0.0, 0.0, 0.0]
+    fusion_uncertainty_configured: false
+    # Units: first 3 entries metres, last 3 degrees. Zeros are invalid placeholders.
+    kinematic_sigma6_m_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    vision_sigma6_m_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    fp_rank_weight: 0.0
+    max_sync_skew_s: 0.050
+    max_visual_age_s: 1.0
+    motion_compensation_enabled: false
 approach_goal_builder:
   ros__parameters:
     target_frame: PSM1_psm_base_link

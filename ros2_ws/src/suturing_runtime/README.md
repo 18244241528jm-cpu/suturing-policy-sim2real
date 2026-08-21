@@ -10,7 +10,8 @@
 - 操作者触发一组双目初始化快照，并拒绝跨帧 RGB/depth/mask；
 - 自动导出锁存 RGB，并支持本机多边形或外部 PNG 的人工首帧 mask；
 - 验收外部 DA、mask 和 FoundationPose 全候选输出；
-- 用 phantom 平面方向筛选平放针候选，并要求人工确认；
+- 按配置在 raw FP、平放方向、OBJ-origin支撑高度、planar mask+plane+CAD 之间做可切换针候选筛选，并要求人工确认；
+- 把 PSM 位姿明确切成纯视觉、纯 FK 或带显式误差模型的候选融合；
 - 同时生成 camera-frame 与 PSM-base 的冻结 Approach goal；
 - 持续报告缺失输入和 freshness；
 - 以 preview-only 或显式四重解锁的低速模式执行一次 PSM Reach。
@@ -42,6 +43,8 @@ metric_da_depth:
 
 三者必须复制锁存 RGB 的原始 stamp/frame/shape。runtime 自己产生
 `/suturing/needle/pose_gated`；不能把 raw FP top-1 直接 remap 到该 topic。
+
+针与 PSM 的所有模式、消息 schema、融合公式和当前必须实测但尚未填入的 hand-eye / mesh-control-point / covariance 项，见仓库根目录 [`docs/REAL_PERCEPTION_MODE_SWITCHES.md`](../../../docs/REAL_PERCEPTION_MODE_SWITCHES.md)。默认针为 `fp_only`、PSM 为 `disabled`，方便逐项 A/B；切换模式不需要改 Python 源码。
 
 ## 人工首帧 mask（第一次真机推荐）
 
@@ -210,3 +213,10 @@ ros2 service call /suturing/execution/stop std_srvs/srv/Trigger '{}'
 - `[测量]` runtime 只做 D2 Reach；尚未接 RL，不发 jaw close，不声称 physical grasp。
 - `[已证伪]` raw FP top-1、semantic mask、GT depth 或 scripted attachment 都不能
   冒充真机输入。
+## 8. 真机运行前的离线分段门
+
+不要用本 ROS package 的完整 launch 来判断 DA 或 FoundationPose 为什么失败。先回到仓库根目录，按
+`scripts/run_real_perception_stage.py` 的 `inspect -> da -> mask -> bundle` 顺序检查，再用
+`scripts/run_fp_stage_docker.sh` 单独 register。只有离线 bundle 的 RGB、深度、mask、K 与尺寸合同都通过后，
+才进入本 package 的 ROS stamp/frame 对账与只读诊断。这样 DA 模型失败、mask 画错、raw/rect K 混用和 ROS
+异步不会被混成同一个“主程序没反应”。
