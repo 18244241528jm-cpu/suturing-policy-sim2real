@@ -20,6 +20,8 @@ AMBF 场景
 
 当前发布验证到 **Reach**；没有声称真实 dVRK 的自动 mask、hand-eye 精度、闭爪、提针已经完成。完整边界见 [`docs/KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md)。
 
+真机候选筛选现已拆成可比较的接口：针可选 `fp_only / flat / support / flat_planar / support_planar`，PSM 可选 `disabled / vision_only / fk_only / fused`。所有缺失标定均 fail-closed，模式、topic、JSON schema 与待测实参见 [`docs/REAL_PERCEPTION_MODE_SWITCHES.md`](docs/REAL_PERCEPTION_MODE_SWITCHES.md)。
+
 ## 1. 先理解目录结构
 
 ### 四个外部依赖（不放进本仓库）
@@ -51,6 +53,23 @@ data/reference/                不重跑 DA/FP 时使用的冻结 S3 bank
 ```
 
 新手只需要按下面顺序操作。不要直接运行 `src/runners/*.sh`，也不要从历史实验报告里复制零散命令。
+
+### 真机图片先分段验收，不要一上来跑主程序
+
+拿到真实 ECM 首帧后，先用 `scripts/run_real_perception_stage.py` 把故障边界拆开：
+
+```text
+inspect（图片可读/曝光）
+  -> da（checkpoint 身份 + 单张深度）
+  -> mask（人工折线的多宽度敏感性）
+  -> bundle（RGB/depth/mask/K/shape 对账）
+  -> run_fp_stage_docker.sh（独立 FoundationPose register）
+  -> fp-compare（K、mask 改动是否令位姿跳变）
+```
+
+这些命令全部是只读离线检查，不启动 AMBF、不发 ROS 运动命令。运行
+`python scripts/run_real_perception_stage.py --help`查看每一段的参数；真机候选合同见
+[`docs/REAL_PERCEPTION_MODE_SWITCHES.md`](docs/REAL_PERCEPTION_MODE_SWITCHES.md)。程序成功退出只说明API/文件合同成立；没有真实深度与6D位姿参考时，不能把它写成DA/FP准确率通过。
 
 ## 2. 设置 AMBF、SRC、DA、FP 路径
 

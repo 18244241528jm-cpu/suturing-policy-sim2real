@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>suturing_runtime</name>
-  <version>0.4.0</version>
+  <version>0.5.0</version>
   <!-- torch is installed from the DA environment, not rosdep/apt. -->
   <exec_depend>python3-opencv</exec_depend>
   <description>Topic-first, guarded SurgicAI Reach runtime for AMBF and dVRK.</description>
