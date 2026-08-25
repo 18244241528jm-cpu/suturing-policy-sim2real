@@ -104,6 +104,29 @@ approach_goal_builder:
     freeze_first_goal: true
     # Fill together with psm_camera_bridge.camera_frame after the real frame ID is observed.
     required_needle_frame: ""
+goal_servo_node:
+  ros__parameters:
+    # Segments a far Approach goal into waypoints the executor will accept, using the
+    # SE(3) servo that beat the learned policy on every swept axis. It only writes to
+    # the executor goal topic; it never commands the robot.
+    enabled: false
+    # false = one segment per operator request, which is the right default until the
+    # first guarded Reach has been observed end to end.
+    auto_advance: false
+    publish_hz: 2.0
+    # Deliberately under the executor 0.010 m / 30 deg limits so a waypoint is never
+    # rejected with D10-E56-DISTANCE or D10-E57-ROTATION.
+    max_segment_m: 0.008
+    max_segment_deg: 25.0
+    goal_tolerance_m: 0.001
+    goal_tolerance_deg: 2.0
+    max_input_age_s: 0.5
+    measured_pose_topic: /suturing/psm1/measured_pose
+    # The operator or the perception chain publishes the true goal here; the node
+    # republishes executor-sized waypoints onto /suturing/approach/goal.
+    final_goal_topic: /suturing/approach/goal_final
+    subgoal_topic: /suturing/approach/goal
+    command_frame: PSM1_psm_base_link
 guarded_pose_executor:
   ros__parameters:
     enable_output: false

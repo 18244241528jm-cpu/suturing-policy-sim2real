@@ -41,7 +41,13 @@ class GuardedPoseExecutor(Node):
         get = lambda key: self.get_parameter(key).value
         self.preview_pub = self.create_publisher(PoseStamped, get("preview_topic"), 10)
         self.command_pose_pub = None; self.command_transform_pub = None
-        if self._output_contract_ok():
+        # The publishers are built once, here.  _output_contract_ok() re-reads the
+        # parameters on every call, so flipping enable_output at runtime would make
+        # arming succeed while no publisher exists; the tick would then dereference
+        # None mid-execution, with the robot already armed.  Latch the startup
+        # decision and refuse to arm whenever the two disagree.
+        self._output_constructed_at_startup = self._output_contract_ok()
+        if self._output_constructed_at_startup:
             raw_servo_type = str(get("raw_servo_type"))
             if raw_servo_type == "geometry_msgs/msg/PoseStamped":
                 self.command_pose_pub = self.create_publisher(PoseStamped, get("raw_servo_topic"), 10)
@@ -80,6 +86,12 @@ class GuardedPoseExecutor(Node):
         if request.data and not self._output_contract_ok():
             response.success = False
             response.message = "D10-E50-OUTPUT_LOCKED: enable_output=true plus exact operator acknowledgement required."
+            return response
+        if request.data and not self._output_constructed_at_startup:
+            response.success = False
+            response.message = ("D10-E60-OUTPUT_NOT_CONSTRUCTED: the output contract passes now but "
+                                "no command publisher exists; enable_output must be set in the "
+                                "parameter file before launch, not changed at runtime.")
             return response
         self.armed = bool(request.data)
         if not self.armed: self.active = False
@@ -144,6 +156,10 @@ class GuardedPoseExecutor(Node):
         preview.pose.orientation.x,preview.pose.orientation.y,preview.pose.orientation.z,preview.pose.orientation.w=map(float,q)
         self.preview_pub.publish(preview)
         if self._output_contract_ok():
+            if not self._output_constructed_at_startup:
+                self._fault("D10-E60-OUTPUT_NOT_CONSTRUCTED: enable_output was changed after "
+                            "startup; relaunch with it set in the parameter file")
+                return
             if self.command_pose_pub is not None:
                 self.command_pose_pub.publish(preview)
             else:

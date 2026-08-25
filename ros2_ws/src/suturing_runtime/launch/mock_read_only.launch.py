@@ -18,5 +18,6 @@ def generate_launch_description():
         Node(package="suturing_runtime",executable="approach_goal_builder",output="screen",parameters=[{
              "required_needle_frame":"ecm_left_optical_frame"}]),
         Node(package="suturing_runtime",executable="pipeline_supervisor",output="screen"),
+        Node(package="suturing_runtime",executable="goal_servo_node",output="screen",parameters=[{"enabled":False}]),
         Node(package="suturing_runtime",executable="guarded_pose_executor",output="screen",parameters=[{"enable_output":False}]),
     ])

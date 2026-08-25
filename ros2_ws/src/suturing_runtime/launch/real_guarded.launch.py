@@ -22,6 +22,7 @@ def generate_launch_description():
         Node(package="suturing_runtime",executable="psm_pose_selector",name="psm_pose_selector",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="approach_goal_builder",name="approach_goal_builder",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="pipeline_supervisor",name="pipeline_supervisor",parameters=[config],output="screen"),
+        Node(package="suturing_runtime",executable="goal_servo_node",name="goal_servo_node",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="guarded_pose_executor",name="guarded_pose_executor",
              parameters=[config,{"enable_output":True,"operator_acknowledgement":acknowledgement}],output="screen"),
     ])
