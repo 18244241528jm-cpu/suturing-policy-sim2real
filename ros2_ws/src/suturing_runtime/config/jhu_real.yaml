@@ -104,6 +104,13 @@ approach_goal_builder:
     # Note this makes the TF lookup camera->ECM, which is what hand-eye calibration
     # produces; it stays blocked until required_needle_frame is filled in.
     target_frame: ECM
+    # Feed the servo, not the executor. The node's own default is
+    # /suturing/approach/goal, which is where goal_servo_node publishes its
+    # executor-sized waypoints and where the executor reads them. Left at the
+    # default, a perception goal lands there whole -- the full Approach stroke,
+    # tens of millimetres -- and the executor rejects it with D10-E56-DISTANCE
+    # while also racing the servo on the same latched topic.
+    goal_topic: /suturing/approach/goal_final
     grasp_angle_deg: 12.5
     lift_height_m: 0.007
     # One-shot DA/FP may take several seconds; this still rejects an old session latch.
