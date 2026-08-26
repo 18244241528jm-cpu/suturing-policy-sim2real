@@ -39,6 +39,7 @@ class GuardedPoseExecutor(Node):
         self.declare_parameter("workspace_min_m", [-0.20,-0.20,-0.05])
         self.declare_parameter("workspace_max_m", [0.20,0.20,0.25])
         get = lambda key: self.get_parameter(key).value
+        self._validate_motion_budget()
         self.preview_pub = self.create_publisher(PoseStamped, get("preview_topic"), 10)
         self.command_pose_pub = None; self.command_transform_pub = None
         # The publishers are built once, here.  _output_contract_ok() re-reads the
@@ -69,6 +70,44 @@ class GuardedPoseExecutor(Node):
         mode = "LIVE_CAPABLE_BUT_DISARMED" if self._output_contract_ok() else "PREVIEW_ONLY"
         self._publish_status(mode, "startup")
         self.get_logger().warning(f"D10_EXECUTOR_READY mode={mode}; startup never moves the robot")
+
+    def _validate_motion_budget(self) -> None:
+        """Refuse to start when the distance cap cannot be covered before the timeout.
+
+        The three limits are coupled: at max_linear_speed_m_s the furthest a single
+        execute_once can travel is speed * execution_timeout_s.  Raising
+        max_initial_translation_m past that does not extend the reach, it converts an
+        up-front D10-E56 rejection -- safe, immediate, nothing has moved -- into a
+        D10-E59 timeout that strands the arm partway with the goal still unmet.  Fail
+        at startup, where the operator can fix the parameter file, rather than in a
+        timer callback with the robot armed.
+        """
+        speed = float(self.get_parameter("max_linear_speed_m_s").value)
+        timeout_s = float(self.get_parameter("execution_timeout_s").value)
+        distance_m = float(self.get_parameter("max_initial_translation_m").value)
+        angular_speed = float(self.get_parameter("max_angular_speed_deg_s").value)
+        rotation_deg = float(self.get_parameter("max_initial_rotation_deg").value)
+        if speed <= 0.0 or angular_speed <= 0.0 or timeout_s <= 0.0:
+            raise ValueError("D10-E13-MOTION-BUDGET speed and timeout parameters must be positive")
+
+        reachable_m = speed * timeout_s
+        reachable_deg = angular_speed * timeout_s
+        if distance_m > reachable_m:
+            raise ValueError(
+                f"D10-E13-MOTION-BUDGET max_initial_translation_m={distance_m:.4f} exceeds the "
+                f"{reachable_m:.4f} m reachable at max_linear_speed_m_s={speed} within "
+                f"execution_timeout_s={timeout_s}; raise execution_timeout_s to at least "
+                f"{distance_m / speed:.1f} s, raise the speed, or segment the approach with "
+                f"goal_servo_node")
+        if rotation_deg > reachable_deg:
+            raise ValueError(
+                f"D10-E13-MOTION-BUDGET max_initial_rotation_deg={rotation_deg:.2f} exceeds the "
+                f"{reachable_deg:.2f} deg reachable at max_angular_speed_deg_s={angular_speed} "
+                f"within execution_timeout_s={timeout_s}; raise execution_timeout_s to at least "
+                f"{rotation_deg / angular_speed:.1f} s")
+        self.get_logger().info(
+            f"D10_MOTION_BUDGET_OK single execute_once reaches {reachable_m*1000:.0f} mm / "
+            f"{reachable_deg:.0f} deg; caps are {distance_m*1000:.0f} mm / {rotation_deg:.0f} deg")
 
     def _output_contract_ok(self) -> bool:
         return bool(self.get_parameter("enable_output").value) and str(

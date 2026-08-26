@@ -136,6 +136,12 @@ guarded_pose_executor:
     command_frame: PSM1_psm_base_link
     control_hz: 20.0
     max_input_age_s: 0.5
+    # Coupled with max_linear_speed_m_s and execution_timeout_s: one execute_once
+    # covers at most speed * timeout = 0.002 * 20 = 0.040 m.  Raising this alone is
+    # refused at startup with D10-E13-MOTION-BUDGET, because it would only convert an
+    # up-front D10-E56 rejection into a mid-motion D10-E59 timeout.  To do the whole
+    # 61 mm stroke in a single call, raise both (0.061 needs execution_timeout_s >= 31);
+    # leaving it at 0.010 and letting goal_servo_node segment keeps the tighter guard.
     max_initial_translation_m: 0.010
     max_initial_rotation_deg: 30.0
     max_linear_speed_m_s: 0.002
