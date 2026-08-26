@@ -13,6 +13,51 @@ I_HAVE_OPERATOR_AND_ESTOP
 
 ---
 
+## Bench rehearsal (do this before you travel)
+
+Verified on 2026-08-25 under ROS 2 Humble; no robot and no simulator involved.
+
+```bash
+colcon build --packages-select suturing_runtime
+```
+
+In one shell, fake a 20 Hz pose stream, start both nodes, then hand the servo a goal
+61 mm away -- the full Approach stroke, the case the executor rejects outright:
+
+```bash
+ros2 topic pub -r 20 /suturing/psm1/measured_pose geometry_msgs/msg/PoseStamped '{header: {frame_id: PSM1_psm_base_link}, pose: {position: {x: 0.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}'
+```
+
+```bash
+ros2 run suturing_runtime goal_servo_node --ros-args -p enabled:=true
+```
+
+```bash
+ros2 run suturing_runtime guarded_pose_executor --ros-args -p enable_output:=true -p operator_acknowledgement:=I_HAVE_OPERATOR_AND_ESTOP
+```
+
+```bash
+ros2 topic pub --once /suturing/approach/goal_final geometry_msgs/msg/PoseStamped '{header: {frame_id: PSM1_psm_base_link}, pose: {position: {x: 0.0, y: 0.0, z: 0.061}, orientation: {w: 1.0}}}'
+```
+
+What a healthy run looks like:
+
+| Check | Expected |
+|---|---|
+| Executor startup line | `D10_MOTION_BUDGET_OK single execute_once reaches 40 mm / 100 deg; caps are 10 mm / 30 deg` |
+| Servo status | `SEGMENT_PUBLISHED ... "segment_translation_m": 0.008, "remaining_translation_m": 0.053` |
+| `execute_once` | `accepted distance=0.008000m` — **not** `D10-E56-DISTANCE`, which is the whole point |
+| `/PSM1/servo_cp` | steps of 0.1 mm, i.e. `max_linear_speed_m_s` 0.002 divided by `control_hz` 20 |
+
+The mock pose never moves, so the executor keeps stepping and never reports `COMPLETE`;
+that is the mock, not a fault.
+
+**`D10-E52-STALE_MEASURED_POSE` right after launch is a startup transient** — the pose
+stream and the node race during discovery. Wait a couple of seconds and call again. It
+does not recur once the node has seen its first pose.
+
+---
+
 ## Step 0 — read before you write (no motion possible)
 
 Nothing in this step can move the arm; only the adapter runs.
