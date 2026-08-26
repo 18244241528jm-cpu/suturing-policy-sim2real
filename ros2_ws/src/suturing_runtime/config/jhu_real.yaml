@@ -8,7 +8,10 @@ dvrk_topic_adapter:
     raw_psm_pose_type: geometry_msgs/msg/PoseStamped
     raw_psm_twist: /PSM1/measured_cv
     raw_psm_jaw: /PSM1/jaw/measured_js
-    fallback_psm_frame: PSM1_psm_base_link
+    # Measured on the JHU cart: /PSM1/measured_cp carries frame_id ECM, because
+    # set_base_frame has been used to put PSM1's base at the ECM. The adapter only
+    # relays -- it never converts -- so an empty header must be labelled ECM too.
+    fallback_psm_frame: ECM
 pipeline_supervisor:
   ros__parameters:
     max_sensor_age_s: 0.75
@@ -96,7 +99,11 @@ psm_pose_selector:
     motion_compensation_enabled: false
 approach_goal_builder:
   ros__parameters:
-    target_frame: PSM1_psm_base_link
+    # Must match guarded_pose_executor.command_frame: this node publishes onto the
+    # very topic the executor reads, so a mismatch is D10-E54-FRAME on every goal.
+    # Note this makes the TF lookup camera->ECM, which is what hand-eye calibration
+    # produces; it stays blocked until required_needle_frame is filled in.
+    target_frame: ECM
     grasp_angle_deg: 12.5
     lift_height_m: 0.007
     # One-shot DA/FP may take several seconds; this still rejects an old session latch.
@@ -126,14 +133,21 @@ goal_servo_node:
     # republishes executor-sized waypoints onto /suturing/approach/goal.
     final_goal_topic: /suturing/approach/goal_final
     subgoal_topic: /suturing/approach/goal
-    command_frame: PSM1_psm_base_link
+    command_frame: ECM
 guarded_pose_executor:
   ros__parameters:
     enable_output: false
     operator_acknowledgement: NOT_ACKNOWLEDGED
     raw_servo_topic: /PSM1/servo_cp
     raw_servo_type: geometry_msgs/msg/PoseStamped
-    command_frame: PSM1_psm_base_link
+    # ECM, not the PSM base. This cart has no /PSM1/local/servo_cp: the only command
+    # entry point is /PSM1/servo_cp, and dVRK interprets it in whatever base frame
+    # set_base_frame installed -- here the ECM. Verified on hardware 2026-08-26 by
+    # comparing a stationary /PSM1/setpoint_cp against /PSM1/measured_cp: both report
+    # frame_id ECM and agree to 0.0027 mm and 0.0063 deg. Servoing on
+    # /PSM1/local/measured_cp (frame PSM1_base) while commanding through this topic
+    # would mix two frames whose origins differ by ~74 mm, and drive the arm astray.
+    command_frame: ECM
     control_hz: 20.0
     max_input_age_s: 0.5
     # Coupled with max_linear_speed_m_s and execution_timeout_s: one execute_once

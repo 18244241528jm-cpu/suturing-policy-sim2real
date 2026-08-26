@@ -21,6 +21,11 @@ Verified on 2026-08-25 under ROS 2 Humble; no robot and no simulator involved.
 colcon build --packages-select suturing_runtime
 ```
 
+These commands use `ros2 run` without `--params-file`, so the nodes fall back to their
+code defaults and the frame here is `PSM1_psm_base_link`. That is deliberate: the generic
+default belongs in the code, and the cart-specific `ECM` belongs in `jhu_real.yaml`. On
+the real cart, launched through the launch files, everything is `ECM` instead.
+
 In one shell, fake a 20 Hz pose stream, start both nodes, then hand the servo a goal
 61 mm away -- the full Approach stroke, the case the executor rejects outright:
 
@@ -70,17 +75,45 @@ ros2 run suturing_runtime dvrk_topic_adapter --ros-args --params-file jhu_real.y
 ros2 topic echo /PSM1/measured_cp --once
 ```
 
-Record three things from that one message:
+### What this already answered, on 2026-08-26
 
-| What | Fills in | Why it matters |
-|---|---|---|
-| `header.frame_id` | `approach_goal_builder.required_needle_frame`, `psm_camera_bridge.camera_frame` | Both ship as `""`; a mismatch is `D10-E54-FRAME` |
-| **sign of `pose.position.z`** | `guarded_pose_executor.workspace_min_m` / `max_m` | The shipped box is `z ∈ [-0.05, 0.25]` and marked `[假设]`. The simulator uses `z ∈ [-0.25, 0.05]` and the checkpoint goal sits at `z = -0.1187`. If the real base frame follows the simulator convention, **every** `execute_once` returns `D10-E58-WORKSPACE` until the box is corrected |
-| magnitude of x/y/z | sanity | Metres, not centimetres. The goal servo converts internally; do not pre-scale |
+`/PSM1/measured_cp` reports **`frame_id: ECM`**, not the PSM's own base: `set_base_frame`
+has put PSM1's base at the ECM. The whole command chain is therefore configured for ECM,
+and every goal you publish must be stamped `ECM`.
 
-Then set `psm_pose_selector.selection_mode: fk_only`. `vision_only` and `fused` stay
-unavailable: `mesh_to_control_point_configured` is false and the quaternion placeholder
-is `[0,0,0,0]` on purpose, so those modes have no calibration behind them.
+The decisive check was `/PSM1/setpoint_cp` against a stationary `/PSM1/measured_cp`:
+
+```
+frame_id       ECM  on both
+position       agree to 0.0027 mm
+orientation    agree to 0.0063 deg
+```
+
+Commands and measurements share one frame, so servoing on `measured_cp` and commanding
+through `/PSM1/servo_cp` is consistent. There is no `/PSM1/local/servo_cp` on this cart:
+`local/measured_cp` (frame `PSM1_base`, origin ~74 mm away) is for hand-eye calibration,
+which wants `T_robot_base_from_control_point`, and must **not** be used to drive the
+executor.
+
+The shipped workspace box needed no change. The pose read at the parked position sits
+inside it with 94 mm of z margin, and z is positive here -- the simulator's
+`z ∈ [-0.25, 0.05]` convention does not apply in the ECM frame.
+
+| Axis | Reading (m) | Box | Margin to lower bound |
+|---|---|---|---|
+| x | -0.0873 | [-0.20, 0.20] | +113 mm |
+| y | +0.0648 | [-0.20, 0.20] | +265 mm |
+| z | +0.0441 | [-0.05, 0.25] | **+94 mm** |
+
+**Still verify the box over the working volume**, not just the parked pose: move the PSM
+by hand to the needle, to the home pose, and to a midpoint, and echo `measured_cp` at
+each. One pose inside the box proves nothing about the rest.
+
+**Keep the ECM parked for the whole session.** The base frame is anchored to it, so
+moving the ECM invalidates every goal captured before the move.
+
+`psm_pose_selector.selection_mode: fk_only` is *not* needed today. It only unblocks the
+pipeline supervisor, and `execute_once` never consults the supervisor.
 
 ---
 
@@ -95,8 +128,12 @@ command publisher at all. Touch the PSM tip to the target, read `measured_cp`, a
 publish that pose as the final goal:
 
 ```bash
-ros2 topic pub --once /suturing/approach/goal_final geometry_msgs/msg/PoseStamped '{header: {frame_id: PSM1_psm_base_link}, pose: {position: {x: 0.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}'
+ros2 topic pub --once /suturing/approach/goal_final geometry_msgs/msg/PoseStamped '{header: {frame_id: ECM}, pose: {position: {x: -0.0873, y: 0.0648, z: 0.0441}, orientation: {x: 0.0656, y: -0.1444, z: 0.9839, w: -0.0818}}}'
 ```
+
+Substitute the numbers you just read, **including the orientation**. A placeholder
+`{w: 1.0}` is the identity rotation, tens of degrees away from any real grasp pose, and
+the servo will happily spend its whole rotation budget turning towards it.
 
 Enable the servo and watch what it *would* command:
 
@@ -109,8 +146,9 @@ ros2 topic echo /suturing/execution/preview
 ```
 
 Check `/suturing/goal_servo/status`: `segment_translation_m` must be ≤ 0.008 and
-`remaining_translation_m` should shrink each time you call `advance`. If the preview
-walks away from the target, stop here — the frame or the z sign is wrong.
+`remaining_translation_m` should shrink each time you call `advance`. Subtract the current
+`measured_cp` from the preview pose: the difference must point at the goal. If the preview
+walks away from the target, stop -- something upstream is still in the wrong frame.
 
 Note the pipeline supervisor will sit in `WAITING_INPUTS` because perception is not
 running. **That does not block execution**: `execute_once` checks arming, freshness,
