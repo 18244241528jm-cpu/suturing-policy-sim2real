@@ -101,11 +101,11 @@ class FPGoalBridge(Node):
     # ------------------------------------------------------------------ inputs
     def _tip_ecm(self, msg: PoseStamped) -> None:
         self.tip_ecm = msg
-        self.tip_ecm_t = self._stamp_s(msg)
+        self.tip_ecm_t = self._stamp_s(msg.header)
 
     def _tip_psmbase(self, msg: PoseStamped) -> None:
         self.tip_psmbase = msg
-        self.tip_psmbase_t = self._stamp_s(msg)
+        self.tip_psmbase_t = self._stamp_s(msg.header)
 
     def _needle_plain(self, msg: PoseStamped) -> None:
         self._handle_needle(msg.header, pose_msg_to_matrix(msg))
@@ -117,8 +117,11 @@ class FPGoalBridge(Node):
         self._handle_needle(msg.header, pose_msg_to_matrix(shim))
 
     @staticmethod
-    def _stamp_s(msg) -> float:
-        return float(msg.header.stamp.sec) + float(msg.header.stamp.nanosec) * 1e-9
+    def _stamp_s(header) -> float:
+        """Seconds from a std_msgs Header. Takes the header, not the message: the
+        needle path only ever holds a header, and accepting both shapes is how the two
+        call sites silently disagreed."""
+        return float(header.stamp.sec) + float(header.stamp.nanosec) * 1e-9
 
     # -------------------------------------------------------------------- core
     def _handle_needle(self, header, needle_in_camera: np.ndarray) -> None:
