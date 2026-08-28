@@ -25,6 +25,8 @@ setup(
         "approach_goal_builder = suturing_runtime.approach_goal_builder:main",
         "guarded_pose_executor = suturing_runtime.guarded_pose_executor:main",
         "goal_servo_node = suturing_runtime.goal_servo_node:main",
+        "policy_servo_node = suturing_runtime.policy_servo_node:main",
+        "fp_goal_bridge = suturing_runtime.fp_goal_bridge:main",
         "topic_preflight = suturing_runtime.topic_preflight:main",
         "mock_topic_source = suturing_runtime.mock_topic_source:main",
         "initialization_snapshot = suturing_runtime.snapshot_node:main",

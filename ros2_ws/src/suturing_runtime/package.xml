@@ -21,6 +21,9 @@
   <exec_depend>python3-numpy</exec_depend>
   <!-- goal_servo_node, subgoal_planner and se3_goal_servo need Rotation. -->
   <exec_depend>python3-scipy</exec_depend>
+  <!-- policy_servo_node only; installed with the RL environment, not by rosdep.
+       Every other node runs without it, so the import stays lazy. -->
+  <!-- <exec_depend>python3-stable-baselines3</exec_depend> -->
   <exec_depend>ros2launch</exec_depend>
   <test_depend>python3-pytest</test_depend>
   <export><build_type>ament_python</build_type></export>

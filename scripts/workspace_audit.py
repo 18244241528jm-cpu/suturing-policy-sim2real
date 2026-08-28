@@ -14,8 +14,14 @@ configured one, and names the tightest face.
 
 Read-only: it subscribes and prints. It publishes nothing and cannot move the arm.
 
-    python3 scripts/workspace_audit.py
-    python3 scripts/workspace_audit.py --topic /PSM1/measured_cp --expect-frame ECM
+    python3 scripts/workspace_audit.py                    # audit an existing box
+    python3 scripts/workspace_audit.py --teach            # derive a box from taught points
+
+Teach mode inverts the question. Instead of checking a box someone guessed, it records
+the poses you actually visit and emits the box that contains them plus a margin, ready
+to paste into jhu_real.yaml. A box grown from the volume the arm is really used in beats
+one carried over from the simulator, which is how the shipped z bounds ended up marked
+as an assumption.
 """
 
 from __future__ import annotations
@@ -110,8 +116,86 @@ class WorkspaceAudit(Node):
         return 0
 
 
+class WorkspaceTeach(Node):
+    """Record one pose per keypress, then emit the enclosing box plus a margin."""
+
+    def __init__(self, args: argparse.Namespace) -> None:
+        super().__init__("workspace_teach")
+        self.args = args
+        self.latest = None
+        self.frames: set[str] = set()
+        self.points: list[np.ndarray] = []
+        self.create_subscription(PoseStamped, args.topic, self._pose, 50)
+
+    def _pose(self, msg: PoseStamped) -> None:
+        self.frames.add(msg.header.frame_id)
+        self.latest = np.array(
+            [msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
+
+    def capture(self) -> bool:
+        if self.latest is None:
+            print("  no pose received yet; is the arm publishing?")
+            return False
+        self.points.append(self.latest.copy())
+        p = self.latest
+        print(f"  recorded #{len(self.points)}: "
+              f"x={p[0]:+.4f} y={p[1]:+.4f} z={p[2]:+.4f}")
+        return True
+
+    def emit(self) -> int:
+        if len(self.points) < 2:
+            print()
+            print("Need at least two points to define a box.")
+            return 1
+        pts = np.vstack(self.points)
+        low = pts.min(axis=0) - self.args.margin_m
+        high = pts.max(axis=0) + self.args.margin_m
+        print()
+        print(f"frames seen: {sorted(self.frames)}")
+        print(f"{len(self.points)} points, margin {self.args.margin_m*1000:.0f} mm on every face")
+        print()
+        for i, axis in enumerate(AXES):
+            print(f"  {axis}  visited [{pts[:,i].min():+.4f}, {pts[:,i].max():+.4f}]"
+                  f"  ->  box [{low[i]:+.4f}, {high[i]:+.4f}]")
+        print()
+        print("Paste into jhu_real.yaml under guarded_pose_executor.ros__parameters:")
+        print()
+        print(f"    workspace_min_m: [{low[0]:.4f}, {low[1]:.4f}, {low[2]:.4f}]")
+        print(f"    workspace_max_m: [{high[0]:.4f}, {high[1]:.4f}, {high[2]:.4f}]")
+        print()
+        print("The box is a guard, not a description: it should cover where the arm is")
+        print("meant to go and stop short of where it is not. Widen it deliberately.")
+        return 0
+
+
+def run_teach(args: argparse.Namespace) -> int:
+    rclpy.init()
+    node = WorkspaceTeach(args)
+    print(f"Teach mode on {args.topic}. Move the arm to a corner of the working volume,")
+    print("press Enter to record it. Enter 'q' then Enter when done.")
+    try:
+        while True:
+            # Service callbacks between prompts so the recorded pose is the live one.
+            for _ in range(20):
+                rclpy.spin_once(node, timeout_sec=0.02)
+            answer = input(f"[{len(node.points)} recorded] Enter to record, q to finish: ")
+            if answer.strip().lower() == "q":
+                break
+            node.capture()
+    except (KeyboardInterrupt, EOFError):
+        pass
+    code = node.emit()
+    node.destroy_node()
+    rclpy.try_shutdown()
+    return code
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--teach", action="store_true",
+                        help="record visited poses and emit a box instead of auditing one")
+    parser.add_argument("--margin-m", type=float, default=0.020,
+                        help="teach mode: padding added to every face of the taught box")
     parser.add_argument("--topic", default="/PSM1/measured_cp",
                         help="pose stream the executor ultimately compares against")
     parser.add_argument("--expect-frame", default="ECM",
@@ -124,6 +208,9 @@ def main() -> None:
                         help="warn when the closest face is nearer than this")
     parser.add_argument("--report-interval-s", type=float, default=2.0)
     args = parser.parse_args()
+
+    if args.teach:
+        raise SystemExit(run_teach(args))
 
     rclpy.init()
     node = WorkspaceAudit(args)
