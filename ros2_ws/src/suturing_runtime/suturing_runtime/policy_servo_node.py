@@ -135,13 +135,33 @@ class PolicyServoNode(Node):
         self.create_timer(1.0 / float(self.get_parameter("publish_hz").value), self._tick)
         self._publish_status("STARTUP", "policy never commands the robot directly")
 
+    # Training used a custom TD3_HER_BC whose replay buffer class lives in the RL_algo
+    # package, and cloudpickle stores that reference by name. Loading here without it
+    # raises ModuleNotFoundError: No module named 'RL_algo' -- on the cart, where the
+    # trainer is not installed. None of these entries are read to run the actor, so they
+    # are replaced rather than dragging the training package onto the robot.
+    INFERENCE_ONLY_OVERRIDES = {
+        "replay_buffer_class": None,
+        "replay_buffer_kwargs": {},
+        "demo_data": None,
+    }
+
     def _load_model(self) -> None:
         # Imported lazily: the rest of the runtime must stay usable on a machine with
         # no torch, and the geometric servo needs none of this.
         from stable_baselines3 import TD3
 
-        self.model = TD3.load(self.model_path, device="cpu")
-        self.get_logger().info(f"D14_POLICY_LOADED path={self.model_path}")
+        self.model = TD3.load(self.model_path, device="cpu",
+                              custom_objects=dict(self.INFERENCE_ONLY_OVERRIDES))
+        spaces = getattr(self.model.observation_space, "spaces", {})
+        shapes = {key: tuple(space.shape) for key, space in spaces.items()}
+        expected = {"observation": (21,), "achieved_goal": (7,), "desired_goal": (7,)}
+        if shapes != expected:
+            raise ValueError(
+                f"D14-E06-OBS_SPACE checkpoint expects {shapes}, this node builds {expected}")
+        self.get_logger().info(
+            f"D14_POLICY_LOADED path={self.model_path} obs={shapes} "
+            f"action={tuple(self.model.action_space.shape)}")
 
     # ------------------------------------------------------------------ inputs
     def _measured(self, msg: PoseStamped) -> None:

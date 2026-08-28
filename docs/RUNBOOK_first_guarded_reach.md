@@ -1,9 +1,12 @@
 # Runbook: first guarded Reach on the real cart
 
-Goal for the session: one operator-approved Cartesian Reach to a hand-measured goal,
-proving the control and calibration chain end to end. Perception is **not** on this
-critical path — FoundationPose currently returns 0/252 on real frames, so the goal comes
-from a PSM tip touch-off, not from the camera.
+Goal for the session: one operator-approved Cartesian Reach, proving the control and
+calibration chain end to end.
+
+FoundationPose now produces needle poses on the real cart, but in the **camera** frame,
+and the hand-eye transform that would move them into ECM does not exist yet. The goal
+therefore still comes from a PSM tip touch-off. `fp_goal_bridge` is ready for the camera
+path the moment a hand-eye solution exists; see the checklist below.
 
 The operator acknowledgement string is exactly:
 
@@ -12,6 +15,25 @@ I_HAVE_OPERATOR_AND_ESTOP
 ```
 
 ---
+
+## Before you leave for the lab
+
+| # | Do | Why |
+|---|---|---|
+| 1 | Copy `wide5/checkpoints/best_model.zip` into the OneDrive transfer folder | 68 MB is too large for git, and the cart can pull it from OneDrive instead of you improvising a transfer on site |
+| 2 | Copy `measured_poseclose/final_model.zip` too | A second model is the only way to tell "the model is wrong" from "the calibration is wrong" once something misbehaves. Copying a file costs nothing; a return trip costs a session |
+| 3 | Copy `planB_20260826/demos_wide5/collection_report.json` | It records the goal distribution the checkpoint was trained on. Without it you cannot answer "is the goal I am feeding it inside the training range", which is the first question when a policy behaves oddly |
+| 4 | Note your sb3 and torch versions | `python3 -c "import stable_baselines3, torch; print(stable_baselines3.__version__, torch.__version__)"`. Verified working: sb3 2.7.1, torch 2.10.0. A major version gap on the cart means the checkpoint may not deserialise, and you want to know that before it is the blocker |
+
+## On arrival, in this order
+
+| # | Do | Why |
+|---|---|---|
+| 1 | `git status` **before** `git pull` | You edited the runtime on the cart. This branch has changed the frames, the goal routing and the executor guards; pulling over local edits is the one step that can lose work |
+| 2 | `colcon build --packages-select suturing_runtime` | Parameters live in the installed share directory, so a pull alone does not take effect |
+| 3 | Check torch and sb3 are present | Absent, the geometric servo still runs -- its torch import is lazy and no other node needs it. Only the policy path is blocked, which decides whether you start with `goal_servo_node` or `policy_servo_node` |
+| 4 | `python3 scripts/workspace_audit.py --teach` | Read-only, cannot move the arm, and it warms up the pose stream. The box you get is grown from where the arm actually goes rather than carried over from the simulator |
+| 5 | Record the FoundationPose topic name and its `frame_id` | They fill `fp_goal_bridge`'s `needle_pose_topic` and `required_needle_frame`. Nothing in the camera path can be configured until you have them |
 
 ## Bench rehearsal (do this before you travel)
 
@@ -217,7 +239,14 @@ ros2 service call /suturing/execution/stop std_srvs/srv/Trigger
 
 - **Perception-driven goals.** `metric_da_depth.enabled` is false and FoundationPose is
   0/252 on real frames. Recording data is the objective; closing the loop is not.
-- **The learned policy.** Under the measured-contract lens the July `measured_poseclose`
+- **The learned policy** is now runnable: `policy_servo_node` loads a checkpoint and
+  emits waypoints exactly like `goal_servo_node`, so the two swap by launching one or the
+  other. Loading needs one trick, already built in: these checkpoints were written by a
+  custom `TD3_HER_BC` whose replay buffer lives in the `RL_algo` package, so a plain
+  `TD3.load` raises `ModuleNotFoundError: No module named 'RL_algo'` on a machine without
+  the training tree. The node replaces the training-only entries instead of installing
+  the trainer on the cart.
+- **Historic note.** Under the measured-contract lens the July `measured_poseclose`
   checkpoint scores 5/5 at 2.53 mm / 9.40 deg, but no policy node exists and the
   geometric servo outperforms it on every swept axis. Bring the checkpoint as a fallback,
   do not let it block the Reach.
