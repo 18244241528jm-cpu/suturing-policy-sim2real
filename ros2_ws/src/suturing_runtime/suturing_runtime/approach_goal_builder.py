@@ -19,7 +19,12 @@ class ApproachGoalBuilder(Node):
     def __init__(self) -> None:
         super().__init__("approach_goal_builder")
         self.declare_parameter("needle_pose_topic", "/suturing/needle/pose_gated")
-        self.declare_parameter("goal_topic", "/suturing/approach/goal")
+        # Not /suturing/approach/goal: that topic belongs to goal_servo_node, which
+        # is the only thing that should publish onto the executor input, and it
+        # only ever emits waypoints inside max_initial_translation_m. A goal built
+        # here spans the whole Approach stroke, so landing it there directly earns
+        # D10-E56-DISTANCE and races the servo on a latched topic. Feed the servo.
+        self.declare_parameter("goal_topic", "/suturing/approach/goal_final")
         self.declare_parameter("camera_goal_topic", "/suturing/approach/goal_camera")
         self.declare_parameter("required_needle_frame", "")
         self.declare_parameter("target_frame", "PSM1_psm_base_link")
