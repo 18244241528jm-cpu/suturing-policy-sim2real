@@ -104,6 +104,35 @@ approach_goal_builder:
     freeze_first_goal: true
     # Fill together with psm_camera_bridge.camera_frame after the real frame ID is observed.
     required_needle_frame: ""
+approach_policy_node:
+  ros__parameters:
+    # The policy launch overrides enabled/model_path. Keep ordinary real_guarded safe.
+    enabled: false
+    enable_policy_output: false
+    auto_step: true
+    model_path: ""
+    model_sha256: ""
+    surgicai_rl_path: ""
+    device: cpu
+    command_frame: PSM1_psm_base_link
+    control_hz: 10.0
+    max_input_age_s: 0.5
+    # Wait for measured PSM feedback before asking the policy for another action.
+    settle_translation_m: 0.0005
+    settle_rotation_deg: 1.0
+    goal_translation_tolerance_m: 0.001
+    goal_rotation_tolerance_deg: 2.0
+    max_initial_goal_translation_m: 0.010
+    max_initial_goal_rotation_deg: 30.0
+    translation_step_m: 0.0015
+    rotation_step_deg: 3.0
+    jaw_step: 0.05
+    desired_jaw: 0.0
+    jaw_min: 0.0
+    jaw_max: 1.0
+    max_steps: 100
+    workspace_min_m: [-0.20, -0.20, -0.05]
+    workspace_max_m: [0.20, 0.20, 0.25]
 guarded_pose_executor:
   ros__parameters:
     enable_output: false

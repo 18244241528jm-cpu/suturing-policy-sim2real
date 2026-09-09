@@ -191,6 +191,147 @@ ros2 service call /suturing/execution/execute_once std_srvs/srv/Trigger '{}'
 ros2 service call /suturing/execution/stop std_srvs/srv/Trigger '{}'
 ```
 
+## 5.1 旧 Approach policy 真机桥接（实验性，先 shadow）
+
+`approach_policy_node` 接收冻结的 `/suturing/approach/goal`、PSM measured pose 和
+measured jaw，重建旧 checkpoint 的 GoalEnv observation，然后输出一个 7-D action。
+其中 pose action 被换算成下一步 `/suturing/policy/next_goal`，再交给
+`guarded_pose_executor` 做 workspace、freshness、限速和显式 arm 检查。jaw 目前只发布
+`/suturing/policy/jaw_preview`，**不会控制真机 jaw**；在 jaw topic/type、限位和夹针检测
+完成现场验收前不要把它直接 remap 到 dVRK command topic。
+
+旧契约不是“每帧 measured pose 直接喂模型”：它以 measured feedback 初始化一次，随后
+按 `command_state += action * step_size` 保持 command-integrated state；每一步仍等待 measured
+PSM 收敛，防止命令跑在机器人前面。observation 固定为：
+
+```text
+observation  = concat(current7, desired7, desired7-current7), shape (21,)
+achieved_goal/current xyz: m -> cm；desired xyz: m -> cm
+RPY: rad，保留旧 roll<=0 分支；jaw: 旧 checkpoint 标量
+action scale = [1.5 mm, 1.5 mm, 1.5 mm, 3 deg, 3 deg, 3 deg, 0.05]
+```
+
+### 安装模型推理依赖
+
+在运行 ROS 2 节点的**同一个 Python 3** 环境安装（训练版本优先）：
+
+```bash
+python3 -m pip install --user \
+  'torch>=2.0' 'gymnasium==0.29.1' 'stable-baselines3==2.2.1'
+```
+
+修改源码或第一次 clone 后构建：
+
+```bash
+cd "$HOME/suturing-policy-sim2real/ros2_ws"
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select suturing_runtime
+source install/setup.bash
+ros2 pkg executables suturing_runtime | grep approach_policy_node
+```
+
+模型必须保留为 Stable-Baselines3 外层 `.zip`，不要只取出里面的 `policy.pth`。自定义
+`TD3_BC` 源码也必须存在；`surgicai_rl_path` 应指向包含
+`RL_algo/td3_BC.py` 的目录，而不是仓库根目录。
+
+旧 Approach 环境和当前 `approach_goal_matrix` 使用的是 **PSM2 gripper 几何**。如果真机
+实际运动臂是 PSM2，必须在 `jhu_real.yaml` 同步修改至少：
+
+```yaml
+dvrk_topic_adapter.ros__parameters.raw_psm_pose: /PSM2/measured_cp
+dvrk_topic_adapter.ros__parameters.raw_psm_twist: /PSM2/measured_cv
+dvrk_topic_adapter.ros__parameters.raw_psm_jaw: /PSM2/jaw/measured_js
+dvrk_topic_adapter.ros__parameters.fallback_psm_frame: PSM2_psm_base_link
+approach_goal_builder.ros__parameters.target_frame: PSM2_psm_base_link
+approach_policy_node.ros__parameters.command_frame: PSM2_psm_base_link
+guarded_pose_executor.ros__parameters.command_frame: PSM2_psm_base_link
+guarded_pose_executor.ros__parameters.raw_servo_topic: /PSM2/servo_cp
+```
+
+还要让 camera→PSM-base hand-eye TF 的 target frame 与此一致。内部标准 topic 仍可叫
+`/suturing/psm1/*`，但容易混淆，现场记录中必须写清 raw arm。若确实要控制 PSM1，不能
+直接假设左右臂 gripper orientation 相同：先改/验收 PSM1 goal geometry，再做 shadow，
+否则不要 arm。
+
+建议把模型放在 Git 仓库外，例如：
+
+```bash
+mkdir -p "$HOME/surgicai_models/approach"
+cp /path/from/usb/approach_poseclose.zip \
+  "$HOME/surgicai_models/approach/approach_poseclose.zip"
+sha256sum "$HOME/surgicai_models/approach/approach_poseclose.zip"
+```
+
+### 第一次只做 shadow inference
+
+先运行第 4 节的 `real_read_only.launch.py`，确认 FP goal、measured pose/jaw 和 frame 后，
+单独启动 policy 节点。以下模式允许 `step_once` 产生 preview，但不会发布 executor 使用的
+`/suturing/policy/next_goal`：
+
+```bash
+ros2 run suturing_runtime approach_policy_node --ros-args \
+  --params-file "$HOME/suturing-policy-sim2real/ros2_ws/src/suturing_runtime/config/jhu_real.yaml" \
+  -p enabled:=true \
+  -p model_path:="$HOME/surgicai_models/approach/approach_poseclose.zip" \
+  -p model_sha256:="PUT_SHA256_HERE" \
+  -p surgicai_rl_path:="$HOME/suturing-policy-sim2real/src/SurgicAI/RL"
+
+ros2 service call /suturing/policy/step_once std_srvs/srv/Trigger '{}'
+ros2 topic echo /suturing/policy/status --qos-durability transient_local --once
+ros2 topic echo /suturing/policy/action --once
+ros2 topic echo /suturing/policy/next_goal_preview --once
+ros2 topic echo /suturing/policy/jaw_preview --once
+```
+
+如果 status 是 `MODEL_ERROR`，先检查：路径指向外层 ZIP、SHA256、Python 能否 import
+`torch/stable_baselines3/gymnasium`，以及 `surgicai_rl_path/RL_algo/td3_BC.py` 是否存在。
+
+### 有操作者和急停时启动 policy pose 闭环
+
+只有完成 shadow overlay、hand-eye、PSM1 frame、workspace 和 1.5 mm 单步方向验收后：
+
+```bash
+ros2 launch suturing_runtime real_policy_guarded.launch.py \
+  config:="$HOME/suturing-policy-sim2real/ros2_ws/src/suturing_runtime/config/jhu_real.yaml" \
+  model_path:="$HOME/surgicai_models/approach/approach_poseclose.zip" \
+  model_sha256:="PUT_SHA256_HERE" \
+  surgicai_rl_path:="$HOME/suturing-policy-sim2real/src/SurgicAI/RL" \
+  operator_acknowledgement:=I_HAVE_OPERATOR_AND_ESTOP
+```
+
+另一个终端依次解锁。先 arm policy，让它发布第一步；再 arm executor 并只调用一次
+`execute_once`。之后 policy 等 measured pose 收敛再给下一步，executor 连续跟随，policy
+发布 complete 后 executor 才完成并 disarm：
+
+```bash
+ros2 service call /suturing/runtime/check std_srvs/srv/Trigger '{}'
+ros2 service call /suturing/policy/arm std_srvs/srv/SetBool '{data: true}'
+ros2 topic echo /suturing/policy/next_goal --once
+ros2 topic echo /suturing/execution/preview --once
+ros2 service call /suturing/execution/arm std_srvs/srv/SetBool '{data: true}'
+ros2 service call /suturing/execution/execute_once std_srvs/srv/Trigger '{}'
+```
+
+同时观察：
+
+```bash
+ros2 topic echo /suturing/policy/status --qos-durability transient_local
+ros2 topic echo /suturing/execution/status
+```
+
+停止时两个节点都停，executor stop 会撤销真机输出：
+
+```bash
+ros2 service call /suturing/policy/stop std_srvs/srv/Trigger '{}'
+ros2 service call /suturing/execution/stop std_srvs/srv/Trigger '{}'
+```
+
+这个节点只解决 Stage1 Approach pose policy 的推理桥接，并不让旧模型自动适配真机域。
+第一次部署至少要记录 FP/goal、21-D observation、7-D action、next goal、measured tracking
+error 和 stop/fault；模型训练范围以外的针位姿应由上游 gate 拒绝。
+默认还会拒绝初始 goal 超过 `10 mm/30 deg`、jaw 不在 `[0,1]`、或 goal/PSM 超出
+workspace；这些只是最外层安全界限，不等于模型已经在整个范围内训练成功。
+
 ## 6. 默认 topic
 
 | 作用 | 现场 raw topic | 标准 topic |

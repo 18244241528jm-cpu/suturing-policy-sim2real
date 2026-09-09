@@ -5,7 +5,7 @@ package_name = "suturing_runtime"
 
 setup(
     name=package_name,
-    version="0.5.0",
+    version="0.6.0",
     packages=find_packages(exclude=("test",)),
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
@@ -23,6 +23,7 @@ setup(
         "dvrk_topic_adapter = suturing_runtime.dvrk_topic_adapter:main",
         "pipeline_supervisor = suturing_runtime.pipeline_supervisor:main",
         "approach_goal_builder = suturing_runtime.approach_goal_builder:main",
+        "approach_policy_node = suturing_runtime.approach_policy_node:main",
         "guarded_pose_executor = suturing_runtime.guarded_pose_executor:main",
         "topic_preflight = suturing_runtime.topic_preflight:main",
         "mock_topic_source = suturing_runtime.mock_topic_source:main",

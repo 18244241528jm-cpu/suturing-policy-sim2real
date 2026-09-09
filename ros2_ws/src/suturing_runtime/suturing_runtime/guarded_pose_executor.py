@@ -11,7 +11,7 @@ import rclpy
 from geometry_msgs.msg import PoseStamped, TransformStamped
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
-from std_msgs.msg import String
+from std_msgs.msg import Bool, String
 from std_srvs.srv import SetBool, Trigger
 
 from .contract import bounded_pose_step, inside_workspace, matrix_to_quaternion_xyzw, pose_matrix
@@ -29,6 +29,7 @@ class GuardedPoseExecutor(Node):
                     "raw_servo_topic": "/PSM1/servo_cp",
                     "raw_servo_type": "geometry_msgs/msg/PoseStamped",
                     "command_frame": "PSM1_psm_base_link",
+                    "completion_topic": "/suturing/policy/complete",
                     "operator_acknowledgement": "NOT_ACKNOWLEDGED"}
         for key, value in defaults.items(): self.declare_parameter(key, value)
         for key, value in {"enable_output": False, "control_hz": 20.0, "max_input_age_s": 0.5,
@@ -36,6 +37,8 @@ class GuardedPoseExecutor(Node):
                            "max_linear_speed_m_s": 0.002, "max_angular_speed_deg_s": 5.0,
                            "translation_tolerance_m": 0.001, "rotation_tolerance_deg": 2.0,
                            "execution_timeout_s": 20.0}.items(): self.declare_parameter(key, value)
+        self.declare_parameter("require_completion_signal", False)
+        self.declare_parameter("reset_timeout_on_goal", False)
         self.declare_parameter("workspace_min_m", [-0.20,-0.20,-0.05])
         self.declare_parameter("workspace_max_m", [0.20,0.20,0.25])
         get = lambda key: self.get_parameter(key).value
@@ -54,11 +57,12 @@ class GuardedPoseExecutor(Node):
         latched = QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE,
                              durability=DurabilityPolicy.TRANSIENT_LOCAL)
         self.create_subscription(PoseStamped, get("goal_topic"), self._goal, latched)
+        self.create_subscription(Bool, get("completion_topic"), self._completion, 10)
         self.create_service(SetBool, "/suturing/execution/arm", self._arm)
         self.create_service(Trigger, "/suturing/execution/execute_once", self._execute)
         self.create_service(Trigger, "/suturing/execution/stop", self._stop_service)
         self.measured = self.goal = None; self.measured_at = self.goal_at = None
-        self.armed = self.active = False; self.started_at = None
+        self.armed = self.active = self.completion_signaled = False; self.started_at = None
         self.create_timer(1.0/float(get("control_hz")), self._tick)
         mode = "LIVE_CAPABLE_BUT_DISARMED" if self._output_contract_ok() else "PREVIEW_ONLY"
         self._publish_status(mode, "startup")
@@ -74,7 +78,12 @@ class GuardedPoseExecutor(Node):
         return pose_matrix([p.x,p.y,p.z], [q.x,q.y,q.z,q.w])
 
     def _measured(self, msg): self.measured, self.measured_at = msg, time.monotonic()
-    def _goal(self, msg): self.goal, self.goal_at = msg, time.monotonic()
+    def _goal(self, msg):
+        self.goal, self.goal_at = msg, time.monotonic()
+        if self.active and bool(self.get_parameter("reset_timeout_on_goal").value):
+            self.started_at = time.monotonic()
+
+    def _completion(self, msg): self.completion_signaled = bool(msg.data)
 
     def _arm(self, request, response):
         if request.data and not self._output_contract_ok():
@@ -153,8 +162,11 @@ class GuardedPoseExecutor(Node):
                 command.transform.translation.z=preview.pose.position.z
                 command.transform.rotation=preview.pose.orientation
                 self.command_transform_pub.publish(command)
-        if distance <= float(self.get_parameter("translation_tolerance_m").value) and \
-           math.degrees(angle) <= float(self.get_parameter("rotation_tolerance_deg").value):
+        pose_complete = distance <= float(self.get_parameter("translation_tolerance_m").value) and \
+            math.degrees(angle) <= float(self.get_parameter("rotation_tolerance_deg").value)
+        completion_allowed = not bool(self.get_parameter("require_completion_signal").value) or \
+            self.completion_signaled
+        if pose_complete and completion_allowed:
             self.active=False; self.armed=False
             self._publish_status("COMPLETE", f"distance={distance:.6f}m rotation={math.degrees(angle):.3f}deg; disarmed")
 

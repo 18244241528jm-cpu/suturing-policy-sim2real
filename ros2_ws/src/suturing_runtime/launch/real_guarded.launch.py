@@ -6,10 +6,16 @@ from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     config=LaunchConfiguration("config"); acknowledgement=LaunchConfiguration("operator_acknowledgement")
+    executor_goal_topic=LaunchConfiguration("executor_goal_topic")
+    require_completion_signal=LaunchConfiguration("require_completion_signal")
+    reset_timeout_on_goal=LaunchConfiguration("reset_timeout_on_goal")
     return LaunchDescription([
         DeclareLaunchArgument("config",default_value=os.path.join(
             get_package_share_directory("suturing_runtime"),"config","jhu_real.yaml")),
         DeclareLaunchArgument("operator_acknowledgement",default_value="NOT_ACKNOWLEDGED"),
+        DeclareLaunchArgument("executor_goal_topic",default_value="/suturing/approach/goal"),
+        DeclareLaunchArgument("require_completion_signal",default_value="false"),
+        DeclareLaunchArgument("reset_timeout_on_goal",default_value="false"),
         Node(package="suturing_runtime",executable="dvrk_topic_adapter",name="dvrk_topic_adapter",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="initialization_snapshot",name="initialization_snapshot",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="metric_da_depth",name="metric_da_depth",parameters=[config],output="screen"),
@@ -23,5 +29,7 @@ def generate_launch_description():
         Node(package="suturing_runtime",executable="approach_goal_builder",name="approach_goal_builder",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="pipeline_supervisor",name="pipeline_supervisor",parameters=[config],output="screen"),
         Node(package="suturing_runtime",executable="guarded_pose_executor",name="guarded_pose_executor",
-             parameters=[config,{"enable_output":True,"operator_acknowledgement":acknowledgement}],output="screen"),
+             parameters=[config,{"enable_output":True,"operator_acknowledgement":acknowledgement,
+                 "goal_topic":executor_goal_topic,"require_completion_signal":require_completion_signal,
+                 "reset_timeout_on_goal":reset_timeout_on_goal}],output="screen"),
     ])
