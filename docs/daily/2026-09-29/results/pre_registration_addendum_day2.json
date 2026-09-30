@@ -1,0 +1,104 @@
+{
+ "round": "R4_realrobot day 2 (camera->PSM registration, scale, hover-and-correct, grasp tolerance, D7, stereo calibration diagnosis)",
+ "parent": "records/logs/R4_20260928/pre_registration.json (sha256 d1dae754...132f). Everything there still applies unless this addendum changes it; changes are listed under 'changes_to_day1_prereg'.",
+ "written": "2026-09-29T18:05:00-04:00",
+ "status": "FROZEN at write time (chmod a-w + sha256 file), before any day-2 data was produced. Deviations go in the report item by item.",
+ "what_was_already_seen_before_writing (honesty note)": [
+  "Day-1 F-2 per-placement relative errors (report table): FS about -1.4% at 120 mm, -4.1% at 150 mm, tilt A more negative than tilt B at the same distance. So the 0-b classification below is NOT blind; it is a pre-specified test applied to data the executor has already looked at.",
+  "R2 E_tip_session: SE(3)+TCP fit RMS 2.79 mm, LOO 3.49 mm, and the pairwise stereo/kinematic distance ratio 1.033. No Sim(3) fit had been run before this file.",
+  "R2 DA preprocessing (read-only code audit, done before this file): r2_da_infer.py calls MetricDepthModel.infer_image(input_size=518) -> backbone.image2tensor -> Resize(keep_aspect_ratio=True, lower_bound, multiple of 14): 1300x1024 -> 658x518 network input. That is the aspect-preserving path, NOT square 518.",
+  "0-c audit already visible from R2 code: r2_tip_solve2.py triangulates the tip on topic-right rect mean images with rect P (fx 1860.724932, cx 690.538345, cy 576.803638, fB 10136.551 px*mm) and fits against PSM1 local/measured_cp (psm_local), so R2's T_reg maps PSM1 local base -> physical-left rectified camera."
+ ],
+ "order": "0-a (needs EXP8 checkpoints from user), 0-b, 0-c, 0-d -> 1-a -> 1-b -> 1-c -> 1-d -> 1-e (if time) -> Part M. If short: keep 0-a, 0-c, 0-d, 1-a, 1-b.",
+ "discipline": {
+  "result_gates": "none; anomalies recorded, execution continues.",
+  "allowed_aborts": ["ECM or either SUJ moved during Part 1 (1-a is the one planned exception)", "required file missing", "tool/instrument broken or not detected"],
+  "frozen_data": {
+   "rule": "R1/R2/R3 and R4 day-1 records are read-only. Day-2 writes only under records/logs/R4_20260928/day2/ (plus this file and figs_meeting/).",
+   "tree_sha256_at_addendum (sorted sha256sum of every file, sha256 of that list)": {
+    "R1_20260921": {"files": 5541, "digest": "d669d8cebcf86adec2cd75a00b6bff48007b59f6fcf3c832f0c31600fdc057d4"},
+    "R2_20260922": {"files": 4353, "digest": "7138fb46c8e3c41d8e251530a459881bd31662040aa8964252ac1c021d1737e3"},
+    "R3_20260924": {"files": 169, "digest": "70b0dbf7f0fe842b1f22d7fd0f58e44535d623735552b1782d87ca9462636832"},
+    "R4_20260928_day1 (whole dir before this file was written)": {"files": 6129, "digest": "2aa609f1bd6fa5b98c99e0a878757635c6040f1ae54d8de1d193cf06858e0c0c"}
+   },
+   "check": "R1-R3 recomputed at end of day 2; R4 day-1 checked as the same file list restricted to files that existed before this addendum."
+  },
+  "independent_unit": "scene / placement / robot pose, never frame.",
+  "proportions": "k/n with Wilson 95% CI.",
+  "paired_binary": "exact McNemar (two-sided binomial on discordant pairs).",
+  "uncertain": "not measured -> 'not measured'. No estimation, no extrapolation."
+ },
+ "part0": {
+  "0-a_D7": {
+   "inputs": "EXP8-main sha256 prefix b6c3a60a / suffix 9366; EXP8-ctrl prefix 567f4a34 / suffix d3e0. Copied by the user from /home/jiaming/p5a_da_training/20260929_exp8/. Loaded only if the full file sha256 matches both the prefix and the suffix; otherwise 0-a is aborted as 'file missing'.",
+   "preprocessing": {
+    "EXP8-main, EXP8-ctrl": "square 518: the image is resized to 518x518 (aspect ratio NOT kept, cubic), same ImageNet normalisation, output resized back to 1300x1024 bilinear. If the sim-side infer_exp0c_metric_da.py is delivered it is used verbatim instead and the report says so; if not, the local re-implementation is used and flagged as a deviation risk.",
+    "P5a": "run twice: (i) aspect-preserving infer_image (R2 path; R2 frozen predictions are reused, not re-run) and (ii) square 518. Difference reported."
+   },
+   "frames": "R2 frozen flat bank (records/logs/R1_20260921/C4_bank/bank_flat.json, N=24 frames, 4 independent GT scenes) and the R1 held scenes (frame 000, 4 scenes).",
+   "metrics": "r2_da_eval.py region_stats definitions unchanged (median bias, spatial residual p50/p95 after removing the median) on needle and pad regions. Held GT: needle mask eroded by 2 px (3x3 kernel, 2 iterations) before any statistic.",
+   "aggregate_for_hypotheses": "median over the 24 flat frames of the per-frame needle-region median bias (same aggregate as the R2 -36 mm number).",
+   "fp": "F-3 D7 column: FP on the 4 R1 flat scenes with EXP8-main depth (frame 000), exactly the F-3 pipeline (same rgb/mask/mesh/K, 252 hypotheses, refine 5). Report along-ray / perpendicular translation error vs circle-centre GT.",
+   "H_K": {"statement": "EXP8-main needle-region |median bias| <= 10 mm on the flat bank.", "decision": "holds iff |aggregate| <= 10.0 mm."},
+   "H_dist": {"statement": "Working-distance prior: sim training distances ~60-85 mm vs real ~104 mm; outputs are pulled back into the training range, so EXP8-main needle median bias stays negative in [-25, -12] mm.", "decision": "holds iff -25.0 <= aggregate <= -12.0 mm."},
+   "note": "H_K and H_dist are mutually exclusive; both can fail (e.g. -11 mm or -30 mm or positive > 10 mm). Reported as is."
+  },
+  "0-b_stereo_calibration": {
+   "data": "day-1 F-2 only (14 placements: 12 nominal + p01, p02); no new capture.",
+   "response": "rel_i = FS1 median signed error / Z_gt median per placement (from F2 pNN/f2_result.json). Also SG100 where valid >= 0.3.",
+   "board_square": "user caliper: 5 squares, mean reported; PnP GT is re-scaled by (measured/6.000) as a sensitivity row. If not measured -> 'not measured'.",
+   "models": {
+    "M_Z": "rel = a + b*Z (OLS over placements; 95% CI from t distribution).",
+    "M_full": "rel = a + b*Z + c*tiltB + d*u_c + e*v_c, u_c,v_c = board-pixel centroid offset from (cx,cy) in units of 100 px; tiltB = 1 for nominal tilt B (measured tilt > 10 deg).",
+    "M_disp": "physical model Z_meas = fB/(fB/Z_true + delta): fit delta (px) by least squares on the per-placement medians; report delta and its 95% CI."
+   },
+   "classification (pre-specified, not blind)": {
+    "Z-invariant (B or f scale)": "b's 95% CI contains 0 and a's excludes 0.",
+    "Z-linear (disparity zero point / cx_L-cx_R / Tx)": "b's 95% CI excludes 0.",
+    "tilt / image position (residual distortion / rectification / PnP)": "partial F-test of (c,d,e) added to M_Z has p < 0.05.",
+    "rule": "classes are not exclusive; every class whose rule holds is reported. None hold -> 'not determined'."
+   },
+   "P_matrix_check": "read cx_L, cx_R, Tx from both rectified P; B = -Tx/fx; compare with fB used in the pipeline (10136.551 px*mm) and check cx_L == cx_R (doffs = 0).",
+   "recalibration": "not in this round unless the diagnosis is unambiguous; any new calibration file gets a new name, originals kept."
+  },
+  "0-c_frame_audit": "descriptive: write p_PSM1base = T_reg * p_rectLeft with every term's source file, direction, units; state R2's camera/raw-vs-rect; if R2 not in rect-left, give the error magnitude.",
+  "0-d_SE3_vs_Sim3": {
+   "data": "R2 E_tip_session, the 16 usable poses, tip pixels and disparities exactly as chosen in tip_solution_v2.json (clear peaks + model-resolved 8/10/12), rect P, psm_local kinematics.",
+   "models": "SE(3): X_cam = R (R_l p + t_l) + t with p (TCP) free. Sim(3): X_cam = s R (R_l p + t_l) + t with p free.",
+   "evaluation": "random 25% holdout (4 of 16) test poses, 12 train; 20 repetitions, numpy default_rng(20260929); same splits for both models. Per rep: holdout RMS. Also full-data RMS/max and s.",
+   "decision": "scale is one of the main sources of the 2.8 mm iff median over reps of holdout RMS(Sim3) <= 0.70 * median holdout RMS(SE3)."
+  }
+ },
+ "part1": {
+  "preconditions_and_stability": "as day-1 part_G_preconditions (ECM joint |d| > 1e-3 rad or > 0.1 mm, SUJ measured_cp |dt| > 0.2 mm or > 0.1 deg => changed). Snapshots at start, after each block, at end. ECM retracted before any scene change.",
+  "1-a_B1_SUJ_live": {
+   "procedure": "ECM retracted; user pushes the PSM1 SUJ a small amount (target >= 10 mm at the SUJ tip), then the ECM SUJ, then returns both. Record the SUJ measured_cp topics for PSM1 and ECM (and PSM1/ECM measured_cp in world) before/during/after at >= 10 Hz.",
+   "decision": "per SUJ: 'updates' iff max |dt| during the push >= 2.0 mm; 'does not update' iff < 0.2 mm; otherwise 'ambiguous'. If 'does not update' for either -> conclusion written: the 29 mm offset is likely there."
+  },
+  "1-b_local_registration": {
+   "procedure": "r2_tip_session-style robot-driven tip session. >= 30 poses within about 40x40x20 mm around the needle work area on the pad, wrist roll +-60 deg, pitch/yaw +-30 deg. Every automatic trajectory dry-run 20 mm above the pad first.",
+   "tip_measurement": "same as R2: mean of 10 rect frames, tip clicked on topic-right (physical left), sub-pixel NCC disparity along the epipolar line, serration-aliasing handled as in r2_tip_solve2.py (clear peaks first, ambiguous resolved by the model fitted on clear ones, training poses only).",
+   "frame": "physical-left rectified camera (0-c).",
+   "split": "pose ids get a random permutation with numpy default_rng(20260930) BEFORE capture; the first ceil(25%) of planned poses are test. Unusable test poses stay in the test denominator as 'unusable'. Test poses never enter the fit (including the ambiguity-resolution model).",
+   "fit": "TCP + T_reg jointly, SE(3) and Sim(3), train/holdout RMS and max. TCP compared with R2 (-2.70, 1.08, 23.81) mm.",
+   "H_1b": {"statement": "local registration holdout RMS (SE3) < 2.8 mm.", "decision": "holds iff holdout RMS on the pre-drawn test split < 2.80 mm. The 20-rep random-split distribution is reported as secondary."}
+  },
+  "1-c_G1_tolerance": {
+   "change_vs_day1_prereg": "offset grid replaced by: radial (in needle plane, perpendicular to arc) {0, +-1, +-2, +-3, +-4} mm; vertical {0, +1, +2, +3} mm; tangential {+-2, +-4} mm. 3 trials per offset; reference (0) grasp repeated 3 times per axis block with the human-repeatability of re-placing the needle reported.",
+   "vertical_safety": "no offset below the contact with the pad; +k means k mm ABOVE the reference grasp height.",
+   "report": "success-vs-offset per axis with Wilson CI; largest |delta| with 3/3 on each side of each axis. Descriptive, no prediction (unchanged)."
+  },
+  "1-d_hover_and_correct": {
+   "target": "grasp point p* in camera frame from the stereo arc fit of the marker point (not FP). FP-target end-to-end block only if the printed tab needle (T-1) exists.",
+   "procedure": "hover = p* + 10 mm vertically up (up = PSM1 base -z mapped to camera by T_reg rotation; recorded). Open-loop: command hover via T_reg + TCP. Correct: measure the jaw tip p_obs by stereo (same method as 1-b), e = hover - p_obs, command += R_reg^T e (rotation only), then measure again (p_obs2, mandatory). Then descend, close, lift 10 mm, wait 2 s; success = needle still in the jaws.",
+   "design": "8 placements (different position/orientation), each with both conditions x 2 trials, order randomised per placement with numpy default_rng(20261001) drawn before the first trial.",
+   "metrics": "open-loop hover error |hover - p_obs| and corrected |hover - p_obs2| in camera frame, and in PSM base frame via R_reg^T; per placement = mean of its 2 trials.",
+   "H_1d": {"statement": "corrected hover error <= 1.5 mm and clearly smaller than open-loop.", "decision": "holds iff median over placements of corrected error <= 1.5 mm AND exact two-sided Wilcoxon signed-rank over the 8 placements (corrected vs open-loop) p < 0.05."},
+   "grasp_success": "paired by (placement, trial index): 16 pairs, exact McNemar; noted that the 2 trials of a placement are not independent."
+  },
+  "1-e_G2": "as day-1 G-2 (H_G2a/b/c unchanged), conditions extended to rigid registration, rigid + grid correction, rigid + hover-correct, (Xiangrui polynomial only with his consent). Same held-out placements and same ground truth.",
+  "safety": ["ECM retracted before scene changes", "slow motion; hover 10 mm above target then vertical descent", "no downward offset past pad contact", "operator hand on e-stop", "every automatic trajectory dry-run 20 mm above the pad and confirmed by the operator"]
+ },
+ "part_M": "figures M1-M6 to records/logs/R4_20260928/figs_meeting/, PNG 200 dpi, full axis labels/units, one-sentence conclusion each in the report.",
+ "excluded": ["using FP output to diagnose calibration", "depth during motion", "retraining DA", "editing global dVRK tool files", "passwords in any file/log", "opening ports (SSH tunnel only)", "modifying existing files/containers on 10.162.41.27", "deleting others' files on 10.162.41.27 (list largest dirs to the user instead)"]
+}

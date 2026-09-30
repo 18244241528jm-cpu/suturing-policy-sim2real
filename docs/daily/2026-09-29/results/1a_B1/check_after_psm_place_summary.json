@@ -1,0 +1,69 @@
+{
+ "/SUJ/PSM1/measured_cp": {
+  "n": 30,
+  "max_dt_mm": 0.0,
+  "end_dt_mm": 0.0,
+  "verdict": "does not update"
+ },
+ "/SUJ/PSM1/local/measured_cp": {
+  "n": 30,
+  "max_dt_mm": 0.0,
+  "end_dt_mm": 0.0,
+  "verdict": "does not update"
+ },
+ "/SUJ/ECM/measured_cp": {
+  "n": 30,
+  "max_dt_mm": 0.0,
+  "end_dt_mm": 0.0,
+  "verdict": "does not update"
+ },
+ "/SUJ/ECM/local/measured_cp": {
+  "n": 30,
+  "max_dt_mm": 0.0,
+  "end_dt_mm": 0.0,
+  "verdict": "does not update"
+ },
+ "/PSM1/measured_cp": {
+  "n": 30,
+  "max_dt_mm": 0.0,
+  "end_dt_mm": 0.0,
+  "verdict": "does not update"
+ },
+ "/ECM/measured_cp": {
+  "n": 31,
+  "max_dt_mm": 0.0,
+  "end_dt_mm": 0.0,
+  "verdict": "does not update"
+ },
+ "/SUJ/PSM1/measured_js": {
+  "n": 30,
+  "max_abs_dq": [
+   0.0,
+   3e-05,
+   5e-05,
+   4e-05,
+   2e-05,
+   2e-05
+  ]
+ },
+ "/SUJ/ECM/measured_js": {
+  "n": 30,
+  "max_abs_dq": [
+   0.0,
+   3e-05,
+   4e-05,
+   2e-05,
+   0.0,
+   0.0
+  ]
+ },
+ "/ECM/measured_js": {
+  "n": 30,
+  "max_abs_dq": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ }
+}

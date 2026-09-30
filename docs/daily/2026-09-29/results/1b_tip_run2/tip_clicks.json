@@ -1,0 +1,124 @@
+{
+ "method": "Claude manual click on topic-right (physical-left) right_rect_mean.png (10-frame mean), full-res px; tip := apex of the closed jaw's rounded end along the jaw axis. Zoomed crops in annot_views/crop_*.png, crop_fix.png.",
+ "unusable": {
+  "09": "jaw hidden behind shaft",
+  "25": "jaw hidden behind shaft/wrist",
+  "28": "tool out of view",
+  "29": "tool out of view"
+ },
+ "tip_R": {
+  "00": [
+   600,
+   502
+  ],
+  "01": [
+   952,
+   926
+  ],
+  "02": [
+   583,
+   95
+  ],
+  "03": [
+   958,
+   667
+  ],
+  "04": [
+   612,
+   525
+  ],
+  "05": [
+   462,
+   248
+  ],
+  "06": [
+   506,
+   400
+  ],
+  "07": [
+   389,
+   767
+  ],
+  "08": [
+   556,
+   272
+  ],
+  "10": [
+   194,
+   643
+  ],
+  "11": [
+   280,
+   356
+  ],
+  "12": [
+   541,
+   802
+  ],
+  "13": [
+   296,
+   850
+  ],
+  "14": [
+   394,
+   644
+  ],
+  "15": [
+   505,
+   621
+  ],
+  "16": [
+   807,
+   500
+  ],
+  "17": [
+   525,
+   914
+  ],
+  "18": [
+   389,
+   594
+  ],
+  "19": [
+   245,
+   418
+  ],
+  "20": [
+   634,
+   98
+  ],
+  "21": [
+   710,
+   740
+  ],
+  "22": [
+   692,
+   213
+  ],
+  "23": [
+   1140,
+   406
+  ],
+  "24": [
+   586,
+   645
+  ],
+  "26": [
+   470,
+   420
+  ],
+  "27": [
+   581,
+   869
+  ],
+  "30": [
+   575,
+   578
+  ],
+  "31": [
+   304,
+   270
+  ]
+ },
+ "edits": "05 moved from (462,258) to (462,248) after overlay check (click was ~10 px outside the jaw)"
+}

@@ -1,0 +1,384 @@
+[__init__()] self.cfg: 
+ lr: 0.0001
+c_in: 6
+zfar: 'Infinity'
+debug: null
+n_view: 1
+run_id: 3wy8qqex
+use_BN: true
+exp_name: 2024-01-11-20-02-45
+n_epochs: 62
+save_dir: /home/bowenw/debug/2024-01-11-20-02-45/
+use_mask: false
+loss_type: pairwise_valid
+optimizer: adam
+batch_size: 64
+crop_ratio: 1.1
+enable_amp: true
+use_normal: false
+max_num_key: null
+warmup_step: -1
+input_resize:
+- 160
+- 160
+max_step_val: 1000
+vis_interval: 1000
+weight_decay: 0
+normalize_xyz: true
+resume_run_id: null
+clip_grad_norm: 'Infinity'
+lr_epoch_decay: 500
+render_backend: nvdiffrast
+train_num_pair: 5
+lr_decay_epochs:
+- 50
+n_epochs_warmup: 1
+make_pair_online: false
+gradient_max_norm: 'Infinity'
+max_step_per_epoch: 10000
+n_rendering_workers: 1
+save_epoch_interval: 100
+n_dataloader_workers: 100
+split_objects_across_gpus: true
+ckpt_dir: /home/surgic-ai/FoundationPose/learning/training/../../weights/2024-01-11-20-02-45/model_best.pth
+
+[__init__()] self.h5_file:None
+[__init__()] Using pretrained model from /home/surgic-ai/FoundationPose/learning/training/../../weights/2024-01-11-20-02-45/model_best.pth
+[__init__()] init done
+[__init__()] welcome
+[__init__()] self.cfg: 
+ lr: 0.0001
+c_in: 6
+zfar: .inf
+debug: null
+w_rot: 0.1
+n_view: 1
+run_id: null
+use_BN: true
+rot_rep: axis_angle
+ckpt_dir: /home/surgic-ai/FoundationPose/learning/training/../../weights/2023-10-28-18-33-37/model_best.pth
+exp_name: 2023-10-28-18-33-37
+save_dir: /tmp/2023-10-28-18-33-37/
+loss_type: l2
+optimizer: adam
+trans_rep: tracknet
+batch_size: 64
+crop_ratio: 1.2
+use_normal: false
+BN_momentum: 0.1
+max_num_key: null
+warmup_step: -1
+input_resize:
+- 160
+- 160
+max_step_val: 1000
+normal_uint8: false
+vis_interval: 1000
+weight_decay: 0
+n_max_objects: null
+normalize_xyz: true
+clip_grad_norm: 'Infinity'
+rot_normalizer: 0.3490658503988659
+trans_normalizer:
+- 0.019999999552965164
+- 0.019999999552965164
+- 0.05000000074505806
+max_step_per_epoch: 25000
+val_epoch_interval: 10
+n_dataloader_workers: 60
+enable_amp: true
+use_mask: false
+
+[__init__()] self.h5_file:
+[__init__()] Using pretrained model from /home/surgic-ai/FoundationPose/learning/training/../../weights/2023-10-28-18-33-37/model_best.pth
+[__init__()] init done
+Warp 1.0.0 initialized:
+   CUDA Toolkit 11.5, Driver 13.3
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 3090" (24 GiB, sm_86, mempool enabled)
+   Kernel cache:
+     /root/.cache/warp/1.0.0
+[Dataset] Root:               /home/surgic-ai/FoundationPose/r4d2_fsfp_s01
+[Dataset] RGB frames:         2
+[Dataset] Paired run frames:  2
+[Dataset] Registration frame: s01_FS1
+[Dataset] Registration mask:  /home/surgic-ai/FoundationPose/r4d2_fsfp_s01/masks/s01_FS1.png
+[Dataset] Camera K:
+[[1.86072493e+03 0.00000000e+00 6.90538345e+02]
+ [0.00000000e+00 1.86072493e+03 5.76803638e+02]
+ [0.00000000e+00 0.00000000e+00 1.00000000e+00]]
+[Preflight] Registration image: 1300x1024, mask=9352 px, valid masked depth=9352 px
+[Preflight] Needle depth range: min=0.102095 m, median=0.102945 m, max=0.110391 m
+[Mesh] Path:     /home/surgic-ai/FoundationPose/r4d2_fsfp_s01/mesh/Needle.obj
+[Mesh] Vertices: 4120
+[Mesh] Faces:    1690
+[Mesh] Extents:  [0.00098    0.00656993 0.01798236] m
+[GPU]            NVIDIA GeForce RTX 3090
+[reset_object()] self.diameter:0.017996322513224753, vox_size:0.003
+[reset_object()] self.pts:torch.Size([12, 3])
+[reset_object()] reset done
+[make_rotation_grid()] cam_in_obs:(42, 4, 4)
+[make_rotation_grid()] rot_grid:(252, 4, 4)
+[make_rotation_grid()] after cluster, rot_grid:(252, 4, 4)
+[make_rotation_grid()] self.rot_grid: torch.Size([252, 4, 4])
+[main()] FoundationPose needle estimator initialization complete
+[main()] Frame 1/2: s01_FS1
+[register()] Welcome
+[register()] poses:(252, 4, 4)
+[register()] after viewpoint, add_errs min:-1.0
+[predict()] ob_in_cams:(252, 4, 4)
+[predict()] self.cfg.use_normal:False
+[predict()] trans_normalizer:[0.019999999552965164, 0.019999999552965164, 0.05000000074505806], rot_normalizer:0.3490658503988659
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] get_vis...
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] ob_in_cams:(252, 4, 4)
+[predict()] self.cfg.use_normal:False
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] pose batch data done
+[find_best_among_pairs()] pose_data.rgbAs.shape[0]: 252
+[predict()] forward done
+[predict()] get_vis...
+[register()] final, add_errs min:-1.0
+[register()] sort ids:tensor([ 81,  12, 195, 114, 177,  21,  18,  78, 222,  93,  75,  96, 198, 135,
+          0,   9,  72,  99,  69, 126,   3, 107,  74, 183, 248, 235, 190,  36,
+          7, 169,   2, 230, 211, 113, 168, 187, 243,  29, 120, 110, 161, 166,
+         97,  82,  95,  32, 141, 238,  53,  88,  98,  10,  68,  73, 109, 185,
+        224,  11,  54, 103, 163,  49,  94, 121, 237, 242,  31,  77, 180,   5,
+         27,  37, 186, 223, 231,   1,  28, 142, 241,  38, 157, 162,  48, 158,
+         16,  47, 131,  63,  76, 143,  67,  87, 213, 220, 136, 145, 204,  64,
+        130, 219, 167, 137,   4,  46, 149, 151, 156, 232, 236, 200, 202, 212,
+        247, 193,  61,  89, 199,  19, 122, 108, 184,  45, 246, 148,  70, 240,
+        104, 116,  83, 171, 218, 221, 147,  17, 226,  23, 214, 250,  15, 129,
+        233,  30, 146,  86, 194,  71, 227,  26, 117, 207,  20, 102, 189, 203,
+         58,  57,  13,  22,  80,  50, 160,  92, 175,  35, 125,  34,  62,  79,
+        152, 153, 210, 165, 201, 150, 182,  44, 173, 239, 105, 191,  41, 112,
+        140, 178, 206,   8,  14, 138, 245, 251, 205,  59, 154, 115, 196, 179,
+        101, 217,  90, 197, 127, 249, 111, 225, 181, 123, 164, 244,   6,  66,
+        172,  39, 132,  42,  60,  33, 228, 106, 174,  51, 133, 134,  91, 119,
+        176,  85, 155, 209, 229,  65, 208, 188,  25, 170, 100, 144,  56, 128,
+        234, 192, 118, 124, 159,  43, 139,  52,  84,  55,  24, 216, 215,  40])
+[register()] sorted scores:tensor([106.1055, 106.0195, 105.9844, 105.9336, 105.8125, 105.7852, 105.7773,
+        105.7539, 105.7539, 105.7461, 105.7344, 105.7305, 105.6992, 105.6875,
+        105.6680, 105.6641, 105.6523, 105.6328, 105.6172, 105.6133, 105.6094,
+        105.6094, 105.6055, 105.5938, 105.5664, 105.5391, 105.5273, 105.5195,
+        105.5156, 105.5117, 105.4961, 105.4883, 105.4766, 105.4727, 105.4688,
+        105.4609, 105.4570, 105.4492, 105.4492, 105.4453, 105.4414, 105.4414,
+        105.4375, 105.4336, 105.4336, 105.4297, 105.4297, 105.4297, 105.4258,
+        105.4258, 105.4258, 105.4219, 105.4180, 105.4180, 105.4180, 105.4180,
+        105.4180, 105.4141, 105.4141, 105.4141, 105.4141, 105.4102, 105.4102,
+        105.4062, 105.4062, 105.4062, 105.4023, 105.4023, 105.4023, 105.3984,
+        105.3984, 105.3984, 105.3984, 105.3984, 105.3984, 105.3945, 105.3945,
+        105.3906, 105.3867, 105.3828, 105.3828, 105.3828, 105.3789, 105.3789,
+        105.3750, 105.3750, 105.3750, 105.3711, 105.3711, 105.3711, 105.3672,
+        105.3672, 105.3672, 105.3672, 105.3633, 105.3594, 105.3555, 105.3516,
+        105.3477, 105.3477, 105.3438, 105.3359, 105.3320, 105.3320, 105.3320,
+        105.3320, 105.3320, 105.3320, 105.3242, 105.3203, 105.3203, 105.3164,
+        105.3008, 105.2969, 105.2773, 105.2734, 105.2695, 105.2383, 105.2305,
+        105.1992, 105.1914, 105.1875, 105.1758, 105.1250, 105.1211, 105.0938,
+        105.0898, 105.0781, 105.0742, 105.0742, 105.0742, 105.0664, 105.0586,
+        105.0508, 105.0195, 105.0039, 105.0000, 104.9961, 104.9805, 104.9805,
+        104.9648, 104.9570, 104.9453, 104.9336, 104.9336, 104.9297, 104.9258,
+        104.9102, 104.9102, 104.9062, 104.8945, 104.8945, 104.8906, 104.8789,
+        104.8750, 104.8555, 104.8398, 104.8398, 104.8398, 104.8320, 104.8320,
+        104.8242, 104.8125, 104.8086, 104.7969, 104.7852, 104.7812, 104.7812,
+        104.7812, 104.7773, 104.7773, 104.7734, 104.7695, 104.7617, 104.7500,
+        104.7422, 104.7422, 104.7422, 104.7383, 104.7383, 104.7344, 104.7305,
+        104.7266, 104.7266, 104.7266, 104.7227, 104.7188, 104.7188, 104.7109,
+        104.7109, 104.7070, 104.7031, 104.6953, 104.6914, 104.6875, 104.6797,
+        104.6641, 104.6602, 104.6484, 104.6250, 104.6055, 104.6016, 104.5938,
+        104.5938, 104.5898, 104.5820, 104.5781, 104.5703, 104.5664, 104.5625,
+        104.5547, 104.5391, 104.5312, 104.5273, 104.5234, 104.5195, 104.5195,
+        104.5117, 104.5039, 104.5000, 104.4922, 104.4922, 104.4844, 104.4844,
+        104.4766, 104.4688, 104.4688, 104.4688, 104.4648, 104.4453, 104.4414,
+        104.4297, 104.4258, 104.4258, 104.4219, 104.4102, 104.4062, 104.4062,
+        104.3945, 104.3906, 104.3828, 104.3828, 104.3555, 104.3398, 104.3320,
+        104.3242, 104.3203, 104.2891, 104.2852, 104.2852, 104.2461, 104.2148])
+[main()] rot_grid hypotheses used: 252
+[main()] Frame 2/2: s01_FS10
+[register()] Welcome
+[register()] poses:(252, 4, 4)
+[register()] after viewpoint, add_errs min:-1.0
+[predict()] ob_in_cams:(252, 4, 4)
+[predict()] self.cfg.use_normal:False
+[predict()] trans_normalizer:[0.019999999552965164, 0.019999999552965164, 0.05000000074505806], rot_normalizer:0.3490658503988659
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] forward start
+[predict()] forward done
+[predict()] get_vis...
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] warp done
+[make_crop_data_batch()] pose batch data done
+[predict()] ob_in_cams:(252, 4, 4)
+[predict()] self.cfg.use_normal:False
+[predict()] making cropped data
+[make_crop_data_batch()] Welcome make_crop_data_batch
+[make_crop_data_batch()] make tf_to_crops done
+[make_crop_data_batch()] render done
+[make_crop_data_batch()] pose batch data done
+[find_best_among_pairs()] pose_data.rgbAs.shape[0]: 252
+[predict()] forward done
+[predict()] get_vis...
+[register()] final, add_errs min:-1.0
+[register()] sort ids:tensor([195,  81,  12, 114, 177,  93,  21, 222, 198,  18,  78, 135,   9,  75,
+        183,   0,  96, 235,  72,   3, 126,  74,  36,  99, 193, 107, 248, 169,
+         69, 168, 190, 161,   7, 230,  32, 187,  82,  94, 211,   2, 110, 238,
+        243, 120, 158,  88, 141, 163,  29,  54,  68, 113, 231,  10,  98, 185,
+         16,  31,  28, 136, 224,  11,  73, 242, 103,  95, 186, 223, 237, 241,
+        109,  53,  77, 121, 162,  37,  38, 130, 142, 145, 213, 232,   1,  27,
+         48,  87, 137, 156, 149, 167, 219,   5,  47,  97, 143,  49,  76, 157,
+        220,   4, 202, 131,  67, 151,  46,  63, 212,  64, 166,  61, 122,  89,
+        199, 116,  19, 247,  45, 184, 180, 204, 108, 246, 171,  17,  70, 240,
+         83, 148, 218, 236, 200, 214,  20, 129, 226, 221, 146,  30, 250,  80,
+        104, 147, 233,  26,  22, 102, 227, 189, 203,  92,  13,  71, 160,  86,
+        117, 125, 153, 173,  57,  58,  62, 207,  34, 140, 201, 175, 210, 138,
+        150,  41, 112, 165, 239,  50, 172, 152,  44, 196, 179, 217,  79, 182,
+        197, 206, 251, 245,   8, 178, 115, 194, 249, 205,  35, 164,  14,  59,
+        101, 191,  42, 100, 154,  66,  90,   6, 144, 244, 105,  15, 106, 225,
+         33, 132, 228, 123, 174,  23, 111, 188, 128,  39, 181, 127,  60, 155,
+        209, 234,  51,  25,  91, 133, 119, 176,  85,  65, 208,  55, 134, 124,
+        192, 118, 170, 229,  56,  43, 216,  52, 139,  84, 159,  40, 215,  24])
+[register()] sorted scores:tensor([107.4102, 107.3789, 107.3086, 107.2461, 107.2383, 107.2031, 107.1758,
+        107.1641, 107.1523, 107.1211, 107.1055, 107.0977, 107.0586, 107.0117,
+        107.0039, 107.0000, 106.9961, 106.9961, 106.9922, 106.9844, 106.9648,
+        106.9531, 106.9375, 106.9375, 106.9180, 106.9141, 106.9141, 106.8984,
+        106.8906, 106.8906, 106.8906, 106.8867, 106.8711, 106.8633, 106.8594,
+        106.8555, 106.8438, 106.8438, 106.8438, 106.8398, 106.8398, 106.8359,
+        106.8359, 106.8281, 106.8281, 106.8242, 106.8242, 106.8203, 106.8164,
+        106.8164, 106.8164, 106.8164, 106.8086, 106.8047, 106.8047, 106.8008,
+        106.7969, 106.7969, 106.7930, 106.7930, 106.7930, 106.7891, 106.7891,
+        106.7852, 106.7812, 106.7773, 106.7773, 106.7773, 106.7773, 106.7773,
+        106.7734, 106.7695, 106.7695, 106.7695, 106.7695, 106.7656, 106.7656,
+        106.7656, 106.7656, 106.7656, 106.7656, 106.7656, 106.7617, 106.7617,
+        106.7617, 106.7617, 106.7617, 106.7617, 106.7578, 106.7578, 106.7578,
+        106.7539, 106.7539, 106.7539, 106.7500, 106.7461, 106.7461, 106.7461,
+        106.7461, 106.7422, 106.7383, 106.7344, 106.7305, 106.7305, 106.7266,
+        106.7266, 106.7266, 106.7188, 106.7148, 106.6875, 106.6680, 106.6602,
+        106.6289, 106.6250, 106.6211, 106.6172, 106.6055, 106.5977, 106.5938,
+        106.5938, 106.5625, 106.5625, 106.5312, 106.5195, 106.5078, 106.5078,
+        106.5039, 106.5039, 106.4961, 106.4688, 106.4453, 106.4219, 106.4180,
+        106.4102, 106.4062, 106.4023, 106.3984, 106.3750, 106.3711, 106.3594,
+        106.3594, 106.3516, 106.3516, 106.3320, 106.3281, 106.3086, 106.3086,
+        106.2852, 106.2812, 106.2773, 106.2656, 106.2617, 106.2578, 106.2539,
+        106.2461, 106.2461, 106.2461, 106.2422, 106.2305, 106.2148, 106.2148,
+        106.2148, 106.1992, 106.1992, 106.1992, 106.1953, 106.1953, 106.1914,
+        106.1875, 106.1836, 106.1836, 106.1836, 106.1836, 106.1797, 106.1758,
+        106.1680, 106.1641, 106.1641, 106.1602, 106.1562, 106.1523, 106.1445,
+        106.1406, 106.1406, 106.1289, 106.1250, 106.1211, 106.1211, 106.1172,
+        106.1172, 106.1172, 106.1133, 106.1055, 106.1055, 106.1016, 106.1016,
+        106.1016, 106.1016, 106.0859, 106.0781, 106.0586, 106.0430, 106.0430,
+        106.0352, 106.0352, 106.0117, 106.0078, 106.0039, 106.0039, 106.0039,
+        105.9883, 105.9844, 105.9844, 105.9805, 105.9805, 105.9727, 105.9727,
+        105.9648, 105.9531, 105.9492, 105.9453, 105.9336, 105.9297, 105.9297,
+        105.9297, 105.9297, 105.9180, 105.9102, 105.9102, 105.9023, 105.8945,
+        105.8945, 105.8906, 105.8867, 105.8867, 105.8750, 105.8633, 105.8594,
+        105.8555, 105.8516, 105.8516, 105.8516, 105.8398, 105.8359, 105.8008,
+        105.7969, 105.7852, 105.7773, 105.7734, 105.7539, 105.7500, 105.6211])
+[main()] rot_grid hypotheses used: 252
+Module Utils load on device 'cuda:0' took 5.23 ms
+[Pose] s01_FS1: t=[0.004343, -0.003142, 0.095373] m
+[Pose] s01_FS10: t=[0.001237, -0.004551, 0.095846] m
+========================================================================
+FoundationPose needle run complete
+Frames processed:      2
+Pose matrices:         /home/surgic-ai/FoundationPose/r4d2_fsfp_s01_out/ob_in_cam
+Visualization images:  /home/surgic-ai/FoundationPose/r4d2_fsfp_s01_out/track_vis
+========================================================================
+num original candidates = 252
+num of pose after clustering: 252

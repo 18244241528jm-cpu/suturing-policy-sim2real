@@ -1,0 +1,46 @@
+{
+ "file": "suj_push2_live.jsonl",
+ "push_window_PSM1_SUJ_s": [
+  5,
+  30
+ ],
+ "ECM_motion_window_s": [
+  114,
+  142
+ ],
+ "PSM1_SUJ_J0_range_m": [
+  0.09507104660969698,
+  0.19237145664083571
+ ],
+ "push_window /SUJ/PSM1/measured_cp max|dt|_mm": 0.0,
+ "push_window /SUJ/PSM1/local/measured_cp max|dt|_mm": 0.0,
+ "push_window /PSM1/measured_cp max|dt|_mm": 0.017489510573601836,
+ "push_window /SUJ/ECM/measured_cp max|dt|_mm": 0.0,
+ "ECM_SUJ_joint_range_whole": [
+  2e-05,
+  0.00047,
+  0.0002,
+  9e-05,
+  0.0,
+  0.0
+ ],
+ "ECM_arm_js_start": [
+  -0.072773684823705,
+  -0.769081516555365,
+  0.064465200072192,
+  0.700617552056226
+ ],
+ "ECM_arm_js_end": [
+  -0.048819040840005,
+  -0.67482719196267,
+  0.064286606321992,
+  0.8128079443789551
+ ],
+ "ECM_arm_end_minus_start_deg_deg_mm_deg": [
+  1.3725000000044592,
+  5.4003750000175454,
+  -0.178593750200004,
+  6.42803598200929
+ ],
+ "verdict_PSM1_SUJ (prereg: max|dt| of SUJ measured_cp during the push)": "does not update"
+}

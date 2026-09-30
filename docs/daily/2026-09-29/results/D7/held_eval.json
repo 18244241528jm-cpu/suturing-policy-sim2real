@@ -1,0 +1,104 @@
+{
+ "P5a-square": [
+  {
+   "scene": 1,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 278,
+   "needle_median_bias_mm": -7.915126800537109,
+   "resid_p50": 1.9945030212402344,
+   "resid_p95": 3.6778587341308593
+  },
+  {
+   "scene": 2,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 1174,
+   "needle_median_bias_mm": -18.107690811157227,
+   "resid_p50": 1.6043376922607422,
+   "resid_p95": 8.028800582885742
+  },
+  {
+   "scene": 3,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 2911,
+   "needle_median_bias_mm": -10.035930633544922,
+   "resid_p50": 2.9742507934570312,
+   "resid_p95": 14.672767639160156
+  },
+  {
+   "scene": 4,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 2120,
+   "needle_median_bias_mm": -20.198986053466797,
+   "resid_p50": 0.6935462951660156,
+   "resid_p95": 6.775991821289062
+  }
+ ],
+ "EXP8-main": [
+  {
+   "scene": 1,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 278,
+   "needle_median_bias_mm": -2.429767608642578,
+   "resid_p50": 0.8318901062011719,
+   "resid_p95": 1.96182861328125
+  },
+  {
+   "scene": 2,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 1174,
+   "needle_median_bias_mm": -8.258785247802734,
+   "resid_p50": 1.8007240295410156,
+   "resid_p95": 7.341591644287098
+  },
+  {
+   "scene": 3,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 2911,
+   "needle_median_bias_mm": -0.19362640380859375,
+   "resid_p50": 3.0330352783203125,
+   "resid_p95": 11.747303009033203
+  },
+  {
+   "scene": 4,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 2120,
+   "needle_median_bias_mm": -12.127479553222656,
+   "resid_p50": 0.4111747741699219,
+   "resid_p95": 6.119531631469724
+  }
+ ],
+ "EXP8-ctrl": [
+  {
+   "scene": 1,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 278,
+   "needle_median_bias_mm": -15.377845764160156,
+   "resid_p50": 0.900177001953125,
+   "resid_p95": 2.008409881591797
+  },
+  {
+   "scene": 2,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 1174,
+   "needle_median_bias_mm": -23.26361656188965,
+   "resid_p50": 1.4504432678222656,
+   "resid_p95": 8.80175437927246
+  },
+  {
+   "scene": 3,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 2911,
+   "needle_median_bias_mm": -14.653846740722656,
+   "resid_p50": 3.1374244689941406,
+   "resid_p95": 16.25156021118164
+  },
+  {
+   "scene": 4,
+   "gt_file": "depth_fused_mm.npy",
+   "n_px": 2120,
+   "needle_median_bias_mm": -24.502500534057617,
+   "resid_p50": 0.6119728088378906,
+   "resid_p95": 6.104340744018554
+  }
+ ]
+}

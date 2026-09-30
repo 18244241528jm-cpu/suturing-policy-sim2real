@@ -1,0 +1,463 @@
+{
+ "p0_setpoint": [
+  -0.00053984164087377,
+  0.03450646065603839,
+  0.14738124600256397
+ ],
+ "q0": [
+  0.3261996984314114,
+  0.3268537706903211,
+  0.8799959139485903,
+  -0.11120953539404985
+ ],
+ "frame": "ECM",
+ "grid_mm": [
+  [
+   -8,
+   -8,
+   -4
+  ],
+  [
+   0,
+   -8,
+   -4
+  ],
+  [
+   8,
+   -8,
+   -4
+  ],
+  [
+   -8,
+   0,
+   -4
+  ],
+  [
+   0,
+   0,
+   -4
+  ],
+  [
+   8,
+   0,
+   -4
+  ],
+  [
+   -8,
+   8,
+   -4
+  ],
+  [
+   0,
+   8,
+   -4
+  ],
+  [
+   8,
+   8,
+   -4
+  ],
+  [
+   -8,
+   -8,
+   -10
+  ],
+  [
+   0,
+   -8,
+   -10
+  ],
+  [
+   8,
+   -8,
+   -10
+  ],
+  [
+   -8,
+   0,
+   -10
+  ],
+  [
+   0,
+   0,
+   -10
+  ],
+  [
+   8,
+   0,
+   -10
+  ],
+  [
+   -8,
+   8,
+   -10
+  ],
+  [
+   0,
+   8,
+   -10
+  ],
+  [
+   8,
+   8,
+   -10
+  ],
+  [
+   -8,
+   -8,
+   -16
+  ],
+  [
+   0,
+   -8,
+   -16
+  ],
+  [
+   8,
+   -8,
+   -16
+  ],
+  [
+   -8,
+   0,
+   -16
+  ],
+  [
+   0,
+   0,
+   -16
+  ],
+  [
+   8,
+   0,
+   -16
+  ],
+  [
+   -8,
+   8,
+   -16
+  ],
+  [
+   0,
+   8,
+   -16
+  ],
+  [
+   8,
+   8,
+   -16
+  ]
+ ],
+ "points": [
+  {
+   "name": "base_0",
+   "cmd_mm": [
+    0,
+    0,
+    0
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g00",
+   "cmd_mm": [
+    -8,
+    -8,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g01",
+   "cmd_mm": [
+    0,
+    -8,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g02",
+   "cmd_mm": [
+    8,
+    -8,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g03",
+   "cmd_mm": [
+    -8,
+    0,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g04",
+   "cmd_mm": [
+    0,
+    0,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g05",
+   "cmd_mm": [
+    8,
+    0,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g06",
+   "cmd_mm": [
+    -8,
+    8,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g07",
+   "cmd_mm": [
+    0,
+    8,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g08",
+   "cmd_mm": [
+    8,
+    8,
+    -4
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "base_1",
+   "cmd_mm": [
+    0,
+    0,
+    0
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g09",
+   "cmd_mm": [
+    -8,
+    -8,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g10",
+   "cmd_mm": [
+    0,
+    -8,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g11",
+   "cmd_mm": [
+    8,
+    -8,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g12",
+   "cmd_mm": [
+    -8,
+    0,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g13",
+   "cmd_mm": [
+    0,
+    0,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g14",
+   "cmd_mm": [
+    8,
+    0,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g15",
+   "cmd_mm": [
+    -8,
+    8,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g16",
+   "cmd_mm": [
+    0,
+    8,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g17",
+   "cmd_mm": [
+    8,
+    8,
+    -10
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "base_2",
+   "cmd_mm": [
+    0,
+    0,
+    0
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g18",
+   "cmd_mm": [
+    -8,
+    -8,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g19",
+   "cmd_mm": [
+    0,
+    -8,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g20",
+   "cmd_mm": [
+    8,
+    -8,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g21",
+   "cmd_mm": [
+    -8,
+    0,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g22",
+   "cmd_mm": [
+    0,
+    0,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g23",
+   "cmd_mm": [
+    8,
+    0,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g24",
+   "cmd_mm": [
+    -8,
+    8,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g25",
+   "cmd_mm": [
+    0,
+    8,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "g26",
+   "cmd_mm": [
+    8,
+    8,
+    -16
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  },
+  {
+   "name": "base_end",
+   "cmd_mm": [
+    0,
+    0,
+    0
+   ],
+   "reached": true,
+   "ecm_drift": 0.0
+  }
+ ]
+}

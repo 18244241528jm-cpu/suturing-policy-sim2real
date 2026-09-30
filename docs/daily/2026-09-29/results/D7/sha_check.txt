@@ -1,0 +1,18 @@
+checkpoints/EXP8-main/best.pth: OK
+checkpoints/EXP8-ctrl/best.pth: OK
+code/infer_exp0c_metric_da.py: OK
+code/run_da_a1_checkpoint_eval.py: OK
+depth_anything_v2/dinov2_layers/attention.py: OK
+depth_anything_v2/dinov2_layers/block.py: OK
+depth_anything_v2/dinov2_layers/drop_path.py: OK
+depth_anything_v2/dinov2_layers/__init__.py: OK
+depth_anything_v2/dinov2_layers/layer_scale.py: OK
+depth_anything_v2/dinov2_layers/mlp.py: OK
+depth_anything_v2/dinov2_layers/patch_embed.py: OK
+depth_anything_v2/dinov2_layers/swiglu_ffn.py: OK
+depth_anything_v2/dinov2.py: OK
+depth_anything_v2/dpt.py: OK
+depth_anything_v2/util/blocks.py: OK
+depth_anything_v2/util/transform.py: OK
+README.md: OK
+tar+sha exit 0

@@ -1,0 +1,26 @@
+{
+ "/SUJ/PSM1/measured_cp": {
+  "n": 0,
+  "verdict": "no messages"
+ },
+ "/SUJ/PSM1/local/measured_cp": {
+  "n": 0,
+  "verdict": "no messages"
+ },
+ "/SUJ/ECM/measured_cp": {
+  "n": 0,
+  "verdict": "no messages"
+ },
+ "/SUJ/ECM/local/measured_cp": {
+  "n": 0,
+  "verdict": "no messages"
+ },
+ "/PSM1/measured_cp": {
+  "n": 0,
+  "verdict": "no messages"
+ },
+ "/ECM/measured_cp": {
+  "n": 0,
+  "verdict": "no messages"
+ }
+}

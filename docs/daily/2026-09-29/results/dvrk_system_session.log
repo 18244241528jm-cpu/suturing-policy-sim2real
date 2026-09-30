@@ -1,0 +1,564 @@
+Options provided:
+ - json configuration file [/home/xsun97/ros2_ws/install/dvrk_config_jhu/share/jhu-daVinci/system-SUJ-ECM-PSM1-PSM2.json]
+Using file: dVRK system JSON configuration file: /home/xsun97/ros2_ws/install/dvrk_config_jhu/share/jhu-daVinci/system-SUJ-ECM-PSM1-PSM2.json
+FirewirePort::Init: number of ports = 1
+  Port 0: /dev/fw13, 14 nodes
+FirewirePort::Init: successfully initialized port 0
+Using libraw1394 version 2.1.2
+FirewirePort::Init: successfully disabled cycle start packet
+FirewirePort::InitNodes: base node id = ffc0
+BasePort::ScanNodes: building node map for 13 nodes:
+  Node 0, BoardId = 12, FPGA_V2, Hardware = QLA1, Firmware Version = 10
+  Node 1, BoardId = 10, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 2, BoardId = 11, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 3, BoardId = 4, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 4, BoardId = 5, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 5, BoardId = 8, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 6, BoardId = 9, FPGA_V2, Hardware = QLA1, Firmware Version = 10
+  Node 7, BoardId = 6, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 8, BoardId = 7, FPGA_V2, Hardware = QLA1, Firmware Version = 10
+  Node 9, BoardId = 3, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 10, BoardId = 2, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 11, BoardId = 1, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+  Node 12, BoardId = 0, FPGA_V1, Hardware = QLA1, Firmware Version = 10
+BasePort::ScanNodes: found 13 boards
+BasePort::SetDefaultProtocol: all nodes broadcast capable and support shorter wait
+BasePort::SetProtocol: system running with broadcast write
+[INFO] [1790718846.489261397] [rclcpp]: 1790718846.433102s, #4: ECM: desired state DISABLED
+[INFO] [1790718846.489319388] [rclcpp]: 1790718846.433178s, #5: ECM: current state DISABLED
+[INFO] [1790718846.489325094] [rclcpp]: 1790718846.464304s, #6: ECM: current state DISABLED
+[INFO] [1790718846.489397691] [rclcpp]: 1790718846.433272s, #3: PSM1: desired state DISABLED
+[INFO] [1790718846.489402354] [rclcpp]: 1790718846.433326s, #4: PSM1: current state DISABLED
+[INFO] [1790718846.489405620] [rclcpp]: 1790718846.471020s, #5: PSM1: current state DISABLED
+[INFO] [1790718846.489408932] [rclcpp]: 1790718846.471670s, #6: PSM1: adapter detected
+[INFO] [1790718846.489412100] [rclcpp]: 1790718846.471690s, #7: PSM1: tool detected
+[INFO] [1790718846.489483788] [rclcpp]: 1790718846.433349s, #3: PSM2: desired state DISABLED
+[INFO] [1790718846.489488014] [rclcpp]: 1790718846.433386s, #4: PSM2: current state DISABLED
+[INFO] [1790718846.489491267] [rclcpp]: 1790718846.478228s, #5: PSM2: adapter detected
+[INFO] [1790718846.489494270] [rclcpp]: 1790718846.478251s, #6: PSM2: tool detected
+[INFO] [1790718846.489497323] [rclcpp]: 1790718846.478282s, #7: PSM2: current state DISABLED
+[INFO] [1790718846.489523284] [rclcpp]: 1790718846.433398s, #1: ECM SUJ: desired state DISABLED
+[INFO] [1790718846.489527131] [rclcpp]: 1790718846.463575s, #2: ECM SUJ: current state DISABLED
+[INFO] [1790718846.489532362] [rclcpp]: 1790718846.489284s, #3: ECM SUJ: clutched
+[INFO] [1790718846.489558993] [rclcpp]: 1790718846.433424s, #1: PSM1 SUJ: desired state DISABLED
+[INFO] [1790718846.489562950] [rclcpp]: 1790718846.463582s, #2: PSM1 SUJ: current state DISABLED
+[INFO] [1790718846.489566063] [rclcpp]: 1790718846.489309s, #3: PSM1 SUJ: not clutched
+[INFO] [1790718846.489591510] [rclcpp]: 1790718846.433431s, #1: PSM2 SUJ: desired state DISABLED
+[INFO] [1790718846.489595209] [rclcpp]: 1790718846.463590s, #2: PSM2 SUJ: current state DISABLED
+[INFO] [1790718846.489598296] [rclcpp]: 1790718846.489316s, #3: PSM2 SUJ: not clutched
+[INFO] [1790718846.489622517] [rclcpp]: 1790718846.433438s, #1: PSM3 SUJ: desired state DISABLED
+[INFO] [1790718846.489626233] [rclcpp]: 1790718846.463595s, #2: PSM3 SUJ: current state DISABLED
+[INFO] [1790718846.489629463] [rclcpp]: 1790718846.489323s, #3: PSM3 SUJ: not clutched
+[INFO] [1790718846.519672527] [rclcpp]: 1790718846.519475s, #4: ECM SUJ: current state DISABLED
+[INFO] [1790718846.519698805] [rclcpp]: 1790718846.519619s, #5: ECM SUJ: not clutched
+[INFO] [1790718846.519723301] [rclcpp]: 1790718846.519510s, #4: PSM1 SUJ: current state DISABLED
+[INFO] [1790718846.519727983] [rclcpp]: 1790718846.519631s, #5: PSM1 SUJ: not clutched
+[INFO] [1790718846.519742983] [rclcpp]: 1790718846.519529s, #4: PSM2 SUJ: current state DISABLED
+[INFO] [1790718846.519746775] [rclcpp]: 1790718846.519641s, #5: PSM2 SUJ: not clutched
+[INFO] [1790718846.519759698] [rclcpp]: 1790718846.519545s, #4: PSM3 SUJ: current state DISABLED
+[INFO] [1790718846.826869074] [rclcpp]: 1790718846.826789s, #8: PSM1: setting up for tool type "LARGE_NEEDLE_DRIVER:400006[21]"
+[INFO] [1790718846.826893237] [rclcpp]: 1790718846.826850s, #9: PSM1: using tool file "LARGE_NEEDLE_DRIVER_400006.json" for: Large Needle Driver for da Vinci Classic (400006[..])
+[INFO] [1790718846.833402758] [rclcpp]: 1790718846.833251s, #8: PSM2: setting up for tool type "DEBAKEY_FORCEPS:400036[20]"
+[INFO] [1790718846.833410329] [rclcpp]: 1790718846.833361s, #9: PSM2: using tool file "DEBAKEY_FORCEPS_400036.json" for: DeBakey Forceps for da Vinci Classic (400036[..])
+[INFO] [1790718850.911475107] [rclcpp]: 1790718850.911331s, #6: ECM SUJ: ECM primary and secondary potentiometers agree
+[INFO] [1790718850.911502048] [rclcpp]: 1790718850.911379s, #6: PSM1 SUJ: ECM primary and secondary potentiometers agree
+[INFO] [1790718850.911506435] [rclcpp]: 1790718850.911400s, #6: PSM2 SUJ: ECM primary and secondary potentiometers agree
+[INFO] [1790718850.911510531] [rclcpp]: 1790718850.911418s, #5: PSM3 SUJ: ECM primary and secondary potentiometers agree
+[INFO] [1790718850.911615795] [rclcpp]: 1790718850.911511s, #7: ECM SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790718850.911639730] [rclcpp]: 1790718850.911593s, #8: ECM SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790718850.911643349] [rclcpp]: 1790718850.911525s, #7: PSM1 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790718850.911644935] [rclcpp]: 1790718850.911605s, #8: PSM1 SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790718850.911647911] [rclcpp]: 1790718850.911539s, #7: PSM2 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790718850.911649775] [rclcpp]: 1790718850.911618s, #8: PSM2 SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790718850.911652786] [rclcpp]: 1790718850.911566s, #6: PSM3 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790718850.911654370] [rclcpp]: 1790718850.911632s, #7: PSM3 SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790718850.911766679] [rclcpp]: 1790718850.911673s, #9: ECM SUJ: measured_cp updated
+[INFO] [1790718850.911769600] [rclcpp]: 1790718850.911691s, #9: PSM1 SUJ: measured_cp updated
+[INFO] [1790718850.911772023] [rclcpp]: 1790718850.911707s, #9: PSM2 SUJ: measured_cp updated
+[INFO] [1790718850.911774388] [rclcpp]: 1790718850.911722s, #8: PSM3 SUJ: measured_cp updated
+[INFO] [1790718877.928106130] [rclcpp]: 1790718877.927985s, #7: ECM: desired state ENABLED
+[INFO] [1790718877.928135010] [rclcpp]: 1790718877.928019s, #10: PSM1: desired state ENABLED
+[INFO] [1790718877.928144176] [rclcpp]: 1790718877.928086s, #10: PSM2: desired state ENABLED
+[INFO] [1790718877.928150271] [rclcpp]: 1790718877.928016s, #10: ECM SUJ: desired state ENABLED
+[INFO] [1790718877.928155985] [rclcpp]: 1790718877.928056s, #10: PSM1 SUJ: desired state ENABLED
+[INFO] [1790718877.928161567] [rclcpp]: 1790718877.928076s, #10: PSM2 SUJ: desired state ENABLED
+[INFO] [1790718877.928167327] [rclcpp]: 1790718877.928091s, #9: PSM3 SUJ: desired state ENABLED
+[INFO] [1790718877.928684277] [rclcpp]: 1790718877.928630s, #8: ECM: power requested
+[INFO] [1790718877.928686452] [rclcpp]: 1790718877.928641s, #9: ECM: current state POWERING
+[INFO] [1790718877.928689676] [rclcpp]: 1790718877.928662s, #11: PSM1: power requested
+[INFO] [1790718877.928693541] [rclcpp]: 1790718877.928605s, #11: ECM SUJ: power requested
+[INFO] [1790718877.928695977] [rclcpp]: 1790718877.928651s, #12: ECM SUJ: current state POWERING
+[INFO] [1790718877.928700428] [rclcpp]: 1790718877.928612s, #11: PSM1 SUJ: power requested
+[INFO] [1790718877.928706740] [rclcpp]: 1790718877.928662s, #12: PSM1 SUJ: current state POWERING
+[INFO] [1790718877.928710745] [rclcpp]: 1790718877.928618s, #11: PSM2 SUJ: power requested
+[INFO] [1790718877.928712263] [rclcpp]: 1790718877.928677s, #12: PSM2 SUJ: current state POWERING
+[INFO] [1790718877.928717488] [rclcpp]: 1790718877.928632s, #10: PSM3 SUJ: power requested
+[INFO] [1790718877.928719011] [rclcpp]: 1790718877.928687s, #11: PSM3 SUJ: current state POWERING
+[INFO] [1790718877.928836191] [rclcpp]: 1790718877.928692s, #12: PSM1: current state POWERING
+[INFO] [1790718877.928841458] [rclcpp]: 1790718877.928735s, #11: PSM2: power requested
+[INFO] [1790718877.928843014] [rclcpp]: 1790718877.928747s, #12: PSM2: current state POWERING
+[INFO] [1790718877.975613664] [rclcpp]: 1790718877.975485s, #13: PSM1: power on
+[INFO] [1790718877.975630470] [rclcpp]: 1790718877.975558s, #14: PSM1: current state ENABLED
+[INFO] [1790718877.978902276] [rclcpp]: 1790718877.978804s, #10: ECM: power on
+[INFO] [1790718877.978911126] [rclcpp]: 1790718877.978844s, #11: ECM: current state ENABLED
+[INFO] [1790718877.985331012] [rclcpp]: 1790718877.985274s, #13: PSM2: power on
+[INFO] [1790718877.985342121] [rclcpp]: 1790718877.985304s, #14: PSM2: current state ENABLED
+[INFO] [1790718880.928915382] [rclcpp]: 1790718880.928844s, #13: ECM SUJ: power on
+[INFO] [1790718880.928944669] [rclcpp]: 1790718880.928872s, #13: PSM1 SUJ: power on
+[INFO] [1790718880.928951259] [rclcpp]: 1790718880.928882s, #13: PSM2 SUJ: power on
+[INFO] [1790718880.928956366] [rclcpp]: 1790718880.928890s, #12: PSM3 SUJ: power on
+[INFO] [1790718880.929012030] [rclcpp]: 1790718880.928925s, #14: ECM SUJ: current state ENABLED
+[INFO] [1790718880.929015744] [rclcpp]: 1790718880.928965s, #14: PSM1 SUJ: current state ENABLED
+[INFO] [1790718880.929018552] [rclcpp]: 1790718880.928979s, #14: PSM2 SUJ: current state ENABLED
+[INFO] [1790718880.929021390] [rclcpp]: 1790718880.928986s, #13: PSM3 SUJ: current state ENABLED
+[INFO] [1790718963.690324502] [rclcpp]: 1790718963.690187s, #15: PSM1: desired state ENABLED
+[INFO] [1790718963.690362440] [rclcpp]: 1790718963.690228s, #15: ECM SUJ: desired state ENABLED
+[INFO] [1790718963.690380285] [rclcpp]: 1790718963.690274s, #15: PSM1 SUJ: desired state ENABLED
+[INFO] [1790718963.690397542] [rclcpp]: 1790718963.690310s, #15: PSM2 SUJ: desired state ENABLED
+[INFO] [1790718963.690414795] [rclcpp]: 1790718963.690340s, #14: PSM3 SUJ: desired state ENABLED
+[INFO] [1790718963.690441093] [rclcpp]: 1790718963.690296s, #12: ECM: desired state ENABLED
+[INFO] [1790718963.690748703] [rclcpp]: 1790718963.690635s, #15: PSM2: desired state ENABLED
+[INFO] [1790718965.584796666] [rclcpp]: 1790718965.584671s, #16: PSM1: desired state HOMED
+[INFO] [1790718965.584839179] [rclcpp]: 1790718965.584636s, #16: PSM2: desired state HOMED
+[INFO] [1790718965.584856481] [rclcpp]: 1790718965.584727s, #16: ECM SUJ: desired state ENABLED
+[INFO] [1790718965.584873182] [rclcpp]: 1790718965.584758s, #16: PSM1 SUJ: desired state ENABLED
+[INFO] [1790718965.584889648] [rclcpp]: 1790718965.584777s, #16: PSM2 SUJ: desired state ENABLED
+[INFO] [1790718965.584906996] [rclcpp]: 1790718965.584793s, #15: PSM3 SUJ: desired state ENABLED
+[INFO] [1790718965.585072710] [rclcpp]: 1790718965.584916s, #13: ECM: desired state HOMED
+[INFO] [1790718965.585386302] [rclcpp]: 1790718965.585322s, #17: PSM1: current state CALIBRATING_ENCODERS_FROM_POTS
+[INFO] [1790718965.585403482] [rclcpp]: 1790718965.585283s, #17: PSM2: current state CALIBRATING_ENCODERS_FROM_POTS
+[INFO] [1790718965.585693481] [rclcpp]: 1790718965.585568s, #14: ECM: current state CALIBRATING_ENCODERS_FROM_POTS
+[INFO] [1790718966.883309693] [rclcpp]: 1790718966.883114s, #18: PSM1: encoders biased using 1970 potentiometer values
+[INFO] [1790718966.883324145] [rclcpp]: 1790718966.883197s, #19: PSM1: current state ENCODERS_BIASED
+[INFO] [1790718966.883441246] [rclcpp]: 1790718966.883315s, #20: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790718966.883443351] [rclcpp]: 1790718966.883357s, #21: PSM1: current state HOMING
+[INFO] [1790718966.883592807] [rclcpp]: 1790718966.883443s, #22: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790718966.883594658] [rclcpp]: 1790718966.883487s, #23: PSM1: current state HOMED
+[INFO] [1790718966.883608822] [rclcpp]: 1790718966.883417s, #18: PSM2: encoders biased using 1970 potentiometer values
+[INFO] [1790718966.883610472] [rclcpp]: 1790718966.883465s, #19: PSM2: current state ENCODERS_BIASED
+[INFO] [1790718966.883612186] [rclcpp]: 1790718966.883524s, #20: PSM2: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790718966.883613733] [rclcpp]: 1790718966.883543s, #21: PSM2: current state HOMING
+[INFO] [1790718966.883615233] [rclcpp]: 1790718966.883558s, #22: PSM2: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790718966.883616700] [rclcpp]: 1790718966.883571s, #23: PSM2: current state HOMED
+[INFO] [1790718966.883748275] [rclcpp]: 1790718966.883573s, #15: ECM: encoders biased using 1970 potentiometer values
+[INFO] [1790718966.883749993] [rclcpp]: 1790718966.883610s, #16: ECM: current state ENCODERS_BIASED
+[INFO] [1790718966.883900964] [rclcpp]: 1790718966.883753s, #17: ECM: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790718966.883903234] [rclcpp]: 1790718966.883773s, #18: ECM: current state HOMING
+[INFO] [1790718966.883904729] [rclcpp]: 1790718966.883803s, #19: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790718966.883906301] [rclcpp]: 1790718966.883819s, #20: ECM: current state HOMED
+[INFO] [1790718966.883919741] [rclcpp]: 1790718966.883782s, #24: PSM1: current state HOMED
+[INFO] [1790718966.883921346] [rclcpp]: 1790718966.883810s, #25: PSM1: current state HOMED
+[INFO] [1790718966.883922878] [rclcpp]: 1790718966.883858s, #26: PSM1: current state ENGAGING_TOOL
+[INFO] [1790718966.883924387] [rclcpp]: 1790718966.883893s, #27: PSM1: tool tip is outside the cannula, assuming it doesn't need to "engage".  If the tool is not engaged properly, move the sterile adapter all the way up and re-insert the tool.
+[INFO] [1790718966.884011821] [rclcpp]: 1790718966.883925s, #28: PSM1: current state TOOL_ENGAGED
+[INFO] [1790718966.884013873] [rclcpp]: 1790718966.883970s, #29: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790718966.884170205] [rclcpp]: 1790718966.884086s, #24: PSM2: current state HOMED
+[INFO] [1790718966.884171918] [rclcpp]: 1790718966.884098s, #25: PSM2: current state HOMED
+[INFO] [1790718966.884173318] [rclcpp]: 1790718966.884116s, #26: PSM2: current state ENGAGING_TOOL
+[INFO] [1790718966.884174782] [rclcpp]: 1790718966.884130s, #27: PSM2: tool tip is outside the cannula, assuming it doesn't need to "engage".  If the tool is not engaged properly, move the sterile adapter all the way up and re-insert the tool.
+[INFO] [1790718966.884176881] [rclcpp]: 1790718966.884144s, #28: PSM2: current state TOOL_ENGAGED
+[INFO] [1790718966.884313062] [rclcpp]: 1790718966.884175s, #29: PSM2: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790718966.884480050] [rclcpp]: 1790718966.884438s, #30: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790718966.884615844] [rclcpp]: 1790718966.884470s, #31: PSM1: current state HOMED
+[INFO] [1790718966.884771839] [rclcpp]: 1790718966.884738s, #30: PSM2: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790718966.884773566] [rclcpp]: 1790718966.884751s, #31: PSM2: current state HOMED
+[INFO] [1790720722.771547932] [rclcpp]: 1790720722.771415s, #21: ECM: control JOINT_SPACE/TRAJECTORY_MODE
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:Arm: 1.79072e+09s, #1: SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:ECM: 1.79072e+09s, #1: ECM SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class dvrk_system: system:Main: 1.79072e+09s, #1: SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM1: 1.79072e+09s, #1: PSM1 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM2: 1.79072e+09s, #1: PSM2 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM3: 1.79072e+09s, #1: PSM3 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: get_and_convert_potentiometers, error: 
+ - SUJ: PSM1
+ - primary:       0.142916    -0.256689     -1.50370[WARN] [1790721071.511853093] [rclcpp]: 1790721071.511665s, #1: ECM SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+    -0.600157    -0.714729     0.425077
+ - secondary:     0.112495    -0.253764     -1.50685    -0.597701 [WARN] [1790721071.511883777] [rclcpp]: 1790721071.511737s, #1: PSM1 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+   -0.709177     0.428411
+[WARN] [1790721071.511902731] [rclcpp]: 1790721071.511777s, #1: PSM2 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+[WARN] [1790721071.511913648] [rclcpp]: 1790721071.511814s, #1: PSM3 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+[INFO] [1790721072.617459198] [rclcpp]: 1790721072.617380s, #17: ECM SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790721072.617489083] [rclcpp]: 1790721072.617419s, #17: PSM1 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790721072.617499595] [rclcpp]: 1790721072.617439s, #17: PSM2 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790721072.617508519] [rclcpp]: 1790721072.617446s, #16: PSM3 SUJ: PSM1 primary and secondary potentiometers agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:Arm: 1.79072e+09s, #2: SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:ECM: 1.79072e+09s, #2: ECM SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM1: 1.79072e+09s, #2: PSM1 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM2: 1.79072e+09s, #2: PSM2 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W-W Class  Class mtsIntuitiveResearchKitSUJ: SUJ:PSM3[WARN] [1790721494.028308718] [rclcpp]: 1790721494.028244s, #2: ECM SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+dvrk_system: 1.79072e+09s, #2: PSM3 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+: [WARN] [1790721494.028384262] [rclcpp]: 1790721494.028280s, #2: PSM1 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+system:Main: 1.79072e+09s, #2-W Class mtsIntuitiveResearchKitSUJ: get_and_convert_potentiometers, error: 
+[WARN] [1790721494.028413225] [rclcpp]: 1790721494.028296s, #2: PSM2 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+: SUJ: PSM1 primary and secondary potentiometers don't seem to agree - SUJ: PSM1
+
+[WARN] [1790721494.028434928] [rclcpp]: 1790721494.028310s, #2: PSM3 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+ - primary:       0.192299    -0.256625     -1.50365    -0.600171    -0.714748     0.425087
+ - secondary:     0.177827    -0.253729     -1.50687    -0.597741    -0.709179     0.428365
+[INFO] [1790721497.344232834] [rclcpp]: 1790721497.344059s, #18: ECM SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790721497.344265344] [rclcpp]: 1790721497.344093s, #18: PSM1 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790721497.344276642] [rclcpp]: 1790721497.344106s, #18: PSM2 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790721497.344286732] [rclcpp]: 1790721497.344131s, #17: PSM3 SUJ: PSM1 primary and secondary potentiometers agree
+File: system_Qt_widget.cpp Line: 361 -  can't find widget nor "Arms" tab widget for "SUJ", did you set the widget name with setObjectName?
+File: system_Qt_widget.cpp Line: 361 -  can't find widget nor "Arms" tab widget for "SUJ", did you set the widget name with setObjectName?
+File: system_Qt_widget.cpp Line: 361 -  can't find widget nor "Arms" tab widget for "SUJ", did you set the widget name with setObjectName?
+[INFO] [1790721590.744023007] [rclcpp]: 1790721590.743790s, #22: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790721590.744060557] [rclcpp]: 1790721590.743876s, #23: ECM: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790721590.744065688] [rclcpp]: 1790721590.743898s, #24: ECM: current state MANUAL
+[INFO] [1790721593.138025515] [rclcpp]: 1790721593.137852s, #25: ECM: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790721593.138043865] [rclcpp]: 1790721593.137922s, #26: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790721593.138045642] [rclcpp]: 1790721593.137960s, #27: ECM: current state HOMED
+[INFO] [1790721594.106095109] [rclcpp]: 1790721594.105953s, #28: ECM: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790721594.106116417] [rclcpp]: 1790721594.106031s, #29: ECM: current state MANUAL
+[INFO] [1790721595.495771754] [rclcpp]: 1790721595.495563s, #30: ECM: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790721595.495796970] [rclcpp]: 1790721595.495627s, #31: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790721595.495799474] [rclcpp]: 1790721595.495658s, #32: ECM: current state HOMED
+[INFO] [1790721595.854963686] [rclcpp]: 1790721595.854848s, #33: ECM: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790721595.854990197] [rclcpp]: 1790721595.854926s, #34: ECM: current state MANUAL
+[INFO] [1790721597.621789159] [rclcpp]: 1790721597.621588s, #35: ECM: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790721597.621813734] [rclcpp]: 1790721597.621658s, #36: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790721597.621819143] [rclcpp]: 1790721597.621701s, #37: ECM: current state HOMED
+[INFO] [1790721601.128019770] [rclcpp]: 1790721601.127871s, #38: ECM: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790721601.128040072] [rclcpp]: 1790721601.127968s, #39: ECM: current state MANUAL
+[INFO] [1790721602.381333868] [rclcpp]: 1790721602.381178s, #40: ECM: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790721602.381359843] [rclcpp]: 1790721602.381243s, #41: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790721602.381365400] [rclcpp]: 1790721602.381263s, #42: ECM: current state HOMED
+[INFO] [1790721607.983916059] [rclcpp]: 1790721607.983763s, #43: ECM: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790721607.983937752] [rclcpp]: 1790721607.983861s, #44: ECM: current state MANUAL
+[INFO] [1790721610.282677730] [rclcpp]: 1790721610.282348s, #45: ECM: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790721610.282704473] [rclcpp]: 1790721610.282567s, #46: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790721610.282709761] [rclcpp]: 1790721610.282592s, #47: ECM: current state HOMED
+[INFO] [1790722405.805811047] [rclcpp]: 1790722405.805553s, #48: ECM: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790722663.033265234] [rclcpp]: 1790722663.033038s, #32: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722663.033297146] [rclcpp]: 1790722663.033147s, #33: PSM1: current state MANUAL
+[INFO] [1790722665.384785918] [rclcpp]: 1790722665.384670s, #34: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722665.384814341] [rclcpp]: 1790722665.384763s, #35: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722665.384921440] [rclcpp]: 1790722665.384823s, #36: PSM1: current state HOMED
+[INFO] [1790722665.844238099] [rclcpp]: 1790722665.844118s, #37: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722665.844256133] [rclcpp]: 1790722665.844187s, #38: PSM1: current state MANUAL
+[INFO] [1790722668.415765645] [rclcpp]: 1790722668.415583s, #39: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722668.415786672] [rclcpp]: 1790722668.415654s, #40: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722668.415788977] [rclcpp]: 1790722668.415686s, #41: PSM1: current state HOMED
+[INFO] [1790722668.821327364] [rclcpp]: 1790722668.821107s, #42: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722668.821354206] [rclcpp]: 1790722668.821177s, #43: PSM1: current state MANUAL
+[INFO] [1790722670.818273330] [rclcpp]: 1790722670.818183s, #44: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722670.818299323] [rclcpp]: 1790722670.818256s, #45: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722670.818402425] [rclcpp]: 1790722670.818295s, #46: PSM1: current state HOMED
+[INFO] [1790722685.801323466] [rclcpp]: 1790722685.801196s, #47: PSM1: no tool detected
+[INFO] [1790722760.722017301] [rclcpp]: 1790722760.721910s, #48: PSM1: tool detected
+[INFO] [1790722761.076177131] [rclcpp]: 1790722761.075932s, #49: PSM1: setting up for tool type "CADIERE_FORCEPS:400049[21]"
+[INFO] [1790722761.076197293] [rclcpp]: 1790722761.076047s, #50: PSM1: using tool file "CADIERE_FORCEPS_400049.json" for: Cadiere Forceps for da Vinci Classic (400049[..])
+[INFO] [1790722761.076479782] [rclcpp]: 1790722761.076332s, #51: PSM1: current state ENGAGING_TOOL
+[INFO] [1790722761.076492811] [rclcpp]: 1790722761.076357s, #52: PSM1: tool tip is outside the cannula, assuming it doesn't need to "engage".  If the tool is not engaged properly, move the sterile adapter all the way up and re-insert the tool.
+[INFO] [1790722761.076496019] [rclcpp]: 1790722761.076367s, #53: PSM1: current state TOOL_ENGAGED
+[INFO] [1790722761.076497977] [rclcpp]: 1790722761.076409s, #54: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790722761.076758287] [rclcpp]: 1790722761.076594s, #55: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722761.076764992] [rclcpp]: 1790722761.076604s, #56: PSM1: current state HOMED
+-E Class mtsPID: PSM1_PID:Controller: 1.79072e+09s, #1: PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1
+-E Class mtsIntuitiveResearchKitPSM: PSM1:Arm: -E Class mtsPID: File: 1.79072e+09s, #1: PSM1: received [PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1]
+mtsPID.cpp Line: 628-E -  PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1 Class 
+errors:     dvrk_system: system:Main:  0.000378412  0.000880387  -0.00962498 -0.000134141 1.79072e+09s, #1: PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1     0.00000  2.77556e-17    -0.602966
+
+[ERROR] [1790722761.134558599] [rclcpp]: 1790722761.134451s, #1: PSM1: received [PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1]
+tolerances:     0.500000     0.500000    0.0500000     0.600000     0.600000     0.600000     0.600000
+measured:      -0.408060 [INFO] [1790722761.134595342] [rclcpp]: 1790722761.134530s, #57: PSM1: desired state FAULT
+   -0.221603     0.198089     0.840799     0.313891     0.214626      1.11498
+[INFO] [1790722761.134601492] [rclcpp]: 1790722761.134559s, #58: PSM1: current state FAULT
+setpoint:      -0.407681    -0.220722     0.188464     0.840664     0.313891     0.214626     0.512018
+-E Class dvrk_system: system:Main-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - : Sorry, no detailed error code available for QLA based controllers.
+1.79072e+09s, #2: PSM1: received [PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1]
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+-W Class mtsRobotIO1394: CheckState: PSM1, actuator 2 power: 0.440272 > limit: 0.2
+-E Class mtsIntuitiveResearchKitPSM: File: mtsIntuitiveResearchKitArm.cpp Line: 894 -  PSM1: get_robot_data:
+ - Actuator amp status:            0            0            0            0            0            0            0
+-E Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79072e+09s, #2: PSM1: detected power loss (actuators)
+-E Class dvrk_system: system:Main: 1.79072e+09s, #3: PSM1: detected power loss (actuators)
+[ERROR] [1790722761.135294814] [rclcpp]: 1790722761.135131s, #2: PSM1: detected power loss (actuators)
+[INFO] [1790722761.135298821] [rclcpp]: 1790722761.135151s, #59: PSM1: desired state FAULT
+[INFO] [1790722761.135300721] [rclcpp]: 1790722761.135164s, #60: PSM1: current state FAULT
+-W Class mtsRobotIO1394: CheckState: PSM1, actuator 2 power: 0.413951 > limit: 0.2
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+-W Class mtsRobotIO1394: CheckState: PSM1, actuator 2 power: 0.358447 > limit: 0.2
+-W Class mtsRobotIO1394: CheckState: PSM1, actuator 2 power: 0.30218 > limit: 0.2
+-W Class mtsRobotIO1394: CheckState: PSM1, actuator 2 power: 0.247439 > limit: 0.2
+-W Class mtsRobotIO1394: CheckState: PSM1, actuator 2 power: 0.200327 > limit: 0.2
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79072e+09s, #1: PSM1: Clutch, arm not ready
+-W Class -W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: dvrk_system: 1.79072e+09system:Main: s, #2: PSM1: arm not ready yet, manipulator clutch ignored
+1.79072e+09s, #3: PSM1: Clutch, arm not ready
+-W Class dvrk_system: system:Main: 1.79072e+09s, #4: PSM1: arm not ready yet, manipulator clutch ignored
+[WARN] [1790722766.305690352] [rclcpp]: 1790722766.305477s, #1: PSM1: Clutch, arm not ready
+[WARN] [1790722766.305703944] [rclcpp]: 1790722766.305556s, #2: PSM1: arm not ready yet, manipulator clutch ignored
+[INFO] [1790722774.800601048] [rclcpp]: 1790722774.800494s, #61: PSM1: desired state DISABLED
+[INFO] [1790722774.800632318] [rclcpp]: 1790722774.800602s, #62: PSM1: current state DISABLED
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79072e+09s, #3: PSM1: command "home" is not supported in state "DISABLED (DISABLED)"
+-W Class dvrk_system: system:Main: 1.79072e+09s, #5: PSM1: command "home" is not supported in state "DISABLED (DISABLED)"
+[WARN] [1790722774.800721675] [rclcpp]: 1790722774.800641s, #3: PSM1: command "home" is not supported in state "DISABLED (DISABLED)"
+[INFO] [1790722774.800880544] [rclcpp]: 1790722774.800817s, #49: ECM: desired state HOMED
+[INFO] [1790722774.800905306] [rclcpp]: 1790722774.800792s, #32: PSM2: desired state HOMED
+[INFO] [1790722774.832173267] [rclcpp]: 1790722774.832026s, #19: ECM SUJ: desired state ENABLED
+[INFO] [1790722774.832193358] [rclcpp]: 1790722774.832089s, #19: PSM1 SUJ: desired state ENABLED
+[INFO] [1790722774.832201966] [rclcpp]: 1790722774.832107s, #19: PSM2 SUJ: desired state ENABLED
+[INFO] [1790722774.832212485] [rclcpp]: 1790722774.832124s, #18: PSM3 SUJ: desired state ENABLED
+[INFO] [1790722779.235928598] [rclcpp]: 1790722779.235805s, #63: PSM1: desired state ENABLED
+[INFO] [1790722779.236485208] [rclcpp]: 1790722779.236448s, #64: PSM1: power requested
+[INFO] [1790722779.236493245] [rclcpp]: 1790722779.236461s, #65: PSM1: current state POWERING
+[INFO] [1790722779.283179817] [rclcpp]: 1790722779.283016s, #66: PSM1: power on
+[INFO] [1790722779.283203999] [rclcpp]: 1790722779.283131s, #67: PSM1: current state ENABLED
+[INFO] [1790722780.235573634] [rclcpp]: 1790722780.235453s, #68: PSM1: desired state HOMED
+[INFO] [1790722780.235616350] [rclcpp]: 1790722780.235514s, #20: ECM SUJ: desired state ENABLED
+[INFO] [1790722780.235634325] [rclcpp]: 1790722780.235541s, #20: PSM1 SUJ: desired state ENABLED
+[INFO] [1790722780.235651426] [rclcpp]: 1790722780.235565s, #20: PSM2 SUJ: desired state ENABLED
+[INFO] [1790722780.235668658] [rclcpp]: 1790722780.235582s, #19: PSM3 SUJ: desired state ENABLED
+[INFO] [1790722780.235847853] [rclcpp]: 1790722780.235694s, #50: ECM: desired state HOMED
+[INFO] [1790722780.236004882] [rclcpp]: 1790722780.235874s, #33: PSM2: desired state HOMED
+[INFO] [1790722780.236149445] [rclcpp]: 1790722780.236088s, #69: PSM1: encoders have already been calibrated, skipping
+[INFO] [1790722780.236154762] [rclcpp]: 1790722780.236103s, #70: PSM1: current state CALIBRATING_ENCODERS_FROM_POTS
+[INFO] [1790722780.236759195] [rclcpp]: 1790722780.236747s, #71: PSM1: current state ENCODERS_BIASED
+[INFO] [1790722780.237482859] [rclcpp]: 1790722780.237451s, #72: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790722780.237490337] [rclcpp]: 1790722780.237465s, #73: PSM1: current state HOMING
+[INFO] [1790722780.237637901] [rclcpp]: 1790722780.237499s, #74: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722780.237643228] [rclcpp]: 1790722780.237529s, #75: PSM1: current state HOMED
+-E Class mtsPID: PSM1_PID:Controller: 1.79072e+09s, #2: PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1
+-E Class dvrk_system: system:Main: 1.79072e+09s, #4: PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1
+-E Class mtsPID: File: mtsPID.cpp Line: 628 -  PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1
+errors:      7.72270e-06      0.00000      0.00000      0.00000      0.00000     0.568326     -1.07585
+tolerances:     0.500000     0.500000    0.0500000     0.600000     0.600000     0.600000     0.600000
+measured:      -0.337598    -0.298011    0.0746846     0.841335     0.306513     0.213956      3.00477
+setpoint:      -0.337590    -0.298011    0.0746846     0.841335     0.306513     0.782282      1.92892
+-E Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79072e+09s, #3: PSM1: received [PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1]
+-E Class dvrk_system: system:Main: 1.79072e+09s, #5: PSM1: received [PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1]
+[ERROR] [1790722780.238121843] [rclcpp]: 1790722780.238010s, #3: PSM1: received [PSM1_PID: tracking error, mask (1 for error):            0            0            0            0            0            0            1]
+[INFO] [1790722780.238147138] [rclcpp]: 1790722780.238029s, #76: PSM1: desired state FAULT
+[INFO] [1790722780.238152396] [rclcpp]: 1790722780.238038s, #77: PSM1: current state FAULT
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+-E Class mtsIntuitiveResearchKitPSM: File: mtsIntuitiveResearchKitArm.cpp Line: 894 -  PSM1: get_robot_data:
+ - Actuator amp status:            0            0            0            0            0            0            0
+-E Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79072e+09s, #4: PSM1: detected power loss (actuators)
+-E Class dvrk_system: system:Main: 1.79072e+09s, #6: PSM1: detected power loss (actuators)
+[ERROR] [1790722780.239498219] [rclcpp]: 1790722780.239361s, #4: PSM1: detected power loss (actuators)
+[INFO] [1790722780.239506855] [rclcpp]: 1790722780.239386s, #78: PSM1: desired state FAULT
+[INFO] [1790722780.239510594] [rclcpp]: 1790722780.239412s, #79: PSM1: current state FAULT
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+-E Class mtsRobotIO1394: File: mtsRobot1394.cpp Line: 1899 -  Explain: PSM1 - Sorry, no detailed error code available for QLA based controllers.
+[INFO] [1790722789.386764629] [rclcpp]: 1790722789.386566s, #80: PSM1: no tool detected
+[INFO] [1790722817.744122268] [rclcpp]: 1790722817.743936s, #81: PSM1: tool detected
+[INFO] [1790722818.129944631] [rclcpp]: 1790722818.098531s, #82: PSM1: setting up for tool type "PROGRASP_FORCEPS:400093[8]"
+[INFO] [1790722818.129967677] [rclcpp]: 1790722818.129848s, #83: PSM1: using tool file "PROGRASP_FORCEPS_400093.json" for: Prograsp Forceps for da Vinci Classic (400093[..])
+[INFO] [1790722825.228662962] [rclcpp]: 1790722825.228530s, #51: ECM: desired state HOMED
+[INFO] [1790722825.228714316] [rclcpp]: 1790722825.228582s, #34: PSM2: desired state HOMED
+[INFO] [1790722825.228734648] [rclcpp]: 1790722825.228656s, #21: ECM SUJ: desired state ENABLED
+[INFO] [1790722825.228753430] [rclcpp]: 1790722825.228699s, #21: PSM1 SUJ: desired state ENABLED
+[INFO] [1790722825.228783444] [rclcpp]: 1790722825.228718s, #21: PSM2 SUJ: desired state ENABLED
+[INFO] [1790722825.228801477] [rclcpp]: 1790722825.228736s, #20: PSM3 SUJ: desired state ENABLED
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79072e+09s, #4: PSM1: command "home" is not supported in state "DISABLED (DISABLED)"
+-W Class dvrk_system: system:Main: 1.79072e+09s, #6: PSM1: command "home" is not supported in state "DISABLED (DISABLED)"
+[INFO] [1790722825.228995507] [rclcpp]: 1790722825.228838s, #84: PSM1: desired state DISABLED
+[INFO] [1790722825.229000964] [rclcpp]: 1790722825.228884s, #85: PSM1: current state DISABLED
+[WARN] [1790722825.229004927] [rclcpp]: 1790722825.228906s, #4: PSM1: command "home" is not supported in state "DISABLED (DISABLED)"
+[INFO] [1790722839.757819970] [rclcpp]: 1790722839.757690s, #52: ECM: desired state DISABLED
+[INFO] [1790722839.757855750] [rclcpp]: 1790722839.757751s, #53: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722839.757860817] [rclcpp]: 1790722839.757801s, #54: ECM: current state DISABLED
+[INFO] [1790722839.757899418] [rclcpp]: 1790722839.757638s, #86: PSM1: desired state DISABLED
+[INFO] [1790722839.757903926] [rclcpp]: 1790722839.757748s, #87: PSM1: current state DISABLED
+[INFO] [1790722839.757920235] [rclcpp]: 1790722839.757867s, #22: ECM SUJ: desired state DISABLED
+[INFO] [1790722839.757937380] [rclcpp]: 1790722839.757895s, #22: PSM1 SUJ: desired state DISABLED
+[INFO] [1790722839.757953926] [rclcpp]: 1790722839.757912s, #22: PSM2 SUJ: desired state DISABLED
+[INFO] [1790722839.757973032] [rclcpp]: 1790722839.757931s, #21: PSM3 SUJ: desired state DISABLED
+[INFO] [1790722839.758016517] [rclcpp]: 1790722839.757967s, #35: PSM2: desired state DISABLED
+[INFO] [1790722839.758022627] [rclcpp]: 1790722839.758001s, #36: PSM2: current state DISABLED
+[INFO] [1790722839.788303315] [rclcpp]: 1790722839.788131s, #23: ECM SUJ: current state DISABLED
+[INFO] [1790722839.788326056] [rclcpp]: 1790722839.788156s, #23: PSM1 SUJ: current state DISABLED
+[INFO] [1790722839.788331631] [rclcpp]: 1790722839.788172s, #23: PSM2 SUJ: current state DISABLED
+[INFO] [1790722839.788336577] [rclcpp]: 1790722839.788201s, #22: PSM3 SUJ: current state DISABLED
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:Arm: 1.79072e+09s, #3: SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:ECM: 1.79072e+09s, #3: ECM SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class dvrk_system: [WARN] [1790722840.858689965] [rclcpp]: 1790722840.858622s, #3: ECM SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+system:Main: -W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM1: 1.79072e+09s, #3: PSM1 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+1.79072e+09s, #7: SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM2: 1.79072e+09s, #3: PSM2 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM3: 1.79072e+09s, #3: PSM3 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: get_and_convert_potentiometers, error: 
+ - SUJ: PSM1
+ - primary:       0.151014 [WARN] [1790722840.858829970] [rclcpp]: 1790722840.858673s, #3: PSM1 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+   -0.256544[WARN] [1790722840.858838541] [rclcpp]: 1790722840.858747s, #3: PSM2 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+ [WARN] [1790722840.858843000] [rclcpp]: 1790722840.858791s, #3: PSM3 SUJ: PSM1 primary and secondary potentiometers don't seem to agree
+    -1.50359    -0.600188    -0.714649     0.425192
+ - secondary:    0.0951465    -0.253676     -1.50678    -0.597779    -0.709085     0.428425
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:Arm: 1.79072e+09s, #4: SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:ECM: -W Class 1.79072e+09s, #4: ECM SUJ: PSM2 primary and secondary potentiometers don't seem to agreedvrk_system: system:Main: 1.79072e+09s, #
+8: SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM1: 1.79072e+09s, #4: PSM1 SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM2: 1.79072e+09s, #4: PSM2 SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM3: 1.79072e+09s, #4: PSM3 SUJ: PSM2 primary and secondary potentiometers don't seem to agree[WARN] [1790722840.858979285] [rclcpp]: 1790722840.858882s, #4: ECM SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+
+[WARN] [1790722840.858983800] [rclcpp]: 1790722840.858930s, #4: PSM1 SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+[WARN] [1790722840.858989653] [rclcpp]: 1790722840.858953s, #4: PSM2 SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+-W Class mtsIntuitiveResearchKitSUJ: get_and_convert_potentiometers, error: 
+ - SUJ: PSM2
+ - primary:      0.0881293     0.244617      1.29444     0.683739     0.979488    -0.181917
+ - secondary: -1.42350e-05     0.245416      1.29245     0.684917     0.975497    -0.182916
+[WARN] [1790722840.859130723] [rclcpp]: 1790722840.858972s, #4: PSM3 SUJ: PSM2 primary and secondary potentiometers don't seem to agree
+[INFO] [1790722841.535782768] [rclcpp]: 1790722841.525928s, #55: ECM: desired state ENABLED
+[INFO] [1790722841.535806238] [rclcpp]: 1790722841.535730s, #56: ECM: power requested
+[INFO] [1790722841.535811098] [rclcpp]: 1790722841.535758s, #57: ECM: current state POWERING
+[INFO] [1790722841.535834643] [rclcpp]: 1790722841.525695s, #88: PSM1: desired state ENABLED
+[INFO] [1790722841.535839061] [rclcpp]: 1790722841.535640s, #89: PSM1: power requested
+[INFO] [1790722841.535842584] [rclcpp]: 1790722841.535735s, #90: PSM1: current state POWERING
+[INFO] [1790722841.535862627] [rclcpp]: 1790722841.525943s, #37: PSM2: desired state ENABLED
+[INFO] [1790722841.535866970] [rclcpp]: 1790722841.535738s, #38: PSM2: power requested
+[INFO] [1790722841.535870539] [rclcpp]: 1790722841.535761s, #39: PSM2: current state POWERING
+[INFO] [1790722841.535883266] [rclcpp]: 1790722841.535618s, #24: ECM SUJ: desired state ENABLED
+[INFO] [1790722841.535887157] [rclcpp]: 1790722841.535832s, #25: ECM SUJ: power requested
+[INFO] [1790722841.535900057] [rclcpp]: 1790722841.535645s, #24: PSM1 SUJ: desired state ENABLED
+[INFO] [1790722841.535903910] [rclcpp]: 1790722841.535846s, #25: PSM1 SUJ: power requested
+[INFO] [1790722841.535917077] [rclcpp]: 1790722841.535736s, #24: PSM2 SUJ: desired state ENABLED
+[INFO] [1790722841.535921006] [rclcpp]: 1790722841.535859s, #25: PSM2 SUJ: power requested
+[INFO] [1790722841.535934297] [rclcpp]: 1790722841.535770s, #23: PSM3 SUJ: desired state ENABLED
+[INFO] [1790722841.535938378] [rclcpp]: 1790722841.535872s, #24: PSM3 SUJ: power requested
+[INFO] [1790722841.535946818] [rclcpp]: 1790722841.535892s, #26: ECM SUJ: current state POWERING
+[INFO] [1790722841.535953559] [rclcpp]: 1790722841.535917s, #26: PSM1 SUJ: current state POWERING
+[INFO] [1790722841.535960028] [rclcpp]: 1790722841.535931s, #26: PSM2 SUJ: current state POWERING
+[INFO] [1790722841.535969633] [rclcpp]: 1790722841.535944s, #25: PSM3 SUJ: current state POWERING
+[INFO] [1790722841.583356744] [rclcpp]: 1790722841.583077s, #91: PSM1: power on
+[INFO] [1790722841.583378771] [rclcpp]: 1790722841.583197s, #92: PSM1: current state ENABLED
+[INFO] [1790722841.587863215] [rclcpp]: 1790722841.587724s, #40: PSM2: power on
+[INFO] [1790722841.587870989] [rclcpp]: 1790722841.587785s, #41: PSM2: current state ENABLED
+[INFO] [1790722841.974782757] [rclcpp]: 1790722841.974600s, #27: ECM SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790722841.974813565] [rclcpp]: 1790722841.974715s, #28: ECM SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790722841.974826996] [rclcpp]: 1790722841.974650s, #27: PSM1 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790722841.974831705] [rclcpp]: 1790722841.974728s, #28: PSM1 SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790722841.974854352] [rclcpp]: 1790722841.974670s, #27: PSM2 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790722841.974858795] [rclcpp]: 1790722841.974743s, #28: PSM2 SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790722841.974870113] [rclcpp]: 1790722841.974685s, #26: PSM3 SUJ: PSM1 primary and secondary potentiometers agree
+[INFO] [1790722841.974874119] [rclcpp]: 1790722841.974756s, #27: PSM3 SUJ: PSM2 primary and secondary potentiometers agree
+[INFO] [1790722842.525802279] [rclcpp]: 1790722842.525675s, #93: PSM1: desired state HOMED
+[INFO] [1790722842.525849363] [rclcpp]: 1790722842.525777s, #42: PSM2: desired state HOMED
+-W Class mtsIntuitiveResearchKitECM: ECM:Arm: 1.79072e+09s, #1: ECM: command "home" is not supported in state "DISABLED (POWERING)"
+-W Class dvrk_system: system:Main: 1.79072e+09s, #9: ECM: command "home" is not supported in state "DISABLED (POWERING)"
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:Arm: 1.79072e+09s, #5: SUJ: command "home" is not supported in state "DISABLED"
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:ECM: -W Class dvrk_system: system:Main: 1.79072e+09s, #101.79072e+09s, #5: ECM SUJ: command "home" is not supported in state "DISABLED"
+: SUJ: command "home" is not supported in state "DISABLED"
+[WARN] [1790722842.526230928] [rclcpp]: 1790722842.526019s, #1: ECM: command "home" is not supported in state "DISABLED (POWERING)"
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM1: 1.79072e+09s, #5: PSM1 SUJ: command "home" is not supported in state "DISABLED"
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM2: 1.79072e+09s, #5: PSM2 SUJ: command "home" is not supported in state "DISABLED"
+-W Class mtsIntuitiveResearchKitSUJ: SUJ:PSM3: 1.79072e+09s, #5: PSM3 SUJ: command "home" is not supported in state "DISABLED"
+[INFO] [1790722842.526391826] [rclcpp]: 1790722842.526304s, #94: PSM1: encoders have already been calibrated, skipping
+[INFO] [1790722842.526397194] [rclcpp]: 1790722842.526324s, #95: PSM1: current state CALIBRATING_ENCODERS_FROM_POTS
+[WARN] [1790722842.526406649] [rclcpp]: 1790722842.526202s, #5: ECM SUJ: command "home" is not supported in state "DISABLED"
+[WARN] [1790722842.526416159] [rclcpp]: 1790722842.526247s, #5: PSM1 SUJ: command "home" is not supported in state "DISABLED"
+[WARN] [1790722842.526425698] [rclcpp]: 1790722842.526273s, #5: PSM2 SUJ: command "home" is not supported in state "DISABLED"
+[WARN] [1790722842.526452799] [rclcpp]: 1790722842.526295s, #5: PSM3 SUJ: command "home" is not supported in state "DISABLED"
+[INFO] [1790722842.526543215] [rclcpp]: 1790722842.526414s, #43: PSM2: encoders have already been calibrated, skipping
+[INFO] [1790722842.526548157] [rclcpp]: 1790722842.526424s, #44: PSM2: current state CALIBRATING_ENCODERS_FROM_POTS
+[INFO] [1790722842.527000387] [rclcpp]: 1790722842.526964s, #96: PSM1: current state ENCODERS_BIASED
+[INFO] [1790722842.527152505] [rclcpp]: 1790722842.527073s, #45: PSM2: current state ENCODERS_BIASED
+[INFO] [1790722842.527778493] [rclcpp]: 1790722842.527678s, #97: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790722842.527783475] [rclcpp]: 1790722842.527694s, #98: PSM1: current state HOMING
+[INFO] [1790722842.527787250] [rclcpp]: 1790722842.527723s, #99: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722842.527790742] [rclcpp]: 1790722842.527736s, #100: PSM1: current state HOMED
+[INFO] [1790722842.527806859] [rclcpp]: 1790722842.527771s, #46: PSM2: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790722842.527810964] [rclcpp]: 1790722842.527792s, #47: PSM2: current state HOMING
+[INFO] [1790722842.527918648] [rclcpp]: 1790722842.527819s, #48: PSM2: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722842.527923493] [rclcpp]: 1790722842.527829s, #49: PSM2: current state HOMED
+[INFO] [1790722842.878465099] [rclcpp]: 1790722842.878330s, #58: ECM: power on
+[INFO] [1790722842.878483841] [rclcpp]: 1790722842.878419s, #59: ECM: current state ENABLED
+[INFO] [1790722844.536168179] [rclcpp]: 1790722844.536019s, #29: ECM SUJ: power on
+[INFO] [1790722844.536217923] [rclcpp]: 1790722844.536063s, #29: PSM1 SUJ: power on
+[INFO] [1790722844.536233434] [rclcpp]: 1790722844.536087s, #29: PSM2 SUJ: power on
+[INFO] [1790722844.536247219] [rclcpp]: 1790722844.536129s, #28: PSM3 SUJ: power on
+[INFO] [1790722844.536257349] [rclcpp]: 1790722844.536208s, #30: ECM SUJ: current state ENABLED
+[INFO] [1790722844.536264892] [rclcpp]: 1790722844.536222s, #30: PSM1 SUJ: current state ENABLED
+[INFO] [1790722844.536271897] [rclcpp]: 1790722844.536238s, #30: PSM2 SUJ: current state ENABLED
+[INFO] [1790722844.536281804] [rclcpp]: 1790722844.536252s, #29: PSM3 SUJ: current state ENABLED
+[INFO] [1790722852.502364208] [rclcpp]: 1790722852.502262s, #101: PSM1: desired state HOMED
+[INFO] [1790722852.502637232] [rclcpp]: 1790722852.502540s, #31: ECM SUJ: desired state ENABLED
+[INFO] [1790722852.502657149] [rclcpp]: 1790722852.502560s, #31: PSM1 SUJ: desired state ENABLED
+[INFO] [1790722852.502675561] [rclcpp]: 1790722852.502569s, #31: PSM2 SUJ: desired state ENABLED
+[INFO] [1790722852.502694902] [rclcpp]: 1790722852.502580s, #30: PSM3 SUJ: desired state ENABLED
+[INFO] [1790722852.502797859] [rclcpp]: 1790722852.502696s, #60: ECM: desired state HOMED
+[INFO] [1790722852.502825152] [rclcpp]: 1790722852.502666s, #50: PSM2: desired state HOMED
+[INFO] [1790722852.503402611] [rclcpp]: 1790722852.503331s, #61: ECM: encoders have already been calibrated, skipping
+[INFO] [1790722852.503409717] [rclcpp]: 1790722852.503345s, #62: ECM: current state CALIBRATING_ENCODERS_FROM_POTS
+[INFO] [1790722852.504018657] [rclcpp]: 1790722852.503991s, #63: ECM: current state ENCODERS_BIASED
+[INFO] [1790722852.504803568] [rclcpp]: 1790722852.504682s, #64: ECM: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790722852.504809712] [rclcpp]: 1790722852.504709s, #65: ECM: current state HOMING
+[INFO] [1790722852.504813985] [rclcpp]: 1790722852.504739s, #66: ECM: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722852.504818112] [rclcpp]: 1790722852.504753s, #67: ECM: current state HOMED
+[INFO] [1790722860.592630261] [rclcpp]: 1790722860.592535s, #102: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722860.592657653] [rclcpp]: 1790722860.592602s, #103: PSM1: current state MANUAL
+[INFO] [1790722861.684607061] [rclcpp]: 1790722861.684430s, #104: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722861.684626235] [rclcpp]: 1790722861.684494s, #105: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722861.684628303] [rclcpp]: 1790722861.684528s, #106: PSM1: current state HOMED
+[INFO] [1790722880.247578076] [rclcpp]: 1790722880.247437s, #107: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722880.247605330] [rclcpp]: 1790722880.247504s, #108: PSM1: current state MANUAL
+[INFO] [1790722883.934015301] [rclcpp]: 1790722883.933807s, #109: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722883.965413290] [rclcpp]: 1790722883.933880s, #110: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722883.965435443] [rclcpp]: 1790722883.933906s, #111: PSM1: current state HOMED
+[INFO] [1790722888.425665866] [rclcpp]: 1790722888.425572s, #112: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722888.425692716] [rclcpp]: 1790722888.425658s, #113: PSM1: current state MANUAL
+[INFO] [1790722891.492726727] [rclcpp]: 1790722891.492534s, #114: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722891.492752731] [rclcpp]: 1790722891.492606s, #115: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722891.492758562] [rclcpp]: 1790722891.492625s, #116: PSM1: current state HOMED
+[INFO] [1790722891.880479116] [rclcpp]: 1790722891.880297s, #117: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790722891.880499165] [rclcpp]: 1790722891.880366s, #118: PSM1: current state MANUAL
+[INFO] [1790722892.775500666] [rclcpp]: 1790722892.775311s, #119: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790722892.775523444] [rclcpp]: 1790722892.775402s, #120: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790722892.775529228] [rclcpp]: 1790722892.775451s, #121: PSM1: current state HOMED
+[INFO] [1790723041.076486639] [rclcpp]: 1790723041.076289s, #122: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790726058.334787541] [rclcpp]: 1790726058.320457s, #123: PSM1: no tool detected
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #5: PSM1: move_cp, arm not ready
+-W Class dvrk_system: system:Main: 1.79073e+09s, #11: PSM1: move_cp, arm not ready
+[WARN] [1790726142.023774530] [rclcpp]: 1790726142.008983s, #5: PSM1: move_cp, arm not ready
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #6: PSM1: move_cp, arm not ready
+-W Class dvrk_system: system:Main: 1.79073e+09s, #12: PSM1: move_cp, arm not ready
+[WARN] [1790726155.418449912] [rclcpp]: 1790726155.418292s, #6: PSM1: move_cp, arm not ready
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #7: PSM1: move_cp, arm not ready (2 errors)
+-W Class dvrk_system: system:Main: 1.79073e+09s, #13: PSM1: move_cp, arm not ready (2 errors)
+[WARN] [1790726167.636927391] [rclcpp]: 1790726167.636776s, #7: PSM1: move_cp, arm not ready (2 errors)
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #8: PSM1: move_cp, arm not ready (3 errors)
+-W Class dvrk_system: system:Main: 1.79073e+09s, #14: PSM1: move_cp, arm not ready (3 errors)
+[WARN] [1790726180.598777188] [rclcpp]: 1790726180.598602s, #8: PSM1: move_cp, arm not ready (3 errors)
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #9: PSM1: move_cp, arm not ready (4 errors)
+-W Class dvrk_system: system:Main: 1.79073e+09s, #15: PSM1: move_cp, arm not ready (4 errors)
+[WARN] [1790726192.779998984] [rclcpp]: 1790726192.779773s, #9: PSM1: move_cp, arm not ready (4 errors)
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #10: PSM1: move_cp, arm not ready (5 errors)
+-W Class dvrk_system: system:Main: 1.79073e+09s, #16: PSM1: move_cp, arm not ready (5 errors)
+[WARN] [1790726205.338549674] [rclcpp]: 1790726205.338341s, #10: PSM1: move_cp, arm not ready (5 errors)
+-W Class mtsIntuitiveResearchKitPSM: PSM1:Arm: 1.79073e+09s, #11: PSM1: move_cp, arm not ready (6 errors)
+-W Class dvrk_system: system:Main: 1.79073e+09s, #17: PSM1: move_cp, arm not ready (6 errors)
+[WARN] [1790726218.487026397] [rclcpp]: 1790726218.486878s, #11: PSM1: move_cp, arm not ready (6 errors)
+[INFO] [1790726260.282455527] [rclcpp]: 1790726260.282256s, #124: PSM1: tool detected
+[INFO] [1790726260.636778969] [rclcpp]: 1790726260.636592s, #125: PSM1: setting up for tool type "PROGRASP_FORCEPS:400093[8]"
+[INFO] [1790726260.636808417] [rclcpp]: 1790726260.636680s, #126: PSM1: using tool file "PROGRASP_FORCEPS_400093.json" for: Prograsp Forceps for da Vinci Classic (400093[..])
+[INFO] [1790726260.637223439] [rclcpp]: 1790726260.637075s, #127: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790726260.637231958] [rclcpp]: 1790726260.637122s, #128: PSM1: current state ENGAGING_TOOL
+[INFO] [1790726260.637236743] [rclcpp]: 1790726260.637161s, #129: PSM1: tool tip is outside the cannula, assuming it doesn't need to "engage".  If the tool is not engaged properly, move the sterile adapter all the way up and re-insert the tool.
+[INFO] [1790726260.637242696] [rclcpp]: 1790726260.637192s, #130: PSM1: current state TOOL_ENGAGED
+[INFO] [1790726260.637345802] [rclcpp]: 1790726260.637283s, #131: PSM1: control JOINT_SPACE/TRAJECTORY_MODE
+[INFO] [1790726260.637352213] [rclcpp]: 1790726260.637323s, #132: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790726260.637486911] [rclcpp]: 1790726260.637349s, #133: PSM1: current state HOMED
+[INFO] [1790726314.962874142] [rclcpp]: 1790726314.962613s, #134: PSM1: control CARTESIAN_SPACE/TRAJECTORY_MODE
+[INFO] [1790728248.036996149] [rclcpp]: 1790728248.005341s, #135: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790728248.037030632] [rclcpp]: 1790728248.036875s, #136: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790728248.037037259] [rclcpp]: 1790728248.036911s, #137: PSM1: current state MANUAL
+[INFO] [1790728249.623588716] [rclcpp]: 1790728249.623461s, #138: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790728249.623617404] [rclcpp]: 1790728249.623538s, #139: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790728249.623636227] [rclcpp]: 1790728249.623559s, #140: PSM1: current state HOMED
+[INFO] [1790728249.853612133] [rclcpp]: 1790728249.853479s, #141: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790728249.853637028] [rclcpp]: 1790728249.853545s, #142: PSM1: current state MANUAL
+[INFO] [1790728250.915873543] [rclcpp]: 1790728250.915775s, #143: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790728250.915900217] [rclcpp]: 1790728250.915837s, #144: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790728250.915905555] [rclcpp]: 1790728250.915859s, #145: PSM1: current state HOMED
+[INFO] [1790728251.790609977] [rclcpp]: 1790728251.790489s, #146: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790728251.790629621] [rclcpp]: 1790728251.790571s, #147: PSM1: current state MANUAL
+[INFO] [1790728253.895790660] [rclcpp]: 1790728253.895671s, #148: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790728253.895815919] [rclcpp]: 1790728253.895760s, #149: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790728253.895931193] [rclcpp]: 1790728253.895816s, #150: PSM1: current state HOMED
+[INFO] [1790728254.770029802] [rclcpp]: 1790728254.769846s, #151: PSM1: control JOINT_SPACE/EFFORT_MODE
+[INFO] [1790728254.770056825] [rclcpp]: 1790728254.769916s, #152: PSM1: current state MANUAL
+[INFO] [1790728255.327721865] [rclcpp]: 1790728255.327551s, #153: PSM1: control JOINT_SPACE/POSITION_MODE
+[INFO] [1790728255.327751335] [rclcpp]: 1790728255.327647s, #154: PSM1: control UNDEFINED_SPACE/UNDEFINED_MODE
+[INFO] [1790728255.327756343] [rclcpp]: 1790728255.327703s, #155: PSM1: current state HOMED
+[INFO] [1790728308.254498899] [rclcpp]: 1790728308.254297s, #156: PSM1: control CARTESIAN_SPACE/TRAJECTORY_MODE
