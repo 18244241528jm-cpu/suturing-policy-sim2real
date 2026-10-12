@@ -1,0 +1,51 @@
+{
+ "status": "DRAFT - not frozen. To be reviewed by the user, then copied to pre_registration.json, chmod a-w, sha256 recorded, BEFORE any 1-a data.",
+ "round": "R5 real robot",
+ "host": "lcsr-dvrk-15; FS/FP host 10.162.41.27 (unreachable since 2026-10-12 ~16:3x)",
+ "instrument": {
+  "PSM1": "LARGE_NEEDLE_DRIVER 400006 (LND). R4 day-2 used PROGRASP_FORCEPS 400093; R5 robot results are NOT directly comparable with R4.",
+  "PSM2": "DEBAKEY_FORCEPS 400036 (not used)"
+ },
+ "needle_meshes": {
+  "n1_original": {"path": "~/surgical_robotics_challenge/ADF/Phantoms/3D_MED/high_res/Needle_001_001.OBJ", "sha256": "c95df3426a05f7e82be7479e8567ff6ef8cfae0827a45ee769819a379b5d4d91", "repo_commit": "c17b95aeb60b2283041385a2d139645548917652"},
+  "n1_measured": "needle_n1_measured.obj, generated from 0-b caliper values (pending); parameters + sha256 recorded when generated",
+  "note": "R4 F-3/s02 FP used FoundationPose/.../Needle.obj (sha256 08124684...), a different file"
+ },
+ "psi_definition": {
+  "primary": "psi_kin = angle between the needle tangent t at the grasp point and the kinematic jaw axis (tool z of measured_cp, rotated to the camera frame by the calibration rotation) projected into the needle plane (normal n from the stereo arc fit); folded to [0, 90] deg",
+  "check": "psi_img2d = image-plane angle between the projected needle tangent and the jaw axis measured in the physical-left rect image (Hough on jaw edges, r5_grasp_v3.dominant_line)",
+  "dropped": "stereo triangulation of the jaw line: ill-conditioned (plane separation sin 0.04-0.06 at ~95 mm, B = 5.45 mm), seen in 0-a",
+  "R4_values_reported_side_by_side": {"R4_original_2D_fixed_axis": [24.6, 57.5], "measured_image_axis_2D": ["23-24", "67-72"], "kin_in_plane": [33.4, 61.1]}
+ },
+ "order_actual": ["0-a done", "0-c done", "beta table done (offline)", "0-b caliper (user)", "1-a", "1-b' LND grid with orientation variation", "1-c' tip-only", "--- wait for 3090 ---", "1-c full", "1-d", "1-f", "1-e", "Part 2 optional", "Part M"],
+ "deviations_from_plan_known_before_data": [
+  "D1: 3090 unavailable -> 1-d, 1-f, 1-e, full 1-c postponed until it returns; no substitution of SGBM for FS.",
+  "D2: instrument is LND, not the R4 ProGrasp -> plan 1-b 'recheck the existing calibration' is replaced by 1-b' (new LND grid); the R4 calibration is not used for any robot step.",
+  "D3: 1-c split into 1-c' (tip-only, no needle) now and the full needle version later."
+ ],
+ "1a_SUJ": {
+  "precondition": "ECM retracted (record ECM js before/after); operator hand on e-stop",
+  "steps": ["record PSM1 SUJ js + /SUJ/PSM1/measured_cp + /SUJ/PSM1/local/measured_cp + /PSM1/measured_cp (10 s, static)",
+            "press the PSM1 SUJ clutch, push a small distance, release; record 10 s",
+            "restart dvrk_system (SIGINT, same JSON) only after user confirms; record 10 s after power-on",
+            "push back to the original place (clutch); record 10 s"],
+  "rule": "'refreshes' after an action iff |change of SUJ measured_cp translation| >= 0.2 mm while the SUJ joints changed; facts only",
+  "after": "ECM and both SUJs are fixed for the rest of the round; js/SUJ snapshot at start, after each group, at the end; any change voids the group"
+ },
+ "1b_prime_grid": {
+  "poses": ">= 36 poses: translation offsets within +-8 mm (x, y) and 0..-16 mm (z, away from pad) of a start pose above the work area, combined with wrist orientation offsets: instrument roll (joint 3) in {-60,-30,0,+30,+60} deg and pitch/yaw (joints 4/5) in {-30,0,+30} deg; exact list generated with seed 20261013 and written to 1b/manifest.json before the first move",
+  "per_pose": "10 synced rect frames (mean saved) + measured_cp (position AND orientation) + local/measured_cp + measured_js + ECM js",
+  "tip_detection": "kinematic prediction -> local multi-template NCC + NCC disparity (no FS); poses where the automatic detection is not confident are clicked by hand on the mean image; method per pose is recorded",
+  "holdout": "random 25% of poses (seed 20261013) are test; 20 repeated random splits reported as distribution",
+  "models": ["SE3", "SE3+TCP", "Sim3+TCP", "affine+TCP"],
+  "report": ["hold-out RMS per model", "TCP estimate with spread over splits", "angle between kinematic jaw axis and image-measured jaw axis (2D projection comparison) vs roll angle"],
+  "abort": "only preconditions (ECM/SUJ moved, tool fault, safety); no result gate"
+ },
+ "1c_prime_tip_only": {
+  "placements": "3 positions x 2 roll angles, no needle needed",
+  "moves": "+-1 mm lateral, +-1 mm along jaw axis, +1 mm vertical (up only); return to origin after each; 3 frames per position",
+  "report": "measured/commanded ratio and direction error per direction; flag if ratio deviates > 10% or direction > 10 deg"
+ },
+ "safety": ["ECM retract before any scene change", "slow motions; per-step translation <= 3 mm and rotation <= 10 deg per command", "wrist roll/pitch/yaw changes only >= 10 mm above any surface", "no motion without valid pose", "stop when outside the workspace box", "no passwords in any file; 3090 only over existing SSH key"],
+ "statistics": "proportions with denominators and Wilson 95% CI; small samples are descriptive only"
+}

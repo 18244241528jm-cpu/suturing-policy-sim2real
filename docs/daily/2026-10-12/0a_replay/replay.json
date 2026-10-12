@@ -1,0 +1,246 @@
+{
+ "jaw_axis_kin_cam": [
+  -0.4994293139843774,
+  -0.5719432474612255,
+  0.6507313439635452
+ ],
+ "calib_rotation_source": "polar of calibration_v3 affine",
+ "cases": {
+  "g1": {
+   "r4_reported_psi_deg": 25.0,
+   "s_r4": 0.6666666666666664,
+   "points": {
+    "r4_point": {
+     "s": 0.6666666666666664,
+     "p_cam_mm": [
+      7.275470569102031,
+      -8.543125387713646,
+      104.45146652004209
+     ],
+     "dist_to_r4_point_mm": 2.5121479338940403e-15,
+     "psi_2d_r4axis_deg": 24.564678459394358,
+     "psi_kin_inplane_deg": 33.41389101078708,
+     "jaw_kin_tilt_from_normal_deg": 69.98500528834415,
+     "frames": {
+      "pre_descend": {
+       "track_uv_used": [
+        812.3136241455281,
+        412.397055872488
+       ],
+       "track_from": "pre_descend",
+       "jaw_img_angle_deg": 57.57233623337743,
+       "n_seg": 9,
+       "psi_2d_measured_axis_deg": 23.46187255888384,
+       "psi_stereo_inplane_deg": 20.19941233219252,
+       "jaw_stereo_tilt_from_normal_deg": 36.67515476262853,
+       "stereo_plane_sin": 0.050078546299375304,
+       "jaw_stereo_vs_kin_deg": 74.22654521028086
+      },
+      "correct_1": {
+       "track_uv_used": [
+        812.0961826783608,
+        412.33809648927786
+       ],
+       "track_from": "correct_1",
+       "jaw_img_angle_deg": 58.0978101427447,
+       "n_seg": 10,
+       "psi_2d_measured_axis_deg": 22.936398649516565,
+       "psi_stereo_inplane_deg": 18.464144706325474,
+       "jaw_stereo_tilt_from_normal_deg": 27.028133583163406,
+       "stereo_plane_sin": 0.060038867628291,
+       "jaw_stereo_vs_kin_deg": 83.8204416374334
+      }
+     }
+    },
+    "v3_s0.5": {
+     "s": 0.5,
+     "p_cam_mm": [
+      7.021162867572283,
+      -5.055571925309279,
+      103.68946983327815
+     ],
+     "dist_to_r4_point_mm": 3.578874196004277,
+     "psi_2d_r4axis_deg": 48.782338367847004,
+     "psi_kin_inplane_deg": 57.27195203672766,
+     "jaw_kin_tilt_from_normal_deg": 69.98500528834415,
+     "frames": {
+      "pre_descend": {
+       "track_uv_used": [
+        812.3136241455281,
+        412.397055872488
+       ],
+       "track_from": "pre_descend",
+       "jaw_img_angle_deg": 57.57233623337743,
+       "n_seg": 9,
+       "psi_2d_measured_axis_deg": 47.679532467336465,
+       "psi_stereo_inplane_deg": 44.05747335813311,
+       "jaw_stereo_tilt_from_normal_deg": 36.67515476262853,
+       "stereo_plane_sin": 0.050078546299375304,
+       "jaw_stereo_vs_kin_deg": 74.22654521028086
+      },
+      "correct_1": {
+       "track_uv_used": [
+        812.0961826783608,
+        412.33809648927786
+       ],
+       "track_from": "correct_1",
+       "jaw_img_angle_deg": 58.0978101427447,
+       "n_seg": 10,
+       "psi_2d_measured_axis_deg": 47.1540585579692,
+       "psi_stereo_inplane_deg": 42.322205732266056,
+       "jaw_stereo_tilt_from_normal_deg": 27.028133583163406,
+       "stereo_plane_sin": 0.060038867628291,
+       "jaw_stereo_vs_kin_deg": 83.8204416374334
+      }
+     }
+    }
+   }
+  },
+  "g2": {
+   "r4_reported_psi_deg": 57.5,
+   "s_r4": 0.7000000000000004,
+   "points": {
+    "r4_point": {
+     "s": 0.7000000000000004,
+     "p_cam_mm": [
+      9.376906031238834,
+      -6.297453521204083,
+      103.82349292603878
+     ],
+     "dist_to_r4_point_mm": 0.0,
+     "psi_2d_r4axis_deg": 57.48297073027352,
+     "psi_kin_inplane_deg": 61.071875437342825,
+     "jaw_kin_tilt_from_normal_deg": 80.02096276330526,
+     "frames": {
+      "correct_1": {
+       "track_uv_used": [
+        849.0453094791425,
+        424.3294667023587
+       ],
+       "track_from": "correct_1",
+       "jaw_img_angle_deg": 46.59207654026277,
+       "n_seg": 5,
+       "psi_2d_measured_axis_deg": 67.36042452287766,
+       "psi_stereo_inplane_deg": 68.4500167341449,
+       "jaw_stereo_tilt_from_normal_deg": 48.55653595885879,
+       "stereo_plane_sin": 0.0388106729892966,
+       "jaw_stereo_vs_kin_deg": 51.869118355573335
+      },
+      "dclosed_3": {
+       "track_uv_used": [
+        876.2143117047912,
+        484.4557046486328
+       ],
+       "track_from": "dclosed_3",
+       "jaw_img_angle_deg": 45.16048717720753,
+       "n_seg": 4,
+       "psi_2d_measured_axis_deg": 68.7920138859329,
+       "psi_stereo_inplane_deg": 81.1819815024172,
+       "jaw_stereo_tilt_from_normal_deg": 15.004644710858487,
+       "stereo_plane_sin": 0.03630985300628118,
+       "jaw_stereo_vs_kin_deg": 88.03772934426178
+      },
+      "open_low": {
+       "track_uv_used": [
+        876.2143117047912,
+        484.4557046486328
+       ],
+       "track_from": "dclosed_3",
+       "jaw_img_angle_deg": 44.02467619006615,
+       "n_seg": 6,
+       "psi_2d_measured_axis_deg": 69.92782487307429,
+       "psi_stereo_inplane_deg": 73.93622525938206,
+       "jaw_stereo_tilt_from_normal_deg": 15.65142934247993,
+       "stereo_plane_sin": 0.0634431744484335,
+       "jaw_stereo_vs_kin_deg": 88.7941614473443
+      },
+      "at_final": {
+       "track_uv_used": [
+        876.2143117047912,
+        484.4557046486328
+       ],
+       "track_from": "dclosed_3",
+       "jaw_img_angle_deg": 41.78767197505752,
+       "n_seg": 4,
+       "psi_2d_measured_axis_deg": 72.16482908808291,
+       "psi_stereo_inplane_deg": 84.20085439110623,
+       "jaw_stereo_tilt_from_normal_deg": 30.87366810557759,
+       "stereo_plane_sin": 0.049306711637464404,
+       "jaw_stereo_vs_kin_deg": 71.57704247428372
+      }
+     }
+    },
+    "v3_s0.5": {
+     "s": 0.5,
+     "p_cam_mm": [
+      7.340900277734851,
+      -3.45853608155418,
+      103.173505622707
+     ],
+     "dist_to_r4_point_mm": 3.5534849305916874,
+     "psi_2d_r4axis_deg": 79.40876903651322,
+     "psi_kin_inplane_deg": 84.70189867560208,
+     "jaw_kin_tilt_from_normal_deg": 80.02096276330526,
+     "frames": {
+      "correct_1": {
+       "track_uv_used": [
+        849.0453094791425,
+        424.3294667023587
+       ],
+       "track_from": "correct_1",
+       "jaw_img_angle_deg": 46.59207654026277,
+       "n_seg": 5,
+       "psi_2d_measured_axis_deg": 89.28622282911735,
+       "psi_stereo_inplane_deg": 87.91996002759585,
+       "jaw_stereo_tilt_from_normal_deg": 48.55653595885879,
+       "stereo_plane_sin": 0.0388106729892966,
+       "jaw_stereo_vs_kin_deg": 51.869118355573335
+      },
+      "dclosed_3": {
+       "track_uv_used": [
+        876.2143117047912,
+        484.4557046486328
+       ],
+       "track_from": "dclosed_3",
+       "jaw_img_angle_deg": 45.16048717720753,
+       "n_seg": 4,
+       "psi_2d_measured_axis_deg": 89.28218780782741,
+       "psi_stereo_inplane_deg": 57.551958264157946,
+       "jaw_stereo_tilt_from_normal_deg": 15.004644710858487,
+       "stereo_plane_sin": 0.03630985300628118,
+       "jaw_stereo_vs_kin_deg": 88.03772934426178
+      },
+      "open_low": {
+       "track_uv_used": [
+        876.2143117047912,
+        484.4557046486328
+       ],
+       "track_from": "dclosed_3",
+       "jaw_img_angle_deg": 44.02467619006615,
+       "n_seg": 6,
+       "psi_2d_measured_axis_deg": 88.14637682068604,
+       "psi_stereo_inplane_deg": 50.30620202112279,
+       "jaw_stereo_tilt_from_normal_deg": 15.65142934247993,
+       "stereo_plane_sin": 0.0634431744484335,
+       "jaw_stereo_vs_kin_deg": 88.7941614473443
+      },
+      "at_final": {
+       "track_uv_used": [
+        876.2143117047912,
+        484.4557046486328
+       ],
+       "track_from": "dclosed_3",
+       "jaw_img_angle_deg": 41.78767197505752,
+       "n_seg": 4,
+       "psi_2d_measured_axis_deg": 85.9093726056774,
+       "psi_stereo_inplane_deg": 72.16912237063451,
+       "jaw_stereo_tilt_from_normal_deg": 30.87366810557759,
+       "stereo_plane_sin": 0.049306711637464404,
+       "jaw_stereo_vs_kin_deg": 71.57704247428372
+      }
+     }
+    }
+   }
+  }
+ }
+}

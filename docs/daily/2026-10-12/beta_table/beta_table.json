@@ -1,0 +1,83 @@
+{
+ "q0_xyzw_ECM": [
+  0.3261996984314114,
+  0.3268537706903211,
+  0.8799959139485903,
+  -0.11120953539404985
+ ],
+ "rows": [
+  {
+   "grasp": "g1",
+   "calib_rotation": "affine_polar",
+   "needle_normal_cam": [
+    -0.2756693080494358,
+    -0.22432666538601528,
+    -0.9347106396079676
+   ],
+   "jaw_z_cam": [
+    -0.49942931398437723,
+    -0.5719432474612253,
+    0.6507313439635449
+   ],
+   "jaw_vs_needle_normal_deg": 69.98500528834415,
+   "jaw_elevation_above_needle_plane_deg": 20.014994711655845,
+   "needle_normal_vs_camera_axis_deg": 20.818553042277987,
+   "arc_fit_source": "reach_target.json"
+  },
+  {
+   "grasp": "g1",
+   "calib_rotation": "SE3",
+   "needle_normal_cam": [
+    -0.2756693080494358,
+    -0.22432666538601528,
+    -0.9347106396079676
+   ],
+   "jaw_z_cam": [
+    -0.4952654238202264,
+    -0.5661321934884646,
+    0.6589434721310408
+   ],
+   "jaw_vs_needle_normal_deg": 69.36622070041757,
+   "jaw_elevation_above_needle_plane_deg": 20.63377929958243,
+   "needle_normal_vs_camera_axis_deg": 20.818553042277987,
+   "arc_fit_source": "reach_target.json"
+  },
+  {
+   "grasp": "g2",
+   "calib_rotation": "affine_polar",
+   "needle_normal_cam": [
+    -0.30081531916138726,
+    -0.41259659393596493,
+    -0.8598105572917055
+   ],
+   "jaw_z_cam": [
+    -0.49942931398437723,
+    -0.5719432474612253,
+    0.6507313439635449
+   ],
+   "jaw_vs_needle_normal_deg": 80.02096276330526,
+   "jaw_elevation_above_needle_plane_deg": 9.979037236694737,
+   "needle_normal_vs_camera_axis_deg": 30.704681074063277,
+   "arc_fit_source": "grasp2_scene/grasp_target.json"
+  },
+  {
+   "grasp": "g2",
+   "calib_rotation": "SE3",
+   "needle_normal_cam": [
+    -0.30081531916138726,
+    -0.41259659393596493,
+    -0.8598105572917055
+   ],
+   "jaw_z_cam": [
+    -0.4952654238202264,
+    -0.5661321934884646,
+    0.6589434721310408
+   ],
+   "jaw_vs_needle_normal_deg": 79.39722756967704,
+   "jaw_elevation_above_needle_plane_deg": 10.602772430322958,
+   "needle_normal_vs_camera_axis_deg": 30.704681074063277,
+   "arc_fit_source": "grasp2_scene/grasp_target.json"
+  }
+ ],
+ "method": "R5 (offline, for the sim side): angle between the PSM1 jaw axis and the needle-plane normal in the two R4 day-2 grasps.\nInputs (R4, read-only): grid_calib/manifest.json q0 (commanded tool orientation in ECM, used by every grasp move_cp),\ngrid_calib/calibration_v3.json (camera <- measured_cp[ECM]; rotation = polar of the affine linear part, or the SE3 fit),\nneedle normals from the stereo arc fits (reach_target.json for g1, grasp2_scene/grasp_target.json for g2).\njaw axis = tool z of q0 (dVRK tool frame: z along the jaws). beta_from_normal = angle(z, n) folded to [0, 90];\n'elevation above the needle plane' = 90 - beta_from_normal.\nCaveat: R4 grasp logs did not store the measured orientation, so the commanded q0 is used.\nusage: python3 r5_beta_table.py --out records/logs/R5_<date>/beta_table"
+}

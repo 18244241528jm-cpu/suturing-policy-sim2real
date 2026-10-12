@@ -1,0 +1,46 @@
+{
+ "recorded": "2026-10-12T17:01:01-04:00",
+ "source": "user caliper, verbal (\"差不多\")",
+ "needle": {
+  "chord_mm": 18.0,
+  "sagitta_mm": 9.0,
+  "end_caps": "none (user: looks like a semicircle, no end caps)",
+  "wire_diameter_mm": "未测",
+  "derived": {
+   "R_mm": 9.0,
+   "arc_deg": 180.0,
+   "formula": "R=(c^2/4+s^2)/(2s); arc=2*asin(c/2R) (s<=R)"
+  }
+ },
+ "LND_400006_jaw": "未测 (user to measure: grasp-face length along jaw axis, width, max-open tip separation)",
+ "ProGrasp_400093_jaw": "未测",
+ "reference_not_measurement": {
+  "n1_mesh_Needle_001_001": {
+   "R_mm": 10.92,
+   "arc_deg": 133.1,
+   "wire_est_mm": 0.68,
+   "how": "r5_grasp_v3.mesh_arc on vertices"
+  },
+  "SRC_LND_400006_SIMPLE_gripper_mesh": {
+   "jaw_extent_from_pivot_mm": 9.8,
+   "hub_radius_mm": 2.4,
+   "width_mm": 4.8,
+   "pair_thickness_mm": 3.2,
+   "sim_jaw_limit_rad": [
+    0,
+    1.5708
+   ],
+   "repo_commit": "77cc137b"
+  },
+  "dVRK_tool_file_LND": {
+   "jaw_qmin_rad": -0.698132,
+   "jaw_qmax_rad": 1.39626,
+   "tooltip_offset_translation_mm": [
+    0,
+    0,
+    0
+   ],
+   "note": "measured_cp is at the wrist/jaw pivot, not the jaw tip"
+  }
+ }
+}
