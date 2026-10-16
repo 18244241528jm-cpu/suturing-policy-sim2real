@@ -1,0 +1,49 @@
+{
+ "created": "2026-10-16T12:48:24-0400",
+ "amends": "pre_registration.json + amendments 1, 2",
+ "written_before": "any non-debug attempt after debug7",
+ "source": "user instruction 12:4x after the first success (debug7)",
+ "condition_C_redefined": "C := the debug7 procedure (code cond S): wrist pitch/yaw -> 0 about the tip (jaw in line with the shaft), roll so that the jaw opening axis tool y is perpendicular to the tangent (y-t >= 80 deg); jaw open 0.6 rad; hover 10 mm above p* along the jaw/shaft axis with <= 3 stereo corrections (10-frame median rule); descend along the axis 8 x 1 mm + 5 x 0.5 mm (10.5 mm, tips to the phantom); close in 10 steps over ~3 s to -0.25 rad; lift 10 mm along the axis in 1 mm steps; hold 2 s. The original C (pitch to max beta) is dropped (debug3 failed with it).",
+ "condition_A": "today's reference orientation, NO wrist change; otherwise identical flow to C (open 0.6, hover along its own jaw axis, same corrections, same descent along the jaw axis, same slow close and lift)",
+ "B": "not done today",
+ "block1_success_rate": {
+  "condition": "C",
+  "placements": "Q1..Q5 (new placements on the flat area; user rotates the needle by ~72 deg each time); 4-5 attempts; report successes/attempts"
+ },
+ "block2_paired": {
+  "placements": "3-5 of Q1..Q5 (as many as time allows, in order Q1..Q5)",
+  "order_per_placement": {
+   "Q1": [
+    "C",
+    "A"
+   ],
+   "Q2": [
+    "A",
+    "C"
+   ],
+   "Q3": [
+    "C",
+    "A"
+   ],
+   "Q4": [
+    "A",
+    "C"
+   ],
+   "Q5": [
+    "C",
+    "A"
+   ]
+  },
+  "seed": 20261019,
+  "rule": "both conditions on the same placement consecutively; every attempt re-perceives; needle displaced by an attempt -> re-placed by the user and recorded (pairing kept, displacement noted)",
+  "ECM": "retract before every placement change (insertion -20 mm via r4_ecm_move.py --state-dir ecm, then --home), record ECM js"
+ },
+ "block3_policy": "R4 checkpoint per R5D2 addendum group 4: report checkpoint/observation/action mapping vs R4; 5 start points per placement simulated offline in the kinematic model; real run only if the simulated end point is <= 3 mm from the hover point, at most 4 real runs; after reaching hover, descent and closing identical to C; report simulated-pass/simulated-total and real-success/real-runs",
+ "FP": "not on the robot today; all frames stored in xfer/<trial_id>/ for offline FP",
+ "records_added": [
+  "xfer/<trial_id>/: left/right rect images of both perception snapshots, state/meta, perception.json, clicks",
+  "preclose_pose.json at the moment before closing: tip 6D pose (measured_cp + R2 TCP) in the ECM frame and in the camera frame (via the R6 affine), needle frame (centre, normal, grasp point, tangent, R, arc) in the camera frame and mapped to the ECM frame with the inverse affine; same frames for both"
+ ],
+ "success": "unchanged: needle lifted 10 mm with the jaw and still held after 2 s; judged by the user on site + lifted_2s frames",
+ "D15": "condition C redefined (see above); A flow aligned to C except the wrist; D12 opening axis corrected to tool y"
+}

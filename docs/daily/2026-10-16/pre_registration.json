@@ -1,0 +1,161 @@
+{
+ "created": "2026-10-16T11:32:45-0400",
+ "round": "R6 real robot 2026-10-16",
+ "host": "lcsr-dvrk-15",
+ "instrument": {
+  "PSM1": "PROGRASP_FORCEPS 400093 (user decision 2026-10-16: keep ProGrasp, do not swap to LND)",
+  "sim_model_instrument": "LND",
+  "flag": "模型为 LND，实际为 ProGrasp，器械不一致"
+ },
+ "perception_host": "mode 2: user laptop Deck-3-Jiaming (RTX 5080 Laptop, WSL Ubuntu-22.04) on demand, 2 frames per attempt; FS 23-51-11 full-res 32 iters (r6_fs_infer.py = r4_fs_infer.py + torch.load weights_only=False)",
+ "calibration": {
+  "file": "calib/calibration_r6.json",
+  "method": "on-site quick affine, 12 pts (seed 20261016), test 0.35/1.58/2.93 mm (g11 re-measured)",
+  "sv": [
+   1.244,
+   1.121,
+   0.83
+  ]
+ },
+ "beta_today": {
+  "reference_orientation_beta_deg_at_P0": 58.31470505105554,
+  "max_beta_deg_wrist_pitch_only": 61.00161648222928,
+  "max_beta_js": [
+   -0.5118680006512051,
+   0.10675854680832,
+   0.143428368305925,
+   -1.9881525109828548,
+   -0.104898610380218,
+   -0.20169942363513055
+  ],
+  "definition": "beta = 90 - angle(tool z, needle-plane normal); tool z rotated to cam by the polar rotation of the R6 affine; needle normal from the arc fit"
+ },
+ "conditions": {
+  "A": "wrist fixed at today's reference orientation (calib reference, deviation D2 replaces R4 q0); position-only closed loop. psi3 and beta recorded per placement as they come; no change of placement if it happens to be aligned",
+  "B": "at 25 mm above p*: instrument roll (joint 3) to minimise psi3 (target <= 10 deg); wrist pitch unchanged",
+  "C": "B, then wrist pitch (joint 4) in 10 deg steps in the beta-increasing direction until beta stops increasing (cap measured max 61.0 + 2 deg)"
+ },
+ "common_flow": "approach 25 mm above p* (reference orientation) -> wrist per condition (at 25 mm) -> open jaw 0.8 rad -> manual template clicks (feature + grasp point) -> hover 10 mm above p* along n -> <= 3 stereo corrections -> straight descent 10 mm along -n to p* -> close -0.25 rad -> lift 10 mm along +n, hold 2 s -> release/return. Script scripts/r6_realrobot/r6_grasp.py",
+ "grasp_point": "arc midpoint s = 0.5 of the stereo arc fit (s measured from the thread end)",
+ "tracking_and_correction": "10 frames, drop NCC<0.5, median, IQR; <5 valid frames -> tracking failure (no motion, outcome = 中止); stop if |e|<0.5 mm or (IQR>0.5 mm and the last two applied corrections < IQR); max 3 corrections; same for A/B/C",
+ "perception_checks": "needle mask = clicked polyline band 5 px + darker than annulus by 18; r2_arc.fit on FS points (+0.5 mm ray offset); R 6-13 mm, arc 100-240 deg, rms <= 1.2 mm, >= 60 points; 2 frames: p* spread <= 1.0 mm, tangent/normal spread <= 10 deg; perception.json must be newer than the trial start and < 20 min old; laptop crash -> attempt void and restart",
+ "debug": "up to 3 condition-C debug attempts on P0 (the needle as placed now), labelled debug, excluded from statistics",
+ "placements": [
+  {
+   "id": "P1",
+   "needle_rotation_deg_about_normal_rel_P1": 0,
+   "location": "flat area of the pad within ~15 mm of the debug placement P0, needle concave side and tip direction as rotated; exact pose comes from perception"
+  },
+  {
+   "id": "P2",
+   "needle_rotation_deg_about_normal_rel_P1": 60,
+   "location": "flat area of the pad within ~15 mm of the debug placement P0, needle concave side and tip direction as rotated; exact pose comes from perception"
+  },
+  {
+   "id": "P3",
+   "needle_rotation_deg_about_normal_rel_P1": 120,
+   "location": "flat area of the pad within ~15 mm of the debug placement P0, needle concave side and tip direction as rotated; exact pose comes from perception"
+  },
+  {
+   "id": "P4",
+   "needle_rotation_deg_about_normal_rel_P1": 180,
+   "location": "flat area of the pad within ~15 mm of the debug placement P0, needle concave side and tip direction as rotated; exact pose comes from perception"
+  },
+  {
+   "id": "P5",
+   "needle_rotation_deg_about_normal_rel_P1": 240,
+   "location": "flat area of the pad within ~15 mm of the debug placement P0, needle concave side and tip direction as rotated; exact pose comes from perception"
+  },
+  {
+   "id": "P6",
+   "needle_rotation_deg_about_normal_rel_P1": 300,
+   "location": "flat area of the pad within ~15 mm of the debug placement P0, needle concave side and tip direction as rotated; exact pose comes from perception"
+  }
+ ],
+ "condition_order_seed": 20261016,
+ "condition_order": {
+  "P1": [
+   "A",
+   "C",
+   "B (only if time)"
+  ],
+  "P2": [
+   "C",
+   "A",
+   "B (only if time)"
+  ],
+  "P3": [
+   "C",
+   "A",
+   "B (only if time)"
+  ],
+  "P4": [
+   "A",
+   "C",
+   "B (only if time)"
+  ],
+  "P5": [
+   "C",
+   "A",
+   "B (only if time)"
+  ],
+  "P6": [
+   "A",
+   "C",
+   "B (only if time)"
+  ]
+ },
+ "paired_rule": "ECM not moved between placements (ECM is fixed for the round; scene change = needle re-placement by the user with the arm at calib base, outside the needle area). Needle must not move between conditions of one placement: checked by re-perceiving before every attempt (p* change > 1.5 mm or tangent change > 10 deg vs the first attempt of that placement = moved -> re-place and record)",
+ "success": "needle lifted with the jaw 10 mm along +n and still held after 2 s (lifted_2s frames: needle off the pad and in the jaw; side video)",
+ "failure_categories": {
+  "推开": "needle pushed away by one jaw while closing",
+  "张开即碰": "jaw touches the needle during descent (before closing)",
+  "未接触": "after closing neither jaw touched the needle",
+  "滑脱": "grasped but dropped during the lift",
+  "中止": "safety rule or perception/tracking check failed"
+ },
+ "records_per_attempt": [
+  "condition",
+  "placement",
+  "attempt no",
+  "start time (date)",
+  "psi3",
+  "psi2 (image check, offline)",
+  "beta",
+  "lateral and height error after hover corrections",
+  "n corrections + stop reason",
+  "close-up before closing (pre_close)",
+  "full video: not available (no screen recorder set up) -> 10-frame bursts at each phase",
+  "side phone video timestamp (user prompted before closing)",
+  "jaw angle after closing",
+  "outcome"
+ ],
+ "sim_predictions": {
+  "source": "EXP15 D-1 (laptop project34/records/logs/EXP15_20261014/D1): beta in {45, 20, 10} only",
+  "A": "无预测 (beta ~58 deg at P0 is outside the D-1 grid; psi3 varies per placement)",
+  "B": "无预测 (beta unchanged ~58 deg, outside the grid)",
+  "C": "无预测 (beta ~61 deg, outside the grid)",
+  "note": "nearest available curve beta=45 (Needle.obj psi tol 17.0 deg at 3 deg criterion, half-circle 17.0) is NOT used as a prediction. 模型为 LND，实际为 ProGrasp，器械不一致"
+ },
+ "analysis": "per condition successes/attempts; A vs C paired by placement, exact McNemar (descriptive only); failure category counts",
+ "safety": [
+  "ECM not moved after framing (record js each attempt; change -> abort)",
+  "<= 3 mm per translation command, <= 10 deg per wrist command",
+  "wrist moves only at 25 mm above p*",
+  "no motion without a fresh valid perception.json",
+  "abort if a predicted height check fails",
+  "operator hand on the e-stop",
+  "no passwords in files"
+ ],
+ "deviations_known_before_data": {
+  "D1": "on-site quick calibration (R6 said no grid calibration today); R4 calibration_v3 invalid after the setup was rearranged (SUJ differs)",
+  "D2": "condition A uses today's reference orientation, not R4 q0 (95.6 deg away, not checked for reachability)",
+  "D3": "g11 test point re-measured with a jaw-only template (first measurement failed NCC); pass 2.93 mm",
+  "D4": "instrument ProGrasp 400093 instead of LND (user decision)",
+  "D5": "needle localisation by a manually clicked polyline + FS arc fit (R4 automatic segmentation picked the suture thread with confident=true on the first frame)",
+  "D6": "FS run with a copy of r4_fs_infer.py (torch.load weights_only=False for torch 2.11)",
+  "D7": "ECM pitch -2 deg for framing before the calibration (ecm/ecm_moves.jsonl)",
+  "D8": "R5D2 files were not available 10:55-11:00; R6 §5 + R5 draft safety rules applied (no robot motion in that window)",
+  "D9": "no full video recording (no recorder running); phase frame bursts instead"
+ }
+}

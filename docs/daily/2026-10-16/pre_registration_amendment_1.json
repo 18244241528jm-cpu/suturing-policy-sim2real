@@ -1,0 +1,14 @@
+{
+ "created": "2026-10-16T11:36:50-0400",
+ "amends": "pre_registration.json sha256 396df5e1cf65801fd0ff66fe9faf65c412f5ec3c524d9faaa922a9fece2107d2",
+ "written_before": "any paired (P1-P6) attempt; during debug attempts on P0",
+ "D10": {
+  "change": "perception rms check: rms <= 1.2 mm -> rms <= 1.6 mm",
+  "reason": "debug1/debug2 on P0: single-frame arc-fit rms 0.76-1.34 mm from FS depth noise on the ~1 mm wire, while the 2-frame geometry agreed (debug2: p* 0.82 mm, tangent 0.7 deg); the 1.2 value was chosen without data",
+  "unchanged": "R, arc, n points, 2-frame p*/tangent/normal consistency (1.0 mm / 10 / 10 deg)"
+ },
+ "D11": {
+  "change": "height reference for the approach safety check = robust local pad plane (FS points within 120 px of p*, needle band excluded) instead of per-pixel FS depth",
+  "reason": "per-pixel FS depth under the predicted point hits the instrument itself near the calib base (false -5.3 mm)"
+ }
+}

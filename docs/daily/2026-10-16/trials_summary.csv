@@ -1,0 +1,15 @@
+trial,counted,condition,s,outcome,R_mm,arc_deg,psi3_deg,y_tangent_deg,x_tangent_deg,beta_deg,hover_corrections,hover_lateral_mm,hover_height_mm,touch_extra_mm,touch_contact_step,jaw_after_close,close_time,preclose_pose
+Q1_C,True,C,0.5,success,9.54,160.47,75.4,85.02,5.27,83.14,2,0.19,-0.12,3.0,3,[-0.22164553221702618],2026-10-16T13:12:55-0400,True
+Q1_A,True,A,0.5,success,9.95,155.33,66.85,46.24,45.63,62.67,2,0.03,0.07,3.0,6,[-0.2219995985624208],2026-10-16T13:20:46-0400,True
+T1_C,True,C,0.25,success,9.99,154.47,78.2,84.98,5.2,83.49,1,0.23,0.2,5.5,11,[-0.221787158755184],2026-10-16T13:30:07-0400,True
+T2_C,True,C,0.25,success,8.85,173.18,1.51,84.79,9.55,82.01,2,0.13,0.35,2.0,4,[-0.219096254530185],2026-10-16T13:37:47-0400,True
+T3_C,False,C,0.25,"abort (safety incident: extra 8 mm press after contact, no close)",9.35,162.56,49.91,85.11,6.91,82.42,1,0.3,-0.08,,,,,True
+T3b_C,True,C,0.25,fail (no contact: jaw tips inside the arc),9.35,162.56,50.04,85.16,6.86,82.44,1,0.12,0.36,0.5,1,[-0.2300723112374179],2026-10-16T13:48:54-0400,True
+T4_C,True,C,0.25,success,9.04,168.41,13.47,85.08,8.44,82.96,1,0.34,0.33,3.5,7,[-0.22292017106044676],2026-10-16T13:55:27-0400,True
+debug1_P0_C,False,,0.5,abort (perception consistency),8.45,186.81,,,,,,,,,,,,False
+debug2_P0_C,False,C,0.5,abort before descent (needle on ridge),8.35,195.17,41.04,,,69.73,,,,,,,,False
+debug3_P0b_C,False,C,0.5,"fail (grasped silicone, needle slipped)",8.81,173.21,17.68,25.8,85.72,63.26,3,0.15,0.24,,,[-0.22766466008873457],2026-10-16T11:56:19-0400,False
+debug4_P0c_S,False,,0.5,abort (flatness),9.06,204.96,,,,,,,,,,,,False
+debug5_P0d_S,False,,0.5,abort (flatness),9.84,176.12,,,,,,,,,,,,False
+debug6_P0e_S,False,S,0.5,abort (jaw on needle; ROS comm loss),9.05,168.41,10.73,6.85,85.21,85.03,1,0.03,0.01,,,,,False
+debug7_P0e_S,False,S,0.5,success,9.11,169.61,22.75,85.06,6.84,84.88,3,0.6,0.76,,,[-0.2216455322170262],2026-10-16T12:37:10-0400,False

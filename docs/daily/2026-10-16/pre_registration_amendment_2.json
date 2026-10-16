@@ -1,0 +1,21 @@
+{
+ "created": "2026-10-16T11:51:22-0400",
+ "amends": "pre_registration.json (396df5e1...) + amendment 1 (6c60b73b...)",
+ "written_before": "any paired (P1-P6) attempt; during debug3",
+ "D12": {
+  "change": "B/C wrist target: angle(tool x = jaw opening direction, tangent at the grasp point) >= 80 deg (was psi3 <= 10 deg); psi3, x-tangent, y-tangent recorded for every attempt incl. A",
+  "source": "user decision 11:4x",
+  "reason": "tool axes checked in the image: z along the jaw, opening = x, hinge = y; at beta 60-70 deg the z projection is short and psi3 does not tell whether the jaw can close across the wire (debug2: psi3 41 deg while x-t 84 deg)"
+ },
+ "D12b": {
+  "change": "all wrist rotations about the tip: R2-E TCP (-2.70, 1.08, 23.81) mm; joint steps <= 6 deg so that the compensating translation <= 3 mm; tip height >= 10 mm checked before rotating",
+  "source": "user decision 11:4x"
+ },
+ "D13": {
+  "change": "needle 3D points = pixel rays of the needle mask intersected with a robust quadratic pad surface fitted to the annulus (pink pixels 10-25 px from the clicked polyline) + 0.5 mm along the surface normal; FS depth of the wire itself is not used",
+  "reason": "debug3: along the arc the FS disparity on the wire is nearly constant (66.6-67.7 px) while the pad beside it varies (65.1-67.4 px) -> wire 2-4 mm in front of the pad at the ends; the FS-wire arc normal was 38 deg (debug3) / 51 deg (debug2) away from the pad"
+ },
+ "D13b": {
+  "change": "flatness check: normal of the fitted pad surface at tail, middle and tip of the needle must agree within 15 deg (else placement not flat -> re-place); safety height reference = tangent plane of the pad surface under p*"
+ }
+}

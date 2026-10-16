@@ -1,0 +1,10 @@
+{
+ "created": "2026-10-16T13:03:01-0400",
+ "source": "user 12:5x, before any Q-placement attempt",
+ "C_vs_original_C": "C (= debug7 / code S): wrist straight (pitch=yaw=0, about the tip), roll so jaw opening y is perpendicular to the tangent, descend along the shaft until the tips touch the phantom, slow close. Original C: wrist pitch pushed to max beta (~61-70 deg) with the jaw bent, descent along the needle normal, fast close -> dropped (debug3 failure).",
+ "vision": "FS + stereo-surface arc fit once per placement (2 frames); later attempts on the same placement reuse the stored grasp point/tangent/normal after an NCC patch check of the needle (>= 3 patches NCC >= 0.7, shift <= 1.0 mm); corrections use only NCC tip tracking; before closing the same needle check (> 1 mm or unverifiable -> abort, no close)",
+ "tracking_frames": "5 frames if all 5 valid and IQR < 0.3 mm, otherwise 10 frames with the earlier rule (< 5 valid -> tracking failure)",
+ "motion": "segments with the tip > 20 mm above the pad (both ends) as one continuous servo_cp move <= 4.5 mm/s; within 20 mm unchanged (<= 3 mm per command); shorter settling waits; slow close unchanged",
+ "tail_group": "after the pairing, if time: s ~ 0.25 at the thread end (user marks the end on the image), 3-4 attempts, C only, reported separately; check the jaw does not take the suture",
+ "policy": "offline first: report target definition (relative to centre or grasp point, offset, from the code) and the distribution of simulated end-point distance to the target; real runs last, at most 2, only if the simulated end point <= 3 mm"
+}
