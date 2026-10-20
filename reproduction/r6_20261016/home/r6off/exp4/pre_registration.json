@@ -1,0 +1,17 @@
+{
+  "experiment": "EXP4 re-assess each real attempt with SurgicAI's criterion and with geometric quantities (descriptive only, n tiny)",
+  "read_from_code": {
+    "files": "environments/SurgicAI/RL/utils/scene_manager.py needle_goal_evaluator, utils/needle.py get_pose_angle, RL/Approach_env.py criteria, RL/subtask_env.py goal_distances",
+    "goal_frame": "grasp frame at arc angle theta on the needle: z = needle plane normal, y = tangent, x = radial (x = y cross z). Goal gripper frame = grasp * translate(0,0,lift_height=0.007 along grasp z) * R_fixed with R_fixed = [[0,-1,0],[-1,0,0],[0,0,-1]] (PSM2): gripper x = -tangent, gripper y = -x_grasp (radial, = jaw opening axis), gripper z = -plane normal. So the goal gripper approaches along the plane normal, 7 mm short of the grasp point along its own z.",
+    "criterion": "Approach_env.criteria: translation = Euclidean norm of (achieved - desired) position in cm (observation scale x100); rotation = Euclidean norm of the RPY difference vector (default) or SO(3) geodesic when measured_success_reward/geodesic_rotation_criterion is set; thresholds default [0.5 cm, 30 deg] in the env class, [0.5 cm, 10 deg] in Env_info, [1.0 cm, 10 deg] for the R6 checkpoint contract. The task text asks for 1 mm and 10 deg; all reported.",
+    "limits": "RPY-norm depends on the base frame; only the geodesic is computed here (cam frame has no relation to the sim base frame). Which real frame corresponds to the sim gripper frame origin is not settled (memory: lift_height 7 mm = mid-jaw depth in AMBF); two reference points are reported."
+  },
+  "attempts": "those with preclose_pose.json: Q1_A, Q1_C, T1_C, T2_C, T3_C, T3b_C, T4_C (7). debug attempts have no preclose pose -> not assessable (not estimated).",
+  "quantities_per_attempt": [
+    "tip_to_grasp_mm: |tip_cam - grasp_point_cam| from preclose_pose.json (tip = cp + R*TCP, TCP carries ~2.8 mm registration RMS)",
+    "tip_to_hoverpoint_mm: |tip - (p* - 7 mm along the tool +z... i.e. p* backed off 7 mm along -z_tool)| , to show the 'sim-equivalent' point; at pre-close the tool has descended so this is NOT expected to be small",
+    "geodesic_to_surgicai_goal_deg: min over the two tangent signs of the geodesic between R_cam(tool) and the SurgicAI goal orientation built from the human-reference tangent and plane normal (favourable choice, stated)",
+    "x_tangent_deg, y_tangent_deg (folded to 0..90), angle_z_normal_deg (tool z vs -normal_toward_cam), beta = 90 - angle_z_normal, psi3 as stored in the day's hover angles (day's definition, not recomputed)"
+  ],
+  "table": "side by side with the real outcome from trials_summary.csv; checks 'pass' for tip_to_grasp_mm <= 1 mm, <= 5 mm, <= 10 mm and geodesic <= 10 deg, counts with denominators, no statistics."
+}

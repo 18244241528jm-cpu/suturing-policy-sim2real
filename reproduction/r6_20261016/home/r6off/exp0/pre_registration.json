@@ -1,0 +1,25 @@
+{
+  "experiment": "EXP0 inventory / orientation check / disparity-scale check / perception replay",
+  "written": "2026-10-16 (before any exp0 number was computed; wall time in STATUS.md)",
+  "inputs": "input/ copy of R6_20261016_slim (read-only). fs_disp.npz = float16 (the day's fs_disp.npy was presumably float32; this quantisation is a known difference)",
+  "A_orientation_check": {
+    "hypotheses": {
+      "H1": "disparity is referenced to topic-RIGHT image (right_rect.png); the matching point is in topic-LEFT image (left_rect.png) at x - d",
+      "H2": "disparity is referenced to topic-LEFT image (left_rect.png); the matching point is in topic-RIGHT image at x - d"
+    },
+    "sampling": "all 13 placements (snap0 only), 400 pixels per frame, seed 0, from pixels with |grad| above the frame median inside rows 100..900, cols 150..1150 and 40 <= d <= 130; patch 21x21 grayscale NCC; 'at x+d' control uses the opposite shift",
+    "decision": "orientation accepted for a hypothesis if the per-frame median NCC(x-d) >= 0.8 on at least 12/13 frames AND median(NCC(x-d) - NCC(x+d)) >= 0.3 on at least 12/13 frames; the hypothesis that passes is reported; if both or neither pass the check is reported as inconclusive and the rest of the analysis stops using the assumption",
+    "also": "sign of camera_info_topic_right P[0,3] (positive Tx => topic-right camera is to the left of topic-left camera => topic right = physical left); baseline B = P[0,3]/fx; compare with 5.4476 mm used by the code"
+  },
+  "B_scale_check": {
+    "pad_region": "pink annulus pixels 10..25 px from the clicked polyline (same definition as r6_perceive.py), FS depth Z = FB/d",
+    "compare": "recompute the day's quadratic pad surface and compare n_support, resid_std_mm, surface normal, fs_wire_minus_surface_mm_median with the numbers stored in perception.json frames[].surface (tolerances: |dn_support| <= 3%, |d resid_std| <= 0.05 mm, normal angle <= 1 deg, |d wire-minus-surface| <= 0.15 mm)",
+    "independent_scale_check": "exploratory only, reported if computable: kinematic instrument tip (measured_cp + R*TCP, calibration_r6 affine) projected into the image vs FS depth at that pixel in snap0, ONLY for frames where the tip pixel lies inside the image and FS depth is valid; no pass/fail threshold, reported as a signed depth difference"
+  },
+  "C_perception_replay": {
+    "method": "r6_perceive.py logic copied unchanged (BAND 5, DARK 18, OFF 0.5, quadratic pad surface, r2_arc.fit, s=0.5 from tail); only I/O changed (npz float16 -> float32 array, local paths); modules r2_arc.py and r5_grasp_v3.py taken from code_snapshot",
+    "success_rule": "per placement: grasp point (p_star_mm of the median of the two frames, as the day) differs from perception.json p_star_mm by <= 0.1 mm. Report also |dR|, |darc|, tangent angle, normal angle. Ratio reported as passed/13 placements.",
+    "if_fail": "stop this item, report cause (candidates tested in this order only: float16 quantisation of disparity -> estimated by re-quantising a float32 control disparity from the replay itself, mask difference)"
+  },
+  "D_aggregate": "R_mm and arc_deg of the 13 independent arc fits (T3b is a reuse of T3 and not counted twice): median, min, max; per-placement p* spread between snap0 and snap1 from the day's perception.json consistency (this is the noise of the manual reference)"
+}

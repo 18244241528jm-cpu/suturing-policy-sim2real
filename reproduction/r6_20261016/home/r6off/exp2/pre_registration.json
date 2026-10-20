@@ -1,0 +1,33 @@
+{
+  "experiment": "EXP2 FoundationPose on the real R6 needle frames vs the human reference (GPU, user present)",
+  "written": "before any FP number on these frames; the CPU preparation (inputs, M2 mesh) is done after this file is locked but before FP runs",
+  "reference": "human-click arc fit of the day (perception.json frames[k].fit; p*, tangent, normal at the attempt's s from the TAIL). It is a HUMAN REFERENCE, not ground truth. Its own noise = p* spread between snap0 and snap1 of the same placement (median 0.19 mm, max 1.17 mm, from exp0) and the fit uncertainty is not otherwise known.",
+  "frames": {
+    "rule": "snap0 and snap1 of each of the 13 independent placements (T3b_C reuses T3_C's frames and is not repeated) = 26 frames. These are taken at the start of the attempt with the arm at the ready pose, away from the needle (no occlusion by the gripper; thread/ridge occlusions are not excluded). Overlays overlay_snap0/1.jpg will be viewed for a sanity check but no frame is excluded after seeing FP results.",
+    "image": "right_rect.png = topic-right = PHYSICAL LEFT (verified in exp0: disparity referenced to it; NCC criterion diff 13/13 though the absolute NCC>=0.8 threshold was not met, see exp0 addendum_1)",
+    "K": "rectified P: fx = fy = 1860.724932, cx = 690.538345, cy = 576.803638, 1300x1024"
+  },
+  "meshes": {
+    "M0": "Needle.OBJ of 3D_MED/high_res (sha256 2db5c6060c806498e3a18bde5fe4d7d7d53900dd1e167bcb61bc1c7873a8d7ca, units m; fitted arc R 9.449 mm, 136.07 deg, tail at the arc start angle 202.93 deg, tip at 338.38 deg; wire 0.98 mm (build json))",
+    "M2": "swept-circle tube mesh: same centre, plane and angular centre as M0's arc; R = median over the 13 placements of the day's fitted R (exp0: 9.07 mm), arc = median day's fitted arc (exp0: 169.6 deg); wire diameter 0.98 mm PROVISIONAL (no caliper value given); flat end caps; tail at the arc start. Parameters and sha256 are written next to the mesh. Not overwritten if it exists. If the user supplies a photo of the needle flat on millimetre paper, the photo-fitted R/arc are reported next to these and M2 is regenerated as M2b (not replacing M2)."
+  },
+  "depth": {
+    "D-raw": "FS depth Z = FB/d (FB = fx * 5.4476 mm), metres, invalid -> 0, fs_disp.npz cast float32 (stored float16)",
+    "D-fix": "D-raw with the needle-mask pixels replaced by the day's pad-surface depth: ray x quadratic pad surface (robust, annulus of pink pad pixels, same code as r6_perceive), lifted 0.5 mm along the local surface normal toward the camera; Z coordinate of that point"
+  },
+  "mask": "clicked-polyline band 5 px AND darker than the annulus by 18 grey levels (the day's needle mask; exp0 replay reproduces the day's numbers), uint8 0/255, min 20 px",
+  "configs": ["M0+D-raw", "M0+D-fix", "M2+D-raw", "M2+D-fix"],
+  "fp_settings": "as EXP11 T-C: 252 initial hypotheses (FoundationPose default), refinement iteration 5, seed 2718 once at process start, min mask 20 px; mask = the human band mask (EXP11 used a rendered bilateral mask on simulated GT; not applicable here); GPU: one process at a time; torch.cuda.set_per_process_memory_fraction(0.6); FIRST 3 frames (M0+D-raw: Q1_C snap0, T4_C snap0, debug7 snap0) and only if clean the remaining frames; load log lines to /mnt/c/crashfix/load_log.txt at stage start/end and every 10 frames",
+  "metrics_per_frame_and_config": {
+    "centre_err_mm": "|T*c_mesh - c_human| (circle centres)",
+    "grasp_err_mm": "|p_FP(s) - p*_human(s)|, s from the tail as the day's attempt (0.5 or 0.25); p_FP via r5_grasp_v3.fp_point_tangent on the mesh's own fitted arc (mesh_arc)",
+    "normal_deg": "undirected angle between FP and human plane normals",
+    "tangent_deg": "undirected angle between FP and human tangents at s",
+    "flip": "directed chord tail->tip of the FP pose (T*tail_anchor -> T*tip_anchor) vs the human directed chord (tail = first click end, tip = last click end): angle > 90 deg",
+    "score_gap": "within the 252 candidates of a frame/config: best score among 'reference-like' candidates (grasp_err <= 2 mm, tangent <= 15 deg, not flipped) minus best score among flipped candidates; frames where the two scores are exactly equal (fp16) are listed separately; frames with no reference-like or no flipped candidate are listed as undefined",
+    "cost": "wall seconds per frame, torch peak allocated GiB per frame"
+  },
+  "usable_rule": "a frame/config 'passes' if the TOP-1 candidate has grasp_err <= 2 mm AND tangent_deg <= 15 AND not flipped. Report passed/26 per config (also passed/13 placements where both frames pass, and the oracle: any candidate passing). Wilson 95% intervals on the proportions. No other threshold is used to choose the best configuration.",
+  "figures": "one figure per config: for each placement (13 cells) the left image crop with FP arc/pose projected (cyan) and the human reference arc (yellow); scatter grasp_err vs tangent_deg coloured by config. English labels, one line of conditions in a corner, no bar charts.",
+  "not_claimed": "FP accuracy w.r.t. true needle pose (no ground truth); occlusion behaviour (frames are unoccluded by design); statistics beyond counts, n = 26 frames from 13 placements of one needle on one phantom"
+}
