@@ -1,5 +1,0 @@
-{
-  "written": "after exp1b (diagnostics a-c), before the two below were computed. Post-hoc, exploratory.",
-  "d_day_open_loop_hover_error": "from trial_state.json hover.corrections: err_norm / lateral / height of the FIRST stereo measurement at hover = how far the day's scripted (kinematic, affine+TCP) approach was from the visually correct hover, i.e. the amount the servo had to absorb; report per attempt and the median. Also the sum of applied_mm.",
-  "e_min_distance_along_trajectory": "for the staged-start GO_rel rollouts (in support) report min over the 200 steps of ||cp - goal|| (mm) and the rotation error at that step, to show what the policy reaches when not stopped at the 1 cm/10 deg rule. Not a stopping rule a deployment could use without knowing the goal error."
-}
